@@ -1,0 +1,36 @@
+{
+  "name": "my-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^5.16.7",
+    "@mui/material": "^5.16.7",
+    "install": "^0.13.0",
+    "next": "^15.0.0-rc.0",
+    "npm": "^10.8.2",
+    "react": "^19.0.0-rc-1d989965-20240821",
+    "react-dom": "^19.0.0-rc-1d989965-20240821",
+    "react-quill": "github:lassespilling/react-quill-2024#package",
+    "react-quill-2": "^2.0.2",
+    "react-quill-new": "^3.3.0",
+    "react-quill-v2.0": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8.32.0",
+    "eslint-config-next": "^0.2.4",
+    "prettier": "^2.8.7",
+    "typescript": "^5"
+  }
+}
