@@ -3,7 +3,7 @@ import { Box, IconButton, Typography } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 
 interface CustomImageUploadProps {
-  label: string;
+  label?: string;
   onChange: (files: File[] | string[]) => void;
   value?: string[];
   maxFiles?: number;
@@ -12,17 +12,9 @@ interface CustomImageUploadProps {
 }
 
 export default function CustomImageUpload(props: CustomImageUploadProps) {
-  const {
-    label,
-    onChange,
-    value,
-    maxFiles = 1,
-    width = 300,
-    height = 300,
-  } = props;
+  const { label, onChange, value, maxFiles = 1, width, height } = props;
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
-  console.log(selectedFiles.length);
 
   useEffect(() => {
     if (value) {
@@ -142,27 +134,43 @@ export default function CustomImageUpload(props: CustomImageUploadProps) {
 
   return (
     <Box
-      maxWidth={"100%"}
-      overflow={"auto"}
       onDrop={handleDrop}
       onDragOver={handleDragOver}
+      width={"100%"}
+      height={"100%"}
+      position={"relative"}
+      px={2}
+      my={2}
     >
-      <Typography
-        sx={{ fontSize: "14px", fontWeight: "600", color: "#2D3648" }}
+      {label && (
+        <Typography
+          sx={{ fontSize: "18px", color: "#2D3648" }}
+          position={"absolute"}
+          top={"-2rem"}
+        >
+          {label} {selectedFiles.length + " / " + maxFiles}
+        </Typography>
+      )}
+      <Box
+        display="flex"
+        justifyContent={"center"}
+        flexWrap="wrap"
+        gap={2}
+        flex={1}
+        width={"100%"}
+        height={"100%"}
       >
-        {label}
-      </Typography>
-      <Box display="flex" flexWrap="wrap" gap={2}>
         {previewUrls.map((url, index) => (
           <Box
             key={url}
             sx={{
               position: "relative",
-              width: width ?? "200px",
-              height: height ?? "200px",
+              width: width ?? "auto",
+              height: height ?? "100%",
               border: "2px dashed #ccc",
               borderRadius: "8px",
               backgroundColor: "#f9f9f9",
+              p: 1,
             }}
           >
             <img
@@ -173,6 +181,7 @@ export default function CustomImageUpload(props: CustomImageUploadProps) {
                 height: "100%",
                 objectFit: "contain",
                 alignSelf: "center",
+                borderRadius: "8px",
               }}
             />
             <IconButton
@@ -191,33 +200,38 @@ export default function CustomImageUpload(props: CustomImageUploadProps) {
             </IconButton>
           </Box>
         ))}
-        {selectedFiles.length < maxFiles && (
-          <IconButton
-            sx={{
-              borderRadius: "12px",
-              width: width ?? "200px",
-              height: height ?? "200px",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              fontSize: "24px",
-              fontWeight: "bold",
-              color: "#888",
-              border: "2px dashed #ccc",
-              backgroundColor: "#f9f9f9",
-            }}
-            component="label"
-          >
-            +
-            <input
-              type="file"
-              hidden
-              multiple
-              accept="image/*"
-              onChange={handleChangeFile}
-            />
-          </IconButton>
-        )}
+        {selectedFiles.length < maxFiles && [
+          Array.from({ length: maxFiles - selectedFiles.length }).map(
+            (_, index) => (
+              <IconButton
+                key={index}
+                sx={{
+                  borderRadius: "12px",
+                  width: width ?? `calc(95% / ${maxFiles})`,
+                  height: height ?? "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  fontSize: "24px",
+                  fontWeight: "bold",
+                  color: "#888",
+                  border: "2px dashed #ccc",
+                  backgroundColor: "#f9f9f9",
+                }}
+                component="label"
+              >
+                +
+                <input
+                  type="file"
+                  hidden
+                  multiple
+                  accept="image/*"
+                  onChange={handleChangeFile}
+                />
+              </IconButton>
+            )
+          ),
+        ]}
       </Box>
     </Box>
   );

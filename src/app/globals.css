@@ -36,7 +36,7 @@ main {
   display: flex;
   flex-direction: column;
   height: auto;
-  width: 100%;
+  width: 200vh;
   flex-grow: 1;
   margin: 1rem;
   padding: 1rem;
@@ -44,4 +44,26 @@ main {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease, opacity 0.3s ease;
   background-color: rgb(220, 242, 241, 0.2);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+* {
+  animation: fadeIn 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+.button {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.box {
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }

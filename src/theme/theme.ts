@@ -20,12 +20,20 @@ const theme = createTheme({
         },
     },
     palette: {
-        primary: {
-            main: '#31BDE4',
+
+        "primary": {
+            "main": "#31BDE4",
+            "light": "#62D3F2",
+            "dark": "#0092C8",
+            "contrastText": "#FFFFFF"
         },
-        secondary: {
-            main: '#4370A0',
+        "secondary": {
+            "main": "#4370A0",
+            "light": "#6C9ABF",
+            "dark": "#004D6C",
+            "contrastText": "#FFFFFF"
         },
+
     },
     typography: {
         fontFamily: ['Kanit', 'Roboto', 'Arial', 'sans-serif'].join(','),

@@ -10,14 +10,14 @@ import List from "@mui/material/List";
 import IconButton from "@mui/material/IconButton";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
-import { useMediaQuery, useTheme } from "@mui/material";
+import { useMediaQuery, useTheme, Typography } from "@mui/material";
 import Link from "next/link";
 const drawerWidth = 221;
 
 //*------------------------------------------------------------------------
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
-  transition: "width 0.1s ease-in-out", // Adjusted duration for smoother transition
+  transition: "width 0.3s ease-in-out", // Adjusted duration for smoother transition
   overflowX: "hidden",
   background: `linear-gradient(
     to bottom, 
@@ -28,7 +28,7 @@ const openedMixin = (theme: Theme): CSSObject => ({
 
 const closedMixin = (theme: Theme): CSSObject => ({
   minWidth: "80px",
-  transition: "width 0.1s ease-in-out",
+  transition: "width 0.3s ease-in-out",
   overflowX: "hidden",
   background: `linear-gradient(
     to bottom, 
@@ -61,7 +61,7 @@ const Drawer = styled(MuiDrawer, {
 
 export default function SideBar() {
   const pathname = usePathname();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const theme = useTheme();
   const handleDrawerOpen = () => {
     setOpen(!open);
@@ -88,9 +88,21 @@ export default function SideBar() {
       <Drawer
         variant="permanent"
         open={open}
-        sx={{ display: isMobile ? "none" : "flex", borderRadius: "20px" }}
+        sx={{
+          display: isMobile ? "none" : "flex",
+          borderRadius: "20px",
+          transition: "width 0.3s",
+          "&:hover": {
+            width: drawerWidth,
+            "& .drawer-content": {
+              display: "block", // Show content on hover
+            },
+          },
+        }}
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
       >
-        <Box pb={5}>
+        {/* <Box pb={5}>
           <IconButton
             aria-label="open drawer"
             onClick={handleDrawerOpen}
@@ -110,7 +122,7 @@ export default function SideBar() {
               <KeyboardDoubleArrowRightIcon sx={{ color: "#FFF" }} />
             )}
           </IconButton>
-        </Box>
+        </Box> */}
         <List sx={{ pt: "6rem", px: 1 }}>
           {menuItems.ADMIN.map(({ text, path, icon }) => (
             <ListItem
@@ -126,7 +138,6 @@ export default function SideBar() {
                   borderRadius: "16px",
                   mx: 1,
                   color: "white",
-                  transition: "color 0.3s, background-color 0.3s",
                   backgroundColor: path === currentPath ? "#365486" : "",
                   "&:hover": {
                     backgroundColor: "#EBF4F6",
@@ -147,6 +158,7 @@ export default function SideBar() {
                     gap: 2,
                     textDecoration: "none",
                     color: "inherit",
+                    textWrap: "nowrap",
                   }}
                 >
                   {icon} {open && text}
@@ -160,21 +172,21 @@ export default function SideBar() {
   );
 }
 
-import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined";
 import LocalAtmOutlinedIcon from "@mui/icons-material/LocalAtmOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import ContactPhoneOutlinedIcon from "@mui/icons-material/ContactPhoneOutlined";
+import FeedOutlinedIcon from "@mui/icons-material/FeedOutlined";
 import { hexToRgba } from "@/utils/app";
 import { usePathname } from "next/navigation";
-import { Opacity } from "@mui/icons-material";
 export const menuItems = {
   ADMIN: [
     {
-      text: "dashboard",
-      path: "/",
-      icon: <BarChartOutlinedIcon />,
+      text: "Profile",
+      path: "/profile",
+      icon: <AccountCircleOutlinedIcon />,
     },
     {
       text: "Home",
@@ -196,6 +208,8 @@ export const menuItems = {
       path: "/package",
       icon: <LocalAtmOutlinedIcon />,
     },
-    { text: "setting", path: "/setting", icon: <SettingsOutlinedIcon /> },
+    { text: "Blog", path: "/blog", icon: <FeedOutlinedIcon /> },
+
+    { text: "Contract", path: "/contract", icon: <ContactPhoneOutlinedIcon /> },
   ],
 };

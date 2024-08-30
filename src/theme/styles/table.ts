@@ -3,34 +3,16 @@ import { Theme } from "@mui/material";
 export const tableStyle = (theme: Theme) => ({
     root: {
         width: '100%',
-        '& thead': {
+        '& thead th': {
             whiteSpace: 'nowrap',
-            background: '#75B9C8',
-            fontSize: '14px',
+            fontSize: '20px',
             fontWeight: 700,
             lineHeight: '21.15px',
-            color: '#666666',
-            "& .MuiTableCell-root": {
-                backgroundColor: '#75B9C8',
-            },
-            '& .MuiTableCell-head .MuiBox-root': {
-                fontSize: '12px',
-                backgroundColor: '#9E88EC',
-                color: '#FFFFFF',
-                borderRadius: '10px',
-                maxWidth: '64px',
-                height: '20px',
-                marginBottom: '4px',
-                margin: 'auto',
-                textAlign: "center"
-            },
+            color: theme.palette.primary.main
         },
         '& tbody': {
-            '& tr:nth-of-type(odd)': {
-                background: '#FFFFFF',
-            },
-            '& tr:nth-of-type(even)': {
-                background: '#EBF5F4',
+            '& tr:hover': {
+                background: '#f7f4f4',
             },
         },
 
@@ -38,6 +20,7 @@ export const tableStyle = (theme: Theme) => ({
             whiteSpace: 'nowrap',
             overflow: 'hidden',
         },
+
     }
 })
 

@@ -16,15 +16,15 @@ const CustomSwitch: React.FC<CustomSwitchProps> = ({
   ...props
 }) => {
   return (
-    <Box display={"flex"} alignSelf={"center"}>
+    <>
       <Switch
         checked={checked}
         disabled={disabled}
         onChange={onChange}
         {...props}
       />
-      {label && <label>{label}</label>}
-    </Box>
+      {label && <label style={{ paddingLeft: "8px" }}>{label}</label>}
+    </>
   );
 };
 

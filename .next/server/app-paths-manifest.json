@@ -1,4 +1,10 @@
 {
+  "/about/page": "app/about/page.js",
+  "/contract/page": "app/contract/page.js",
+  "/profile/page": "app/profile/page.js",
   "/home/page": "app/home/page.js",
-  "/page": "app/page.js"
+  "/blog/page": "app/blog/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/service/page": "app/service/page.js",
+  "/package/page": "app/package/page.js"
 }
