@@ -64,7 +64,7 @@ export default function Home({}: Props) {
             gap={2}
           >
             <CustomImageUpload
-              label="Upload Images"
+              label="อัปโหลดภาพ"
               onChange={handleImageChange}
               value={images}
               height="500px"
@@ -79,16 +79,17 @@ export default function Home({}: Props) {
             height={"100%"}
             p={5}
           >
-            <CustomTextfield label="Title" placeholder="Enter title" />
+            <CustomTextfield label="หัวข้อ" placeholder="กรอกหัวข้อ" />
             <CustomTextfield
-              label="Subtitle"
-              placeholder="Enter subtitle"
+              label="รายละเอียด"
+              placeholder="กรอกรายละเอียด"
               minRows={10}
               value={""}
             />
           </Box>
         </Grid>
       </Grid>
+
       <Box
         display={"flex"}
         gap={2}

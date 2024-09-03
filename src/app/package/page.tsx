@@ -72,7 +72,7 @@ export default function Package({}: Props) {
       <Box>
         <Grid container spacing={2}>
           {[...Array(row)].map((_, rowIndex) => (
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={6} key={rowIndex}>
               <StyledBox key={rowIndex} flexDirection={"column"}>
                 <Box
                   display={"flex"}
@@ -82,7 +82,7 @@ export default function Package({}: Props) {
                   borderRadius={"8px 8px 0 0 "}
                 >
                   <Typography variant="h5" fontWeight={700}>
-                    Package no.{rowIndex + 1}
+                    แพ็คเกจที่ {rowIndex + 1}
                   </Typography>
                   <CustomSwitch />
                 </Box>
@@ -113,14 +113,20 @@ export default function Package({}: Props) {
                   >
                     <Grid container spacing={2}>
                       <Grid item xs={6}>
-                        <CustomTextfield label="name" />
+                        <CustomTextfield
+                          label="ชื่อแพ็คเกจ"
+                          placeholder="กรอกชื่อแพ็คเกจ"
+                        />
                       </Grid>
                       <Grid item xs={6}>
-                        <CustomTextfield label="price" />
+                        <CustomTextfield
+                          label="ราคา"
+                          placeholder="กรอกราคาแพ็คเกจ"
+                        />
                       </Grid>
                       <Grid item xs={12}>
                         <CustomTextEditor
-                          placeholder="Detail package"
+                          placeholder="รายละเอียดแพ็คเกจ"
                           value={""}
                           onChange={(v) => console.log(v)}
                           minRow={4}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Autocomplete, Box, TextField, Typography } from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import theme from "@/theme/theme";
 
 interface CustomInputWithTagsProps {
   value?: any[];
@@ -50,7 +51,7 @@ const CustomInputWithTags: React.FC<CustomInputWithTagsProps> = ({
       display: "flex",
     },
     "& .MuiInputBase-input": {
-      minHeight: minRows ? `${minRows * 44}px` : "44px",
+      minHeight: `${minRows || 1 * 44}px`,
       height: "100%",
     },
   };
@@ -63,8 +64,7 @@ const CustomInputWithTags: React.FC<CustomInputWithTagsProps> = ({
         position: "relative",
         flexDirection: "row",
         alignItems: "end",
-        marginTop: "8px",
-        marginBottom: "8px",
+        marginY: "16px",
       }}
     >
       <Autocomplete
@@ -107,7 +107,7 @@ const CustomInputWithTags: React.FC<CustomInputWithTagsProps> = ({
             }}
             sx={{
               "& .MuiAutocomplete-tag": {
-                backgroundColor: "#75B9C8",
+                backgroundColor: theme.palette.primary.light,
                 color: "#FFFFFF",
                 fontSize: "14px",
                 lineHeight: "20px",

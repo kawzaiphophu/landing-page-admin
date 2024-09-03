@@ -1,16 +1,13 @@
 "use client";
 
-import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
-import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import { useState } from "react";
 import { styled, Theme, CSSObject } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
-import IconButton from "@mui/material/IconButton";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
-import { useMediaQuery, useTheme, Typography } from "@mui/material";
+import { useMediaQuery, useTheme } from "@mui/material";
 import Link from "next/link";
 const drawerWidth = 221;
 
@@ -181,6 +178,8 @@ import ContactPhoneOutlinedIcon from "@mui/icons-material/ContactPhoneOutlined";
 import FeedOutlinedIcon from "@mui/icons-material/FeedOutlined";
 import { hexToRgba } from "@/utils/app";
 import { usePathname } from "next/navigation";
+import TravelExploreIcon from "@mui/icons-material/TravelExplore";
+
 export const menuItems = {
   ADMIN: [
     {
@@ -211,5 +210,6 @@ export const menuItems = {
     { text: "Blog", path: "/blog", icon: <FeedOutlinedIcon /> },
 
     { text: "Contract", path: "/contract", icon: <ContactPhoneOutlinedIcon /> },
+    { text: "SEO", path: "/seo", icon: <TravelExploreIcon /> },
   ],
 };

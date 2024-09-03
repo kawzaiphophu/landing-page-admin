@@ -26,43 +26,38 @@ export default function Profile({}: Props) {
         }}
       >
         <Typography variant="h3" color={"#FFF"}>
-          โปรไฟล์
+          Profile
         </Typography>
       </Box>
       <Grid container spacing={2} mt={5}>
         {/* Logo Section */}
-        <Grid item xs={12} sm={3}>
-          <Box height={"100%"} px={5}>
-            <CustomImageUpload
-              label="โลโก้"
-              onChange={(e) => console.log(e)}
-              maxFiles={1}
-              height="160px"
-            />
-          </Box>
-        </Grid>
+        {/* <Grid item xs={12} sm={3}> */}
+        <Box height={"100%"} px={5} width={"20vw"}>
+          <CustomImageUpload
+            label="โลโก้"
+            onChange={(e) => console.log(e)}
+            maxFiles={1}
+            height="160px"
+          />
+        </Box>
+        {/* </Grid> */}
         {/* Company Information */}
         <Grid container spacing={2} xs={9}>
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={6}>
             <CustomTextfield
               label="ชื่อบริษัท (ภาษาไทย)"
               placeholder="กรุณากรอกชื่อบริษัท"
               value={"regis consultant"}
             />
           </Grid>
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={6}>
             <CustomTextfield
               label="ชื่อบริษัท (ภาษาอังกฤษ)"
               placeholder="กรุณากรอกชื่อบริษัท"
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <CustomTextfield
-              label="รายละเอียดบริษัท"
-              placeholder="กรุณากรอกรายละเอียด"
-            />
-          </Grid>
-          <Grid item xs={12} sm={3}>
+
+          {/* <Grid item xs={12} sm={3}>
             <CustomTextfield
               label="ชื่อผู้ใช้ Line"
               placeholder="กรุณากรอกชื่อผู้ใช้"
@@ -85,14 +80,20 @@ export default function Profile({}: Props) {
               label="ลิงก์ Facebook"
               placeholder="กรุณากรอกลิงก์"
             />
-          </Grid>
-          <Grid item xs={12} sm={3}>
+          </Grid> */}
+          <Grid item xs={12} sm={6}>
             <CustomTextfield label="อีเมล" placeholder="กรุณากรอกอีเมล" />
           </Grid>
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={6}>
             <CustomTextfield
               label="หมายเลขโทรศัพท์"
               placeholder="กรุณากรอกหมายเลขโทรศัพท์"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <CustomTextfield
+              label="รายละเอียดบริษัท"
+              placeholder="กรุณากรอกรายละเอียด"
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -122,8 +123,8 @@ export default function Profile({}: Props) {
         alignSelf="flex-end"
         pt={1}
       >
-        <CustomButton text="ยกเลิก" style="outlined" />
-        <CustomButton text="ส่ง" style="contained" />
+        <CustomButton text="Cancel" style="outlined" />
+        <CustomButton text="Submit" style="contained" />
       </Box>
     </Box>
   );

@@ -139,8 +139,8 @@ export default function CustomImageUpload(props: CustomImageUploadProps) {
       width={"100%"}
       height={"100%"}
       position={"relative"}
-      px={2}
-      my={2}
+      p={2}
+      // m={2}
     >
       {label && (
         <Typography

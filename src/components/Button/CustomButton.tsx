@@ -80,11 +80,9 @@ const CustomButton: React.FC<ButtonsProps> = ({
           },
           hover: {
             backgroundColor: colors.light,
-            color: colors.dark,
           },
           focus: {
             backgroundColor: colors.light,
-            color: colors.dark,
           },
           disabled: {
             backgroundColor: "#F3F3F3",

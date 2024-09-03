@@ -192,14 +192,12 @@ export default function CustomTextfield({
   return (
     <Box
       sx={{
-        // ...sx,
+        ...sx,
         width: "100%",
         display: "flex",
         position: "relative",
         flexDirection: "row",
-        alignItems: "end",
-        marginTop: "8px",
-        marginBottom: "8px",
+        py: "8px",
       }}
     >
       <TextField
@@ -278,12 +276,10 @@ export default function CustomTextfield({
               alignSelf: "end",
               borderRadius: "0  8px 8px 0",
               "&:hover": {
-                backgroundColor: "#153238",
-                color: "#FFFFFF",
+                backgroundColor: theme.palette.secondary.light,
               },
               "&:active": {
-                backgroundColor: "#153238",
-                color: "#FFFFFF",
+                backgroundColor: theme.palette.secondary.light,
               },
             }}
           >

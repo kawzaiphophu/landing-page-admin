@@ -9,8 +9,6 @@ import {
   List,
   ListItem,
   ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Typography,
   useMediaQuery,
   useTheme,
@@ -190,10 +188,10 @@ export default function NavBar() {
               sx={{
                 "& .css-4t3x6l-MuiPaper-root-MuiDrawer-paper ": {
                   background: `linear-gradient(
-    to bottom, 
-    ${hexToRgba(theme.palette.primary.main, 0.2)}, 
-    ${hexToRgba(theme.palette.secondary.main, 0.5)}
-  )`,
+                       to bottom, 
+                       ${hexToRgba(theme.palette.primary.main, 0.2)}, 
+                      ${hexToRgba(theme.palette.secondary.main, 0.5)}
+                       )`,
                 },
               }}
             >
@@ -203,7 +201,7 @@ export default function NavBar() {
             <Box display={"flex"} flexDirection={"column"}>
               <Box display={"flex"} gap={2} alignItems={"center"}>
                 <Typography
-                  variant="h5"
+                  variant="h4"
                   color="primary"
                   fontWeight={600}
                   noWrap

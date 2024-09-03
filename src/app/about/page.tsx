@@ -73,7 +73,7 @@ export default function About({}: Props) {
           height={"auto"}
         >
           <CustomImageUpload
-            label="Upload Images"
+            label="อัปโหลดภาพ"
             onChange={handleImageChange}
             value={images}
             maxFiles={3}
@@ -83,12 +83,12 @@ export default function About({}: Props) {
         </Grid>
         <Grid item xs={12} md={12}>
           <Box height={"100%"} display={"flex"} flexDirection={"column"}>
-            <CustomTextfield label="Title" placeholder="Enter title" />
-            <CustomTextEditor
-              placeholder="subtitle"
+            <CustomTextfield label="หัวข้อ" placeholder="กรอกหัวข้อ" />
+            <CustomTextfield
+              label="รายละเอียด"
+              placeholder="กรอกรายละเอียด"
+              minRows={10}
               value={""}
-              onChange={(v) => console.log(v)}
-              minRow={10}
             />
           </Box>
         </Grid>

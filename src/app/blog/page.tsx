@@ -21,6 +21,7 @@ import DropdownMenu from "@/components/Dropdown/DropdownMenu";
 import CustomButton from "@/components/Button/CustomButton";
 import { useRouter } from "next/navigation";
 import CustomTextfield from "@/components/Textfield/CustomTextfield";
+import PaginationControl from "@/components/Pagination/PaginationControl";
 
 type Props = {};
 
@@ -50,7 +51,7 @@ export default function Setting({}: Props) {
         sx={{
           border: "1px solid #DEDEDE",
           borderRadius: "8px",
-          p: 3,
+          p: " 0.5rem 3rem ",
           bgcolor: theme.palette.primary.dark,
           mt: -5,
         }}
@@ -58,7 +59,7 @@ export default function Setting({}: Props) {
         <Typography variant="h3" color={"#FFF"}>
           Blog Section
         </Typography>
-        <Box width={"50%"} display={"flex"} gap={2}>
+        <Box width={"50%"} display={"flex"} justifyContent={"end"} gap={2}>
           <CustomTextfield
             type="search"
             buttonText="ค้นหา "
@@ -74,7 +75,10 @@ export default function Setting({}: Props) {
         </Box>
       </Box>
 
-      <TableContainer component={Paper} sx={{ height: "60vh" }}>
+      <TableContainer
+        component={Paper}
+        sx={{ height: "auto", maxHeight: "60vh", mt: 2 }}
+      >
         <Table stickyHeader>
           <TableHead>
             <TableRow sx={{ height: "50px" }}>
@@ -132,6 +136,14 @@ export default function Setting({}: Props) {
                 </Box>
               )} */}
       </TableContainer>
+      <PaginationControl
+        totalPages={totalPages}
+        page={page}
+        pageLimit={pageLimit}
+        setPage={setPage}
+        setPageLimit={setPageLimit}
+        setSearchValue={setSearchValue}
+      />
     </Box>
   );
 }
