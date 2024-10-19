@@ -13,9 +13,7 @@ import React, { useState } from "react";
 
 //?================================================================================
 import CustomImageUpload from "@/components/CustomImageUpload/CustomImageUpload";
-import CustomSwitch from "@/components/Switch/Switch";
 import { useSnackbar } from "@/components/Alert/CustomAlert";
-import CustomTextEditor from "@/components/Editor/CustomTextEditor";
 import CustomTextfield from "@/components/Textfield/CustomTextfield";
 import CustomButton from "@/components/Button/CustomButton";
 
@@ -37,7 +35,7 @@ export default function About({}: Props) {
 
   const handleClick = () => {
     CustomAlert({
-      color: "success", // Change to 'error', 'info', 'warning' as needed
+      color: "error", // Change to 'error', 'info', 'warning' as needed
       title: "Operation Successful",
       text: "Your operation was completed successfully.",
     });
@@ -99,7 +97,7 @@ export default function About({}: Props) {
         justifyContent={"center"}
         alignSelf="flex-end"
       >
-        <CustomButton text="Cancel" style="outlined" />
+        <CustomButton text="Cancel" style="outlined" onClick={handleClick} />
         <CustomButton text="Submit" style="contained" />
       </Box>
     </Box>

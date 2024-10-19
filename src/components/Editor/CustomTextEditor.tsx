@@ -104,9 +104,10 @@ const Editor: React.FC<CustomQuillEditorProps> = ({
           border: `solid 1px ${
             theme.palette.mode === "dark" ? "#626060" : "#DEDEDE"
           }`,
-          background: theme.palette.mode === "dark" ? "#242424" : "#FFFFFF",
+          borderTop: "1px solid #DEDEDE",
+          background: "#FFFFFF",
           "&:focus-within": {
-            border: `2px solid ${theme.palette.primary.main}`,
+            borderColor: `${theme.palette.primary.main}`,
           },
           "& .ql-blank::before": {
             color: theme.palette.mode === "dark" ? "#585656" : "#DEDEDE",
