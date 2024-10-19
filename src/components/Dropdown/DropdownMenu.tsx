@@ -109,7 +109,7 @@ export default function DropdownMenu({
               {titles.map((title, index) => (
                 <StyledMenuItem
                   key={index}
-                  onClick={(event) => {
+                  onClick={(event: any) => {
                     event.stopPropagation(); // Stop event propagation
                     handleClose(event);
                     if (actions[index]) {

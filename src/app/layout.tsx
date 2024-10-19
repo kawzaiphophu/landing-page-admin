@@ -13,7 +13,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Company Website Admin",
-  description: "Knacx",
+  description: "",
 };
 
 export default function RootLayout({
@@ -41,6 +41,7 @@ export default function RootLayout({
                     height: "auto",
                     position: "relative",
                     minHeight: "92.5vh",
+                    maxWidth: "90vw",
                   }}
                 >
                   <NavBar />

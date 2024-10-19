@@ -3,8 +3,6 @@ import Box from "@mui/material/Box";
 import { ThemeProvider, useTheme } from "@mui/material/styles";
 import React, { useRef, useState } from "react";
 import ReactQuill, { Quill } from "react-quill";
-import "react-quill-v2.0/dist/quill.snow.css";
-import "react-quill/dist/quill.snow.css";
 import { extractPlainText } from "@/utils/formatData";
 import QuillResizeImage from "quill-resize-image";
 
