@@ -5,6 +5,7 @@ import React, { useRef, useState } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import { extractPlainText } from "@/utils/formatData";
 import QuillResizeImage from "quill-resize-image";
+import "react-quill-v2.0/dist/quill.snow.css";
 
 interface CustomQuillEditorProps {
   value: string;
