@@ -1,26 +1,38 @@
 "use client";
+
 //?================================================================================
 import {
   Box,
   Typography,
-  TextField,
   Button,
   useTheme,
-  Divider,
   Grid,
   IconButton,
   styled,
-  Stack,
 } from "@mui/material";
 import React, { useState } from "react";
+import dynamic from "next/dynamic";
 
 //?================================================================================
-import CustomImageUpload from "@/components/CustomImageUpload/CustomImageUpload";
-import CustomSwitch from "@/components/Switch/Switch";
-import CustomTextfield from "@/components/Textfield/CustomTextfield";
+const CustomImageUpload = dynamic(
+  () => import("@/components/CustomImageUpload/CustomImageUpload"),
+  { ssr: false }
+);
+const CustomTextEditor = dynamic(
+  () => import("@/components/Editor/CustomTextEditor"),
+  { ssr: false }
+);
+const CustomSwitch = dynamic(() => import("@/components/Switch/Switch"), {
+  ssr: false,
+});
+const CustomTextfield = dynamic(
+  () => import("@/components/Textfield/CustomTextfield"),
+  { ssr: false }
+);
+const CustomButton = dynamic(() => import("@/components/Button/CustomButton"), {
+  ssr: false,
+});
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import CustomTextEditor from "@/components/Editor/CustomTextEditor";
-import CustomButton from "@/components/Button/CustomButton";
 //?================================================================================
 
 type Props = {};
