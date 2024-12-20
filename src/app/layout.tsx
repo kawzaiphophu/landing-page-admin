@@ -2,12 +2,10 @@
 
 import { Inter } from "next/font/google";
 import "./globals.css";
-import SideBar from "@/components/SideBar/SideBar";
-import { Box, Divider } from "@mui/material";
-import NavBar from "@/components/Navbar/Navbar";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "@/theme/theme";
 import { SnackbarProvider } from "@/components/Alert/CustomAlert";
+import { MainLayout } from "@/components/Layout/MainLayout";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,38 +19,16 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
+
+
   return (
     <html lang="en">
       <ThemeProvider theme={theme}>
         <SnackbarProvider>
-          <body className={inter.className}>
-            <Box sx={{ display: "flex" }}>
-              <Box
-                width="auto"
-                flexGrow={1}
-                p={1}
-                sx={{ display: { xs: "none", md: "flex" } }}
-              >
-                <SideBar />
-              </Box>
-              <main>
-                <Box
-                  sx={{
-                    height: "auto",
-                    position: "relative",
-                    minHeight: "92.5vh",
-                    maxWidth: "90vw",
-                  }}
-                >
-                  <NavBar />
-                  <Divider />
-                  <Box p={2} mt={3}>
-                    {children}
-                  </Box>
-                </Box>
-              </main>
-            </Box>
-          </body>
+        <body className={inter.className}>
+          <MainLayout>{children}</MainLayout>
+        </body>
         </SnackbarProvider>
       </ThemeProvider>
     </html>

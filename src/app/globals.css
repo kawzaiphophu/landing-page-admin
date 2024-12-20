@@ -55,15 +55,6 @@ main {
   }
 }
 
-* {
-  animation: fadeIn 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
-}
-
-.button {
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.box {
-  transition: transform 0.3s ease, opacity 0.3s ease;
+.MuiInputLabel-asterisk {
+  color: #ee3741;
 }

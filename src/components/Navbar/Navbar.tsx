@@ -21,7 +21,8 @@ import { usePathname } from "next/navigation";
 import { menuItems } from "../SideBar/SideBar";
 import Link from "next/link";
 import { hexToRgba } from "@/utils/app";
-
+import Image from "next/image";
+import logo from "@/assets/logo-red-VqMlSVYQ.png";
 //*------------------------------------------------------------------------
 
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
@@ -36,6 +37,7 @@ export default function NavBar() {
   const [open, setOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const theme = useTheme();
+  
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -138,6 +140,10 @@ export default function NavBar() {
         height: "80px",
         zIndex: 1100,
         borderRadius: "0.75rem",
+        width:'auto',
+        ml:'1rem',
+        mr:'2rem',
+        mb:'3rem',
         backgroundColor: isScrolled
           ? "rgba(255, 255, 255, 0.6)"
           : "rgba(255, 255, 255, 0.6)",
@@ -177,12 +183,12 @@ export default function NavBar() {
               px: { xs: "0", sm: "2" },
             }}
           >
-            {isMobile && (
+            {/* {isMobile && (
               <Button onClick={toggleDrawer(!open)} sx={{ minWidth: 0 }}>
                 <MenuIcon color="secondary" />
               </Button>
-            )}
-            <Drawer
+            )} */}
+            {/* <Drawer
               open={open}
               onClose={toggleDrawer(false)}
               sx={{
@@ -196,10 +202,11 @@ export default function NavBar() {
               }}
             >
               {DrawerList}
-            </Drawer>
+            </Drawer> */}
             <Box sx={logoStyle}></Box>
             <Box display={"flex"} flexDirection={"column"}>
               <Box display={"flex"} gap={2} alignItems={"center"}>
+                <Image src={logo} alt="alt" width={100} />
                 <Typography
                   variant="h4"
                   color="primary"
@@ -209,7 +216,7 @@ export default function NavBar() {
                     display: { xs: "none", sm: "flex" },
                   }}
                 >
-                  Company Website Admin
+                  Unified Solutions
                 </Typography>
               </Box>
             </Box>

@@ -8,6 +8,7 @@ interface PaginationControlProps {
   totalPages: number;
   page: number;
   pageLimit: number;
+  totalItem: number;
   setPage: (page: number) => void;
   setPageLimit: (limit: number) => void;
   setSearchValue?: (value: string) => void | undefined;
@@ -23,6 +24,7 @@ const PaginationControl: React.FC<PaginationControlProps> = ({
   setPageLimit,
   setSearchValue,
   title = [15, 30, 45, 60],
+  totalItem,
 }) => {
   const handlePageLimitChange = (limit: number) => {
     setPageLimit(limit);
@@ -36,9 +38,9 @@ const PaginationControl: React.FC<PaginationControlProps> = ({
     <Stack
       display={"flex"}
       direction={{ xs: "column", sm: "row" }}
-      justifyContent="end"
+      justifyContent="space-between"
       alignItems="center"
-      sx={{ py: 2 }}
+      sx={{ p: 2 }}
       gap={2}
       flexWrap={"nowrap"}
     >
@@ -49,14 +51,23 @@ const PaginationControl: React.FC<PaginationControlProps> = ({
         sx={{ color: "#7D7D7B", fontSize: "14px", fontWeight: "600" }}
         flexWrap={"nowrap"}
       >
-        <Box fontWeight="600">{pageLimit}</Box>
+        <Typography variant="body2" color="##9E9E9E">
+          แสดง
+        </Typography>
+
         <DropdownMenu
+          label={pageLimit.toString()}
           icon="arrow"
           id={1}
           titles={title}
           actions={title.map((limit) => () => handlePageLimitChange(limit))}
           menuIcon={[]}
         />
+        <Typography variant="body2" color="##9E9E9E">
+          {pageLimit * page - pageLimit + 1} -{" "}
+          {page * pageLimit > totalItem ? totalItem : page * pageLimit} จาก{" "}
+          {totalItem || "0"}
+        </Typography>
       </Box>
       <Box display={"flex"} alignItems={"center"}>
         <CustomPagination

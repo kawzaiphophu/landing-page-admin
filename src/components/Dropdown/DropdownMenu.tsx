@@ -37,6 +37,7 @@ interface DropdownMenuProps {
   icon?: "menu" | "arrow";
   isDisabled?: boolean[];
   menuIcon?: string[] | any;
+  label?: string | number;
 }
 
 //*------------------------------------------------------------------------
@@ -48,6 +49,7 @@ export default function DropdownMenu({
   icon = "menu",
   isDisabled = [],
   menuIcon = [],
+  label,
 }: DropdownMenuProps) {
   const theme = useTheme();
 
@@ -76,22 +78,30 @@ export default function DropdownMenu({
   };
 
   return (
-    <Box onClick={(event) => event.stopPropagation()}>
+    <Box
+      // onClick={(event) => event.stopPropagation()}
+      display={"flex"}
+      alignItems={"center"}
+      sx={{
+        border: "1px solid #DEDEDE",
+        width: "100px",
+        height: "44px",
+        justifyContent: "end",
+        borderRadius: "4px",
+        px: 1,
+        cursor: "pointer",
+      }}
+      onClick={handleClick}
+    >
+      {label && (
+        <Typography variant="body2" mr={3}>
+          {label}
+        </Typography>
+      )}
       <PopupState variant="popover" popupId={`menu-popup-${id}`}>
         {(popupState) => (
           <React.Fragment>
-            <StyledButton
-              {...bindTrigger(popupState)}
-              sx={{
-                width: "40px",
-                height: "40px",
-                pointerEvents: "auto",
-                borderRadius: "50%",
-              }}
-              onClick={handleClick}
-            >
-              {selectedIcon}
-            </StyledButton>
+            <Box>{selectedIcon}</Box>
             <StyledMenu
               {...bindMenu(popupState)}
               anchorEl={anchorEl}
@@ -109,7 +119,7 @@ export default function DropdownMenu({
               {titles.map((title, index) => (
                 <StyledMenuItem
                   key={index}
-                  onClick={(event: any) => {
+                  onClick={(event) => {
                     event.stopPropagation(); // Stop event propagation
                     handleClose(event);
                     if (actions[index]) {
@@ -131,7 +141,7 @@ export default function DropdownMenu({
                   >
                     {icon === "menu" && typeof menuIcon[index] === "string" ? (
                       <img
-                        style={{ width: "24px", height: "24px" }}
+                        style={{ width: "10px", height: "10px" }}
                         src={menuIcon[index]}
                         alt="menu_icon"
                       />

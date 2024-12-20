@@ -1,0 +1,67 @@
+.swal2-html-container {
+  color: #a1a19f !important;
+}
+
+.swal2-confirm {
+  width: 156px;
+  height: 44px;
+  color: #ffffff !important;
+  background-color: #cd2525 !important;
+}
+
+div:where(.swal2-container) button:where(.swal2-styled) {
+  box-shadow: none !important;
+}
+.swal2-container.swal2-backdrop-show {
+  z-index: 2147483647 !important;
+}
+.swal2-cancel {
+  width: 156px;
+  height: 44px;
+  color: #666666 !important;
+  background-color: #ffffff !important;
+  border: 1px solid #666666 !important;
+}
+
+.swal2-actions {
+  flex-direction: row-reverse;
+}
+
+.swal2-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2147483647 !important;
+}
+
+.swal2-popup {
+  align-content: center;
+  position: relative;
+  height: 25rem;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.swal2-popup .swal2-close {
+  position: absolute;
+  top: 0;
+}
+.format-pre {
+  height: auto;
+  width: auto;
+}
+
+.format-pre .swal2-title {
+  font-size: 1.5rem;
+  padding: 0;
+}
+
+.format-pre .swal2-html-container {
+  font-size: 1rem;
+}

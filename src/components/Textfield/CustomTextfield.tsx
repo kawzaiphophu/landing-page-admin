@@ -2,10 +2,6 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
-  Button,
-  Dialog,
-  DialogContent,
-  DialogTitle,
   IconButton,
   InputAdornment,
   TextField,
@@ -15,8 +11,6 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import theme from "@/theme/theme";
 
 interface InputProps {
   name?: string;
@@ -45,6 +39,7 @@ interface InputProps {
   buttonText?: string;
   valueLat?: string;
   valueLng?: string;
+  maxValue?: number | string;
 }
 
 export default function CustomTextfield({
@@ -53,7 +48,7 @@ export default function CustomTextfield({
   value = undefined,
   onChange,
   id,
-  placeholder,
+  placeholder = `กรุณาระบุข้อมูล${label}`,
   error,
   onKeyDown,
   InputProps,
@@ -63,130 +58,193 @@ export default function CustomTextfield({
   disabled,
   helperText,
   errorMessage,
-  onClickButton,
   required,
   showLength,
   minRows,
   endAdornment,
   sx,
-  buttonText,
+  maxValue,
 }: InputProps) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [validateError, setValidateError] = useState<string | null>(null);
   const [length, setLength] = useState<number>(0);
-  const [open, setOpen] = useState(false);
+  const [inputValue, setInputValue] = useState<any>(value);
 
   useEffect(() => {
     if (typeof value === "string") {
       setLength(value.length);
     }
+    setInputValue(value);
   }, [value]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let inputValue = event.target.value;
+  const validateInput = (inputValue: string): string | null => {
+    let validatedValue = inputValue;
 
-    setLength(inputValue.length);
-    if (type === "number") {
-      if (maxLength && inputValue.length > maxLength) {
-        inputValue = inputValue.slice(0, maxLength);
+    if (type === "number" || type === "phone" || type === "numberWithComma") {
+      const cleanedInputValue = inputValue.replace(/,/g, "");
+
+      if (maxLength && cleanedInputValue.length > maxLength) {
+        validatedValue = cleanedInputValue.slice(0, maxLength);
+      } else {
+        validatedValue = cleanedInputValue;
       }
-      onChange && onChange(inputValue);
-      return;
-    }
-    switch (type) {
-      case "password":
-        onChange && onChange(inputValue);
-        if (inputValue.length < 6 || inputValue.length > 15) {
-          setValidateError("รหัสผ่านความยาว 6-15 ตัวอักษร");
-        } else {
-          setValidateError(null);
-        }
-        break;
+      if (maxValue && Number(validatedValue) > Number(maxValue)) {
+        return String(maxValue);
+      }
 
-      case "float":
-        const floatPattern = /^\d*\.?\d{0,2}$/;
-        if (floatPattern.test(inputValue)) {
-          const floatVal = parseFloat(inputValue);
-          if (isNaN(floatVal) || floatVal <= 10.0) {
-            onChange && onChange(inputValue);
-          }
+      validatedValue = validatedValue.replace(/[eE]/g, "");
+    }
+
+    switch (type) {
+      case "number":
+        const cleanedNumberValue = validatedValue
+          .replace(/[^0-9.eE]/g, "")
+          .replace(/(\..*)\..*/g, "$1")
+          .slice(0, maxLength);
+
+        if (cleanedNumberValue === "") {
+          return "";
         }
-        break;
+
+        const numericValue = Number(cleanedNumberValue);
+
+        if (maxValue && numericValue > Number(maxValue)) {
+          return String(maxValue);
+        }
+
+        return numericValue.toString();
 
       case "phone":
-        if (inputValue.length <= 10) {
-          onChange && onChange(inputValue);
+        const cleanedPhoneValue = validatedValue.replace(/[^0-9+]/g, "");
+
+        if (maxLength && cleanedPhoneValue.length > maxLength) {
+          return cleanedPhoneValue.slice(0, maxLength);
         }
-        break;
+
+        if (cleanedPhoneValue === "") {
+          return "";
+        }
+
+        if (
+          maxValue &&
+          Number(cleanedPhoneValue.replace("+", "")) > Number(maxValue)
+        ) {
+          return String(maxValue);
+        }
+
+        return cleanedPhoneValue;
+      case "float":
+        const floatPattern = /^\d*\.?\d{0,2}$/;
+
+        validatedValue = validatedValue.replace(/[^0-9.]/g, "");
+
+        if (floatPattern.test(validatedValue)) {
+          const floatVal = parseFloat(validatedValue);
+
+          if (maxValue && floatVal > Number(maxValue)) {
+            return String(maxValue);
+          }
+
+          return validatedValue;
+        }
+
+        return "";
 
       case "email":
-        onChange && onChange(inputValue);
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (emailPattern.test(inputValue)) {
-          setValidateError(null);
-        } else {
+        if (!emailPattern.test(validatedValue)) {
           setValidateError("ที่อยู่อีเมลไม่ถูกต้อง");
+          return validatedValue; // Return current value even if invalid
         }
+
+        setValidateError(null);
         break;
 
       case "textWithoutSymbol":
         const removeSpecialCharacters = (str: string) => {
           return str.replace(/[\^~$|<>.,#;:]/g, "");
         };
-        inputValue = removeSpecialCharacters(inputValue);
-        onChange && onChange(inputValue);
+        validatedValue = removeSpecialCharacters(validatedValue);
         break;
+      case "numberWithComma":
+        const cleanedInputValue = inputValue.replace(/,/g, "");
+        validatedValue = cleanedInputValue
+          .replace(/[^0-9.eE]/g, "")
+          .replace(/(\..*)\..*/g, "$1")
+          .slice(0, maxLength || undefined);
+
+        if (validatedValue === "") {
+          return "";
+        }
+
+        if (maxLength && validatedValue.length > maxLength) {
+          validatedValue = validatedValue.slice(0, maxLength);
+        }
+
+        const numericinput = Number(validatedValue);
+        if (maxValue && numericinput > Number(maxValue)) {
+          return String(maxValue);
+        }
+
+        if (!isNaN(numericinput)) {
+          validatedValue = numericinput.toLocaleString();
+        } else {
+          return "";
+        }
+
+        return validatedValue;
 
       default:
-        onChange && onChange(inputValue);
         break;
+    }
+
+    return validatedValue;
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let inputValue = event.target.value;
+    const validatedValue = validateInput(inputValue);
+    if (validatedValue !== null) {
+      setLength(validatedValue.length);
+      setInputValue(validatedValue);
     }
   };
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     let inputValue = event.target.value;
-
-    if (type === "float") {
-      if (inputValue) {
-        let floatVal = parseFloat(inputValue);
-        if (isNaN(floatVal)) {
-          floatVal = 0.0;
-        }
-        if (floatVal > 10.0) {
-          floatVal = 10.0;
-        }
-        inputValue = floatVal.toFixed(2);
-        onChange && onChange(inputValue);
-      }
+    if (!inputValue) {
+      setValidateError(null);
     }
-
-    onBlur && onBlur(inputValue);
+    onChange && onChange(inputValue.replace(/,/g, ""));
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (type === "number" || type === "float") {
-      const allowedKeys = [
-        "Backspace",
-        "Tab",
-        "Enter",
-        "ArrowLeft",
-        "ArrowRight",
-        "Delete",
-        ".",
-      ];
-      if (!allowedKeys.includes(event.key) && !/^\d$/.test(event.key)) {
+    const allowedKeys = [
+      "Backspace",
+      "Tab",
+      "ArrowLeft",
+      "ArrowRight",
+      "Delete",
+      "v",
+      "c",
+      "a",
+    ];
+
+    if (event.ctrlKey || event.metaKey) {
+      if (event.key === "c" || event.key === "v" || event.key === "a") {
+        return;
+      }
+    }
+
+    if (type === "number" || type === "phone" || type === "numberWithComma") {
+      const isNumericKey = /^\d$/.test(event.key);
+      const isAllowedKey = allowedKeys.includes(event.key);
+      if (!isNumericKey && !isAllowedKey) {
         event.preventDefault();
       }
     }
+
     onKeyDown && onKeyDown(event);
-  };
-
-  const handleMapOpen = () => {
-    setOpen(true);
-  };
-
-  const handleMapClose = () => {
-    setOpen(false);
   };
 
   return (
@@ -195,9 +253,8 @@ export default function CustomTextfield({
         ...sx,
         width: "100%",
         display: "flex",
-        position: "relative",
-        flexDirection: "row",
-        py: "8px",
+        flexDirection: "column",
+        my: 1,
       }}
     >
       <TextField
@@ -206,21 +263,30 @@ export default function CustomTextfield({
         label={label}
         disabled={disabled}
         id={id}
-        placeholder={placeholder}
+        placeholder={type === "number" && !placeholder ? "0.00" : placeholder}
         variant="outlined"
         onChange={handleChange}
-        value={value || ""}
+        onKeyDown={handleKeyDown}
+        value={inputValue === "NOT_SPECIFIED" ? "" : inputValue || ""}
         error={error || Boolean(validateError)}
         fullWidth
         inputProps={{
           maxLength: maxLength,
+          inputMode: "numeric",
         }}
         InputLabelProps={{
           shrink: true,
           ...InputProps,
         }}
-        onKeyDown={handleKeyDown}
-        type={showPassword ? "text" : type === "password" ? "password" : type}
+        type={
+          type === "number"
+            ? "text"
+            : showPassword
+            ? "text"
+            : type === "password"
+            ? "password"
+            : type
+        }
         onBlur={handleBlur}
         onWheel={(event) => event.currentTarget.querySelector("input")?.blur()}
         helperText={helperText}
@@ -231,16 +297,18 @@ export default function CustomTextfield({
         InputProps={{
           endAdornment: (
             <>
-              {type === "map" ? (
-                <InputAdornment position="end">
-                  <LocationOnIcon
-                    style={{ cursor: "pointer" }}
-                    onClick={handleMapOpen}
-                  />
-                </InputAdornment>
-              ) : (
-                <InputAdornment position="end">{endAdornment}</InputAdornment>
-              )}
+              <InputAdornment position="end">
+                {endAdornment}
+                {type === "password" && (
+                  <IconButton
+                    onClick={() => {
+                      setShowPassword(!showPassword);
+                    }}
+                  >
+                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                  </IconButton>
+                )}
+              </InputAdornment>
             </>
           ),
           startAdornment:
@@ -260,53 +328,20 @@ export default function CustomTextfield({
                   borderTopRightRadius: "0px",
                   borderBottomRightRadius: "0px",
                 },
+                "& .MuiOutlinedInput-root": {},
               }
-            : {}
+            : {
+                "& .MuiOutlinedInput-root": {
+                  maxHeight: `${minRows ? minRows * 40 : "auto"}px`,
+                  ...(minRows && { paddingX: "16px" }), // Add padding if minRows is defined
+                },
+              }
         }
       />
-      {type === "search" && (
-        <>
-          <Button
-            onClick={onClickButton}
-            sx={{
-              color: "#FFFFFF",
-              backgroundColor: theme.palette.secondary.main,
-              height: "44px",
-              width: "auto",
-              alignSelf: "end",
-              borderRadius: "0  8px 8px 0",
-              "&:hover": {
-                backgroundColor: theme.palette.secondary.light,
-              },
-              "&:active": {
-                backgroundColor: theme.palette.secondary.light,
-              },
-            }}
-          >
-            {buttonText}
-          </Button>
-        </>
-      )}
-      {type === "password" && (
-        <IconButton
-          onClick={() => {
-            setShowPassword(!showPassword);
-          }}
-          sx={{
-            position: "absolute",
-            right: 0,
-            top: "27px",
-            "&:hover": { background: "none" },
-          }}
-        >
-          {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-        </IconButton>
-      )}
+
       {(error || validateError) && (
         <Box
           sx={{
-            position: "absolute",
-            bottom: "-25px",
             display: "flex",
             alignItems: "center",
             fontSize: "12px",
@@ -331,11 +366,15 @@ export default function CustomTextfield({
             fontSize: "12px",
             fontWeight: 400,
             lineHeight: "14.06px",
-            color: "#E20E0E",
           }}
         >
           <ErrorOutlineIcon sx={{ width: "16px", mr: 1 }} />
-          <Typography component="span" fontSize={12} fontWeight={400}>
+          <Typography
+            component="span"
+            fontSize={12}
+            fontWeight={400}
+            color={"red"}
+          >
             {validateError || errorMessage || `กรุณากรอก${label}`}
           </Typography>
         </Box>

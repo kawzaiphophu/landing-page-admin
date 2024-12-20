@@ -86,7 +86,7 @@ export default function SideBar() {
         variant="permanent"
         open={open}
         sx={{
-          display: isMobile ? "none" : "flex",
+          display:  "flex",
           borderRadius: "20px",
           transition: "width 0.3s",
           "&:hover": {
@@ -156,6 +156,7 @@ export default function SideBar() {
                     textDecoration: "none",
                     color: "inherit",
                     textWrap: "nowrap",
+                    fontWeight: 600, 
                   }}
                 >
                   {icon} {open && text}
@@ -169,47 +170,39 @@ export default function SideBar() {
   );
 }
 
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined";
-import LocalAtmOutlinedIcon from "@mui/icons-material/LocalAtmOutlined";
-import ContactPhoneOutlinedIcon from "@mui/icons-material/ContactPhoneOutlined";
-import FeedOutlinedIcon from "@mui/icons-material/FeedOutlined";
+import BarChartIcon from "@mui/icons-material/BarChart";
 import { hexToRgba } from "@/utils/app";
 import { usePathname } from "next/navigation";
-import TravelExploreIcon from "@mui/icons-material/TravelExplore";
-
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 export const menuItems = {
   ADMIN: [
     {
-      text: "Profile",
-      path: "/profile",
-      icon: <AccountCircleOutlinedIcon />,
+      text: "Dashboard",
+      path: "/dashboard",
+      icon: <BarChartIcon />,
     },
     {
-      text: "Home",
-      path: "/home",
-      icon: <HomeOutlinedIcon />,
+      text: "Customer",
+      path: "/customer",
+      icon: <PersonOutlineIcon />,
     },
     {
-      text: "About Us",
-      path: "/about",
+      text: "Suppliers",
+      path: "/supplier",
       icon: <GroupsOutlinedIcon />,
     },
     {
-      text: "Service",
-      path: "/service",
+      text: "Orders",
+      path: "/order",
       icon: <HandshakeOutlinedIcon />,
     },
     {
-      text: "Package",
-      path: "/package",
-      icon: <LocalAtmOutlinedIcon />,
+      text: "Users",
+      path: "/user",
+      icon: <ManageAccountsIcon />,
     },
-    { text: "Blog", path: "/blog", icon: <FeedOutlinedIcon /> },
-
-    { text: "Contract", path: "/contract", icon: <ContactPhoneOutlinedIcon /> },
-    { text: "SEO", path: "/seo", icon: <TravelExploreIcon /> },
   ],
 };

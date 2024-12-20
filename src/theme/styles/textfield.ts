@@ -7,13 +7,14 @@ const textFieldStyles = (theme: Theme) => ({
     root: {
         "& .MuiInputLabel-root": {
             fontSize: '18px',
-            transform: 'translate(9px, -14px) scale(1)',
+            transform: 'translate(9px, -20px) scale(1)',
             background: '#FFF',
-            padding: '0 4px',
-            borderRadius: '8px'
+            padding: '0 8px',
+            borderRadius: '3px',
         },
         "& .MuiInputBase-input::placeholder": {
             fontSize: '16px',
+            fontWeight:'500',
             color: theme.palette.text.secondary,
 
         },
@@ -21,7 +22,7 @@ const textFieldStyles = (theme: Theme) => ({
             borderRadius: '8px',
             background: '#FFF',
             fontSize: '18px',
-            fontWeight: '250'
+            fontWeight: '400'
         },
 
     },

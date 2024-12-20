@@ -1,3 +1,5 @@
+import { getDistrictNameByCode, getProvinceNameByCode, getSubdistrictNameByCode } from "./app";
+
 const formatSinglePhoneNumber = (phoneNumber: string): string => {
   if (!phoneNumber) return "-";
 
@@ -98,4 +100,17 @@ export const extractPlainText = (htmlString?: string): string => {
   const regex = /<[^>]*>/g;
   const plainText = htmlString.replace(regex, "");
   return plainText.trim();
+};
+
+export const getAddress = (data: { 
+  address: string, 
+  subDistrict: string, 
+  district: string, 
+  province: string, 
+  zipcode: string, 
+  country: string 
+}) => {
+  const getValueOrDash = (value: any) => value || '';
+
+  return `${getValueOrDash(data.address)} ${getValueOrDash(getSubdistrictNameByCode(data.subDistrict))} ${getValueOrDash(getDistrictNameByCode(data.district))} ${getValueOrDash(getProvinceNameByCode(data.province))} ${getValueOrDash(data.zipcode)} ${getValueOrDash(data.country)}`;
 };

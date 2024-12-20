@@ -16,6 +16,9 @@ import CustomImageUpload from "@/components/CustomImageUpload/CustomImageUpload"
 import { useSnackbar } from "@/components/Alert/CustomAlert";
 import CustomTextfield from "@/components/Textfield/CustomTextfield";
 import CustomButton from "@/components/Button/CustomButton";
+import DashboardStats from "./component/DashboardStats";
+import OrdersTable from "./component/OrdersTable";
+import SalesChart from "./component/SalesChart";
 
 //?================================================================================
 
@@ -23,7 +26,7 @@ type Props = {};
 
 //?================================================================================
 
-export default function About({}: Props) {
+export default function Dashboard({}: Props) {
   const theme = useTheme();
   const [images, setImages] = useState<string[]>([]);
   const { CustomAlert } = useSnackbar();
@@ -53,52 +56,31 @@ export default function About({}: Props) {
           border: "1px solid #DEDEDE",
           borderRadius: "8px",
           p: 3,
-          bgcolor: theme.palette.primary.dark,
+          bgcolor: theme.palette.primary.light,
           mt: -5,
         }}
       >
         <Typography variant="h3" color={"#FFF"}>
-          About Us Section
+          Dashboard
         </Typography>
       </Box>
-      <Grid container mt={5} minHeight={"60vh"} height={"auto"}>
-        <Grid
-          item
-          xs={12}
-          md={12}
-          display="flex"
-          justifyContent={"space-between"}
-          height={"auto"}
+      <Box sx={{ mt: 6 }}>
+        <DashboardStats />
+
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+            flexDirection: { xs: "column", md: "row" },
+          }}
         >
-          <CustomImageUpload
-            label="อัปโหลดภาพ"
-            onChange={handleImageChange}
-            value={images}
-            maxFiles={3}
-            width="32%"
-            height="30vh"
-          />
-        </Grid>
-        <Grid item xs={12} md={12}>
-          <Box height={"100%"} display={"flex"} flexDirection={"column"}>
-            <CustomTextfield label="หัวข้อ" placeholder="กรอกหัวข้อ" />
-            <CustomTextfield
-              label="รายละเอียด"
-              placeholder="กรอกรายละเอียด"
-              minRows={10}
-              value={""}
-            />
+          <Box sx={{ flex: 1 }}>
+            <SalesChart />
           </Box>
-        </Grid>
-      </Grid>
-      <Box
-        display={"flex"}
-        gap={2}
-        justifyContent={"center"}
-        alignSelf="flex-end"
-      >
-        <CustomButton text="Cancel" style="outlined" onClick={handleClick} />
-        <CustomButton text="Submit" style="contained" />
+          <Box sx={{ flex: 1 }}>
+            <OrdersTable />
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

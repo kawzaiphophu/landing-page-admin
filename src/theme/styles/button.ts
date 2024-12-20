@@ -4,10 +4,10 @@ export const buttonStyles = (theme: Theme) => ({
     root: { fontWeight: '700' },
     sizeSmall: {
         fontSize: '14px',
-        padding: '0 24px',
+        padding: '0 12px',
         borderRadius: '8px',
-        maxHeight: '48px',
-        minWidth: '68px',
+        maxHeight: '30px',
+        minWidth: '30px',
     },
     sizeMedium: {
         fontSize: '16px',
