@@ -36,7 +36,6 @@ const theme = createTheme({
     fontFamily: ["Kanit", "Roboto", "Arial", "sans-serif"].join(","),
     allVariants: {
       color: "#666",
-
     },
     h1: {
       fontSize: "30px",

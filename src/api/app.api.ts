@@ -15,17 +15,20 @@ export default class AppApi {
         );
     }
 
-    static uploadFile(files: File[]): Promise<{ fileExtension: string, filePath: string, fileSize: number }[]> {
+    static uploadFile(files: File[]): Promise<{ fileName: string, filePath: string, fileSize: number }[]> {
         const formData = new FormData();
         files.forEach((file) => {
             formData.append("files", file);
         });
-        return MainApi.post('upload', formData, {
+        return MainApi.post('files', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
-        }).then((res: AxiosResponse<{ fileExtension: string, filePath: string, fileSize: number }[]>) => {
+        }).then((res: AxiosResponse<{ fileName: string, filePath: string, fileSize: number }[]>) => {
+            console.log(res.data);
             if (Array.isArray(res.data) && res.data.length > 0) {
+          
+                
                 return res.data.map(file => ({
                     ...file,
                     filePath: `${process.env.API_URL?.replace('/api', '')}/${file.filePath}`

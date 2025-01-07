@@ -79,6 +79,7 @@ export default function Customer({}: Props) {
   //     contract: "test test",
   //   },
   // ];
+
   useEffect(() => {
     getAllCustomer(page, pageLimit);
   }, [page, pageLimit]);
@@ -158,7 +159,8 @@ export default function Customer({}: Props) {
                     <TableCell align="center">ลำดับ</TableCell>
                     <TableCell>ชื่อลูกค้า</TableCell>
                     <TableCell>สาขา</TableCell>
-                 
+                    <TableCell>เลขผู้เสียภาษี</TableCell>
+
                     <TableCell>อีเมล</TableCell>
                     <TableCell align="center">เบอร์โทรศัพท์</TableCell>
                     <TableCell align="center">โทรสาร</TableCell>
@@ -191,6 +193,7 @@ export default function Customer({}: Props) {
                       </TableCell>
                       <TableCell>{customer?.name || "-"}</TableCell>
                       <TableCell>{customer?.branch || "-"}</TableCell>
+                      <TableCell>{customer?.taxNumber || "-"}</TableCell>
                       <TableCell>{customer?.email || "-"}</TableCell>
                       <TableCell>{customer?.tel || "-"}</TableCell>
                       <TableCell>{customer?.fax || "-"}</TableCell>

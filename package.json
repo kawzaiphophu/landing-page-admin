@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 9999",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -27,6 +27,7 @@
     "react-dom": "^18",
     "react-quill": "2.0",
     "react-quill-v2.0": "^2.0.0",
+    "react-share": "^5.1.2",
     "recharts": "^2.15.0",
     "sweetalert2": "^11.15.2"
   },

@@ -69,6 +69,7 @@ export default function CustomSelect({
       }}
     >
       <TextField
+      size="small"
         select
         fullWidth
         label={label}
@@ -80,7 +81,6 @@ export default function CustomSelect({
         InputLabelProps={{
           shrink: true,
         }}
-        size="small"
         required={required}
         sx={{
           "& .MuiSelect-select span::before": {

@@ -14,41 +14,40 @@ export function MainLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <Suspense fallback={<Loading />}>
-          <CssBaseline />
-          <SnackbarProvider>
-            {pathname === "/login" ? (
-              <div>{children}</div>
-            ) : (
-              <>
-               
-                <div style={{ display: "flex" }}>
-                  <div >
-                    <SideBar />
-                  </div>
+        <CssBaseline />
+        <SnackbarProvider>
+          {pathname === "/login" ? (
+            <div>{children}</div>
+          ) : (
+            <>
+              <div style={{ display: "flex" }}>
+                <div>
+                  <SideBar />
+                </div>
+                <div
+                  style={{
+                    flex: 1,
+                    padding: "1rem",
+                    width: "90vw",
+                    height: "auto",
+                    background: "#FFF",
+                    transition: "width 3s ease-in-out",  
+                  }}
+                >
+                  <NavBar />
                   <div
                     style={{
-                      flex: 1,
-                      padding: "1rem",
-                      width: "90vw",
-                      height: "auto",
-                      background: "#FFF",
+                      margin: "1rem",
+                      minHeight: "auto",
                     }}
                   >
-                     <NavBar />
-                    <div
-                      style={{
-                        margin: "1rem",
-                        minHeight: "auto",
-                      }}
-                    >
-                      {children}
-                    </div>
+                    {children}
                   </div>
                 </div>
-              </>
-            )}
-          </SnackbarProvider>
-
+              </div>
+            </>
+          )}
+        </SnackbarProvider>
       </Suspense>
     </>
   );

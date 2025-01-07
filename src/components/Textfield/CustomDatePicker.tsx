@@ -3,93 +3,47 @@
 import { DateView, LocalizationProvider } from "@mui/x-date-pickers";
 import { styled } from "@mui/system";
 import { DatePicker } from "@mui/x-date-pickers";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-
+// import newAdapter from "./newAdapter.date";
 //*------------------------------------------------------------------------
+
 const StyledDatePicker = styled(DatePicker)(({ theme }) => ({
-  "& .MuiInputLabel-root": {
-    fontWeight: 600,
-    fontSize: "14px",
-    lineHeight: "30px",
-    color: "#2D3648 !important",
-    transform: "translate(0, -5px) scale(1) !important",
-    position: "relative !important",
-    "& .MuiFormLabel-asterisk": {
-      color: "#CD2525 !important",
-    },
-  },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: theme.palette.text.primary,
-    boxSizing: "none",
-  },
-  "& .MuiInputBase-input::placeholder": {
-    fontWeight: "400",
-    fontSize: "16px",
-    lineHeight: "18.75px",
-    color: theme.palette.placeholder,
-  },
-  "& .MuiInputBase-root ": {
-    cursor: "default",
-  },
-  "& .MuiInputBase-root": {
-    color: theme.palette.text.primary,
-    border: `solid 1px ${theme.palette.inputBorder}`,
-    minHeight: "44px",
-    minWidth: "150px",
-    paddingRight: "25px",
-    "& fieldset": {
-      display: "none",
-      borderColor: "transparent",
-    },
-    "&:hover": {
-      backgroundColor: "transparent",
-      color: theme.palette.text.primary,
-      border: `solid 1px ${theme.palette.inputBorder}`,
-    },
-    "&.Mui-focused": {
-      border: `solid 1px ${theme.palette.primary.main}`, // Use theme for primary color
-      "& fieldset": {
-        borderColor: "transparent",
-      },
-    },
-    "& .MuiInputAdornment-root button": {
-      position: "absolute",
-      width: "100%",
-      height: "100%",
-      left: "0",
-      borderRadius: "0",
-      display: "flex",
-      justifyContent: "end",
-      alignItems: "center",
-      backgroundColor: "transparent",
-      "&:hover": { backgroundColor: "transparent" },
-      "& .MuiTouchRipple-root ": { display: "none" },
-    },
-  },
-  "& .MuiOutlinedInput-root.Mui-error": {
-    border: `solid 1px ${theme.palette.error.main}`,
-  },
-  "& .MuiOutlinedInput-root.Mui-disabled": {
-    "&:hover": {
-      border: "1px solid #909090 !important",
-      boxShadow: "none",
-    },
-  },
-  "& .MuiOutlinedInput-notchedOutline": {
-    border: "none",
-  },
-  "& .MuiPickersCalendarHeader-root": {
-    display: "none", // Hide the calendar header for all views
-  },
-  "& .MuiPickersDay-root": {
-    "&.Mui-selected": {
-      backgroundColor: theme.palette.primary.main, // Highlight selected day
-      color: "#fff",
-    },
-  },
+  // "& .MuiInputBase-input::placeholder": {
+  //   fontWeight: "400",
+  //   fontSize: "16px",
+  //   lineHight: "18.75px",
+  //   color: theme.palette.placeholder,
+  // },
+  // "& .MuiInputBase-root ": {
+  //   cursor: "default",
+  // },
+  // "& .MuiInputBase-root": {
+  //   color: theme.palette.text.primary,
+  //   border: `solid 1px ${theme.palette.inputBorder}`,
+  //   minHeight: "44px",
+  //   paddingRight: "25px",
+  //   "& fieldset": {
+  //     display: "none",
+  //     borderColor: "transparent",
+  //   },
+  //   "& .MuiInputAdornment-root button": {
+  //     position: "absolute",
+  //     width: "100%",
+  //     height: "100%",
+  //     left: "0",
+  //     borderRadius: "0",
+  //     display: "flex",
+  //     justifyContent: "end",
+  //     alignItems: "center",
+  //     "&:hover": {
+  //       backgroundColor: "unset",
+  //     },
+  //     "& .MuiTouchRipple-root ": { display: "none" },
+  //   },
+  // },
 }));
 
 interface Props {
@@ -102,6 +56,11 @@ interface Props {
   views?: DateView[];
   error?: boolean;
   disableFuture?: boolean;
+  required?: boolean;
+  disabled?: boolean;
+  disablePast?: boolean;
+  shouldDisableDate?: any;
+  errorMessage?: string;
 }
 
 //*------------------------------------------------------------------------
@@ -116,14 +75,28 @@ export default function CustomDatePicker({
   views,
   error,
   disableFuture = false,
+  required = false,
+  disabled = false,
+  disablePast = false,
+  shouldDisableDate,
+  errorMessage,
 }: Props) {
   const handleChange = (e: any) => {
-    onChange && onChange(e || "");
+    onChange && onChange(dayjs(e).format("YYYY-MM-DD") || "");
   };
 
   return (
-    <Box sx={{ marginTop: "8px", marginBottom: "8px" }}>
-      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="th">
+    <Box sx={{ my: 1 }}>
+      <LocalizationProvider
+        dateAdapter={AdapterDayjs}
+        adapterLocale="th"
+        // dateFormats={{
+        //   year: "BBBB",
+        // }}
+        localeText={{
+          fieldYearPlaceholder: () => "YYYY",
+        }}
+      >
         <Box
           display="flex"
           justifyContent="space-between"
@@ -134,17 +107,21 @@ export default function CustomDatePicker({
           <StyledDatePicker
             views={views}
             disableFuture={disableFuture}
+            disablePast={disablePast}
             minDate={minDate}
             maxDate={maxDate}
             label={label}
-            value={value ? dayjs(value) : null}
+            value={dayjs(value).isValid() ? dayjs(value) : undefined}
             format={views && views[0] === "day" ? "DD" : "DD/MM/YYYY"}
             sx={{ minWidth: "20px" }}
             onChange={handleChange}
+            disabled={disabled}
+            shouldDisableDate={shouldDisableDate}
             slotProps={{
               textField: {
                 size: "small",
                 placeholder: placeholder,
+                required: required,
                 error: error,
                 fullWidth: true,
                 InputLabelProps: {
@@ -162,6 +139,25 @@ export default function CustomDatePicker({
             }}
           />
         </Box>
+        {error && (
+          <Box
+            sx={{
+              // position: "absolute",
+              // bottom: "-25px",
+              display: "flex",
+              alignItems: "center",
+              fontSize: "12px",
+              fontWeight: 400,
+              lineHeight: "14.06px",
+              color: "#E20E0E",
+            }}
+          >
+            <ErrorOutlineIcon sx={{ width: "16px", mr: 1 }} />
+            <Typography component="span" fontSize={12} fontWeight={400}>
+              {errorMessage ? errorMessage : `กรุณาเลือก${label}`}
+            </Typography>
+          </Box>
+        )}
       </LocalizationProvider>
     </Box>
   );

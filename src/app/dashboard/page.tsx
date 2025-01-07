@@ -9,7 +9,7 @@ import {
   Divider,
   Grid,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 //?================================================================================
 import CustomImageUpload from "@/components/CustomImageUpload/CustomImageUpload";
@@ -19,6 +19,8 @@ import CustomButton from "@/components/Button/CustomButton";
 import DashboardStats from "./component/DashboardStats";
 import OrdersTable from "./component/OrdersTable";
 import SalesChart from "./component/SalesChart";
+import DashboardApi from "@/api/dashboard.api";
+import { ISummary } from "@/types/dashboard.type";
 
 //?================================================================================
 
@@ -30,6 +32,11 @@ export default function Dashboard({}: Props) {
   const theme = useTheme();
   const [images, setImages] = useState<string[]>([]);
   const { CustomAlert } = useSnackbar();
+
+  const dateForm = new Date();
+  dateForm.setDate(dateForm.getDate() - 30);
+  const dateTo = new Date();
+
   //?==============================================================================
 
   const handleImageChange = (files: File[] | string[]) => {
@@ -65,7 +72,7 @@ export default function Dashboard({}: Props) {
         </Typography>
       </Box>
       <Box sx={{ mt: 6 }}>
-        <DashboardStats />
+        <DashboardStats  />
 
         <Box
           sx={{
@@ -77,10 +84,11 @@ export default function Dashboard({}: Props) {
           <Box sx={{ flex: 1 }}>
             <SalesChart />
           </Box>
-          <Box sx={{ flex: 1 }}>
+        
+        </Box>
+        <Box sx={{ flex: 1 }}>
             <OrdersTable />
           </Box>
-        </Box>
       </Box>
     </Box>
   );

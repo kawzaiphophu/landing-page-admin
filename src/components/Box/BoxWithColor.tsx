@@ -4,7 +4,7 @@ import Image from "next/image"; // Assuming you're using Next.js
 import EditIcon from "@mui/icons-material/Edit";
 import Fade from "@mui/material/Fade";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 type LoanStatus = {
   text: string;
   value: string;
@@ -76,10 +76,10 @@ export default function BoxWithColor({
       //     iconSrc = importExcel;
       //     tooltip = "ส่งออกเอกสาร";
       //     break;
-      //   case "detail":
-      //     iconSrc = detail;
-      //     tooltip = "รายละเอียด";
-      //     break;
+        case "detail":
+          iconSrc = <RemoveRedEyeOutlinedIcon />;
+          tooltip = "รายละเอียด";
+          break;
       //   case "eye":
       //     iconSrc = eye_icon;
       //     tooltip = "View";

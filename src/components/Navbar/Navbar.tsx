@@ -37,7 +37,7 @@ export default function NavBar() {
   const [open, setOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const theme = useTheme();
-  
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -140,10 +140,10 @@ export default function NavBar() {
         height: "80px",
         zIndex: 1100,
         borderRadius: "0.75rem",
-        width:'auto',
-        ml:'1rem',
-        mr:'2rem',
-        mb:'3rem',
+        width: "auto",
+        ml: "2rem",
+        mr: "2rem",
+        mb: "3rem",
         backgroundColor: isScrolled
           ? "rgba(255, 255, 255, 0.6)"
           : "rgba(255, 255, 255, 0.6)",
@@ -167,6 +167,13 @@ export default function NavBar() {
           backgroundColor: "tranparent",
         }}
       >
+        <a
+          href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:3000/store/promotion/10635?agent=1479&branch=1089"
+          target="_blank"
+        >
+          Share on Facebook
+        </a>
+
         <Box
           sx={{
             display: "flex",

@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Autocomplete, Box, TextField, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  IconButton,
+  TextField,
+  Typography,
+} from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import theme from "@/theme/theme";
+import { ClearIcon } from "@mui/x-date-pickers";
 
 interface CustomInputWithTagsProps {
-  value?: any[];
+  value?: any;
   options: any[];
-  onChange: (newValue: any[]) => void;
+  onChange: (newValue: any) => void;
   onInputChange?: (inputValue: string) => void;
   placeholder?: string;
   label?: string;
@@ -14,10 +20,12 @@ interface CustomInputWithTagsProps {
   getOptionLabel?: (option: any | undefined) => string;
   error?: boolean;
   minRows?: number;
+  onClear?: () => void;
+  require?:boolean
 }
 
 const CustomInputWithTags: React.FC<CustomInputWithTagsProps> = ({
-  value = [],
+  value,
   options,
   onChange,
   onInputChange,
@@ -27,21 +35,33 @@ const CustomInputWithTags: React.FC<CustomInputWithTagsProps> = ({
   getOptionLabel = (option) => option?.toString() || "",
   error,
   minRows,
+  onClear,
+  require
 }) => {
-  const [selectedTags, setSelectedTags] = useState<any[]>(value);
+  const [selectedTags, setSelectedTags] = useState<string>(value);
 
   useEffect(() => {
     setSelectedTags(value);
-  }, [value]);
-
-  const handleAutocompleteChange = (_: any, newTags: any[]) => {
-    setSelectedTags(newTags);
-    onChange(newTags);
-  };
+  }, []);
 
   const handleInputChange = (_: any, inputValue: string) => {
     if (onInputChange) {
       onInputChange(inputValue);
+    }
+  };
+  const handleChange = (_: any, value: string) => {
+    if (onChange) {
+      onChange(value);
+    }
+  };
+
+  const handleClearClick = () => {
+    if (onClear) {
+      onClear();
+    }
+    setSelectedTags("");
+    if (onChange) {
+      onChange("");
     }
   };
 
@@ -64,31 +84,28 @@ const CustomInputWithTags: React.FC<CustomInputWithTagsProps> = ({
         position: "relative",
         flexDirection: "row",
         alignItems: "end",
-        marginY: "16px",
+        my: 1,
       }}
     >
-      <Autocomplete
+      {/* <Autocomplete
         sx={styleAutoComplete}
-        multiple
+        // multiple
         fullWidth
         id="tags-outlined"
         options={options}
-        value={selectedTags} // Controlled value
-        freeSolo
+        value={selectedTags}
+        // freeSolo
         getOptionLabel={getOptionLabel}
         onChange={handleAutocompleteChange}
         onInputChange={handleInputChange}
         disabled={disabled}
         renderOption={(props, option) => {
-          const isSelected = selectedTags.some(
-            (selectedTag) =>
-              JSON.stringify(selectedTag) === JSON.stringify(option)
-          );
+          const isSelected = selectedTags?.includes(option);
           return (
             <li
               {...props}
               style={{
-                backgroundColor: isSelected ? "#EDE4FF" : "transparent",
+                backgroundColor: isSelected ? "primary" : "transparent",
               }}
             >
               {option && getOptionLabel(option)}
@@ -108,7 +125,7 @@ const CustomInputWithTags: React.FC<CustomInputWithTagsProps> = ({
             sx={{
               "& .MuiAutocomplete-tag": {
                 backgroundColor: theme.palette.primary.light,
-                color: "#FFFFFF",
+                color: "secondary",
                 fontSize: "14px",
                 lineHeight: "20px",
                 fontWeight: 400,
@@ -116,7 +133,71 @@ const CustomInputWithTags: React.FC<CustomInputWithTagsProps> = ({
             }}
           />
         )}
+      /> */}
+      <Autocomplete
+        sx={styleAutoComplete}
+        fullWidth
+        disablePortal
+        options={options}
+        onChange={handleChange}
+        onInputChange={handleInputChange}
+        clearIcon={null}
+        disabled={disabled}
+        getOptionLabel={(option) =>
+          option && typeof option === "object" && Object.keys(option).length
+            ? getOptionLabel(option)
+            : ""
+        }
+        isOptionEqualToValue={(option, value) => option.id === value.id} 
+        value={value && Object.keys(value).length ? value : null}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label={label}
+            placeholder={
+              !value || Object.keys(value).length === 0 ? placeholder : ""
+            }
+            error={error}
+            multiline
+            required={require}
+            value={value && Object.keys(value).length ? value : selectedTags}
+            minRows={minRows}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            sx={{
+              "& .MuiInputBase-root": {
+                padding: "2px 8px",
+                alignItems: "start",
+                overflow: "auto",
+              },
+            }}
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: (
+                <>
+                  <IconButton
+                    onClick={handleClearClick}
+                    disabled={disabled}
+                    size="small"
+                    sx={{
+                      position: "absolute",
+                      right: "30px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      padding: "4px",
+                    }}
+                  >
+                    <ClearIcon />
+                  </IconButton>
+                  {params.InputProps.endAdornment}
+                </>
+              ),
+            }}
+          />
+        )}
       />
+
       {error && (
         <Box
           sx={{

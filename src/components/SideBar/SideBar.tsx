@@ -14,7 +14,7 @@ const drawerWidth = 221;
 //*------------------------------------------------------------------------
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
-  transition: "width 0.3s ease-in-out", // Adjusted duration for smoother transition
+  transition: "width 0.3s ease-in-out",  
   overflowX: "hidden",
   background: `linear-gradient(
     to bottom, 
@@ -92,34 +92,13 @@ export default function SideBar() {
           "&:hover": {
             width: drawerWidth,
             "& .drawer-content": {
-              display: "block", // Show content on hover
+              display: "block", 
             },
           },
         }}
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
       >
-        {/* <Box pb={5}>
-          <IconButton
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              position: "absolute",
-              zIndex: 1,
-              mt: 1,
-              p: 1,
-              right: "20px",
-              top: "20px",
-            }}
-          >
-            {open ? (
-              <KeyboardDoubleArrowLeftIcon sx={{ color: "#FFF" }} />
-            ) : (
-              <KeyboardDoubleArrowRightIcon sx={{ color: "#FFF" }} />
-            )}
-          </IconButton>
-        </Box> */}
         <List sx={{ pt: "6rem", px: 1 }}>
           {menuItems.ADMIN.map(({ text, path, icon }) => (
             <ListItem
@@ -195,8 +174,8 @@ export const menuItems = {
       icon: <GroupsOutlinedIcon />,
     },
     {
-      text: "Orders",
-      path: "/order",
+      text: "Project",
+      path: "/project",
       icon: <HandshakeOutlinedIcon />,
     },
     {

@@ -50,6 +50,7 @@ export default function CustomerAction({}: Props) {
     nameEn: "",
     branch: "สาขาใหญ่",
     email: "",
+    taxNumber: "",
     tel: "",
     fax: "",
     country: "ประเทศไทย",
@@ -230,10 +231,18 @@ export default function CustomerAction({}: Props) {
               <CustomTextfield
                 label="สาขา"
                 value={form?.branch}
-                onChange={(value) => handleChange("nameEn", value)}
+                onChange={(value) => handleChange("branch", value)}
               />
             </Grid>
 
+            <Grid item xs={12} sm={6}>
+              <CustomTextfield
+                label="เลขผู้เสียภาษี"
+                value={form?.taxNumber}
+                type="number"
+                onChange={(value) => handleChange("taxNumber", value)}
+              />
+            </Grid>
             <Grid item xs={12} sm={6}>
               <CustomTextfield
                 label="อีเมล"

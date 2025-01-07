@@ -14,6 +14,7 @@ export interface ICustomer {
     contactPersons: ContactPerson[];
     id?:             number;
     status?:         string;
+    taxNumber?:         string;
     branch:string
 }
 
