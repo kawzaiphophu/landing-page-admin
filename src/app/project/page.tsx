@@ -70,23 +70,17 @@ export default function Project({}: Props) {
   const [totalPages, setTotalPages] = useState<number>(10);
   const [totalItems, setTotalItems] = useState<number>(0);
   const [projects, setProjects] = useState<IProject[]>([]);
-  // const Projects = [
-  //   {
-  //     name: "test",
-  //     branch: "สาขาใหญ่",
-  //     address: "131 bangphalt bangkok 10700",
-  //     email: "asdads@asd.com",
-  //     tel: "0998772123",
-  //     fax: "0928312312",
-  //     contract: "test test",
-  //   },
-  // ];
+
   useEffect(() => {
     getAllProject(page, pageLimit);
   }, [page, pageLimit]);
 
-  const getAllProject = async (page: number, pageLimit: number) => {
-    const param = { page, pageLimit };
+  const getAllProject = async (
+    page: number,
+    pageLimit: number,
+    search?: string
+  ) => {
+    const param = { page, pageLimit, search };
     try {
       const { data, totalItems, totalPages } = await ProjectApi.findAll(param);
       setProjects(data);
@@ -97,15 +91,19 @@ export default function Project({}: Props) {
   //?==============================================================================
 
   const gotoCreate = () => {
-    router.push(`project/crete`);
+    router.push(`project/create`);
   };
   const gotoEdit = (id: number) => {
     router.push(`project/edit?projectId=${id}`);
   };
 
+  const gotoView = (id: number) => {
+    router.push(`project/view?projectId=${id}`);
+  };
+
   const handleDelete = async (id: number) => {
     const { isConfirmed } = await ConfirmSwal({
-      title: "ต้องการลบโปรเจ็คใช่หรือไม่",
+      title: "ต้องการลบโปรเจกต์ใช่หรือไม่",
       icon: "info",
     });
 
@@ -142,7 +140,25 @@ export default function Project({}: Props) {
           Project
         </Typography>
       </Box>
-      <Box display={"flex"} justifyContent={"end"} pt={2}>
+      <Box
+        display={"flex"}
+        justifyContent={"space-between"}
+        pt={2}
+        alignItems={"center"}
+      >
+        <Box width={"50%"} display={"flex"} gap={2}>
+          <CustomTextfield
+            type="search"
+            label=""
+            placeholder="ค้นหาโปรเจกต์"
+            onChange={(v) => setSearchValue(v)}
+          />
+          <CustomButton
+            text="ค้นหา"
+            size="medium"
+            onClick={() => getAllProject(page, pageLimit, searchValue)}
+          />
+        </Box>
         <Button variant="outlined" color="secondary" onClick={gotoCreate}>
           Create Project
         </Button>
@@ -158,7 +174,7 @@ export default function Project({}: Props) {
                 <TableHead>
                   <TableRow sx={{ height: "72px", zIndex: 10 }}>
                     <TableCell align="center">ลำดับ</TableCell>
-                    <TableCell>ชื่อโปรเจ็ค</TableCell>
+                    <TableCell>ชื่อโปรเจกต์</TableCell>
                     <TableCell>สถานะ</TableCell>
                     <TableCell>รายละเอียด</TableCell>
                     <TableCell align="center">ระยะเวลาประกัน</TableCell>
@@ -194,14 +210,23 @@ export default function Project({}: Props) {
                         {pageLimit * (page - 1) + index + 1}
                       </TableCell>
                       <TableCell>{project?.projectName || "-"}</TableCell>
-                      <TableCell>{STATUS.find((s)=>s.value === project?.projectStatus)?.name || "-"}</TableCell>
+                      <TableCell>
+                        {STATUS.find((s) => s.value === project?.projectStatus)
+                          ?.name || "-"}
+                      </TableCell>
                       <TableCell>{project?.projectScope || "-"}</TableCell>
                       <TableCell>{project?.projectWaranty || "-"}</TableCell>
                       <TableCell>{project?.projectMa || "-"}</TableCell>
                       <TableCell>{project?.projectMaPerYear || "-"}</TableCell>
-                      <TableCell align="right">{formatPrice(project?.projectPrice ) }</TableCell>
-                      <TableCell align="right">{formatPrice(project?.projectCost)  }</TableCell>
-                      <TableCell align="right">{formatPrice(project?.projectProfit) }</TableCell>
+                      <TableCell align="right">
+                        {formatPrice(project?.projectPrice)}
+                      </TableCell>
+                      <TableCell align="right">
+                        {formatPrice(project?.projectCost)}
+                      </TableCell>
+                      <TableCell align="right">
+                        {formatPrice(project?.projectProfit)}
+                      </TableCell>
 
                       <TableCell
                         sx={{
@@ -215,13 +240,19 @@ export default function Project({}: Props) {
                       >
                         <Box display={"flex"} gap={1} justifyContent={"center"}>
                           <BoxWithColor
+                            icon="detail"
+                            onClick={() => gotoView(project.projectId as any)}
+                          />
+                          <BoxWithColor
                             icon="edit"
                             onClick={() => gotoEdit(project.projectId as any)}
                           />
                           <BoxWithColor
                             icon="del"
                             color="error"
-                            onClick={() => handleDelete(project.projectId as any)}
+                            onClick={() =>
+                              handleDelete(project.projectId as any)
+                            }
                           />
                         </Box>
                       </TableCell>

@@ -1,5 +1,6 @@
 export interface ISupplier {
   name: string;
+  nameEn: string;
   email: string;
   tel: string;
   address: string;
@@ -12,6 +13,8 @@ export interface ISupplier {
   contactPersons: ContactPerson[];
   id?: number;
   status?: string;
+  branch:string
+  taxNumber:string;
 }
 
 export interface ContactPerson {
@@ -19,4 +22,5 @@ export interface ContactPerson {
   tel: string;
   role: string;
   id?: number;
+  email:string
 }

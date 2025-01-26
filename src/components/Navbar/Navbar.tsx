@@ -52,12 +52,20 @@ export default function NavBar() {
   }, []);
 
   const handleLogOut = () => {
-    const userRole = localStorage.getItem("user_role");
+    // Clear localStorage
     localStorage.clear();
-    if (userRole) {
-      localStorage.setItem("user_role", userRole);
+  
+
+    const cookies = document.cookie.split(";"); // Get all cookies
+    for (let cookie of cookies) {
+      const cookieName = cookie.split("=")[0].trim();
+      document.cookie = `${cookieName}=; max-age=0; path=/`; // Set cookie expiration to the past
     }
+  
+    // Redirect to login page
+    window.location.href = "/login"; // Redirect to the login page
   };
+  
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -167,12 +175,7 @@ export default function NavBar() {
           backgroundColor: "tranparent",
         }}
       >
-        <a
-          href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:3000/store/promotion/10635?agent=1479&branch=1089"
-          target="_blank"
-        >
-          Share on Facebook
-        </a>
+       
 
         <Box
           sx={{
@@ -225,6 +228,7 @@ export default function NavBar() {
                 >
                   Unified Solutions
                 </Typography>
+                {/* <SocialShareButtons/> */}
               </Box>
             </Box>
           </Box>
@@ -267,3 +271,102 @@ const logoStyle = {
     cursor: "pointer",
   },
 };
+
+
+import { 
+  FacebookShareButton, 
+  FacebookMessengerShareButton, 
+  LineShareButton, 
+  WhatsappShareButton 
+} from 'react-share';
+import { 
+  FacebookIcon, 
+  FacebookMessengerIcon, 
+  LineIcon, 
+  WhatsappIcon 
+} from 'react-share';
+
+interface SocialShareButtonsProps {
+
+}
+
+const SocialShareButtons: React.FC = () => {
+  const url = encodeURIComponent('https://az-uat-akm-cust.allkons.com/shopping/product/925?productVariantId=6415');
+  const title = encodeURIComponent('Check out this amazing product!');
+  const appId = '1333714707590194'; // Your Facebook App ID
+
+  return (
+    <div style={{ display: 'flex', gap: '10px' }}>
+      {/* Facebook Share */}
+      <a
+        href={`https://www.facebook.com/sharer/sharer.php?u=${url}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ display: 'inline-block' }}
+      >
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/c/c2/F_icon.svg"
+          alt="Share on Facebook"
+          style={{ width: 32, height: 32, borderRadius: '50%' }}
+        />
+      </a>
+
+      {/* Messenger Share */}
+      <a
+        href={`fb-messenger://share/?link=${url}&app_id=${appId}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ display: 'inline-block' }}
+      >
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/8/83/Facebook_Messenger_Logo.svg"
+          alt="Share on Messenger"
+          style={{ width: 32, height: 32, borderRadius: '50%' }}
+        />
+      </a>
+
+      {/* Line Share */}
+      <a
+        href={`https://social-plugins.line.me/lineit/share?url=${url}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ display: 'inline-block' }}
+      >
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg"
+          alt="Share on Line"
+          style={{ width: 32, height: 32, borderRadius: '50%' }}
+        />
+      </a>
+
+      {/* WhatsApp Share */}
+      <a
+        href={`https://api.whatsapp.com/send?text=${title}%20${url}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ display: 'inline-block' }}
+      >
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+          alt="Share on WhatsApp"
+          style={{ width: 32, height: 32, borderRadius: '50%' }}
+        />
+      </a>
+
+      {/* Instagram (Redirect to Profile) */}
+      <a
+        href="https://www.instagram.com/yourprofile/"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ display: 'inline-block' }}
+      >
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png"
+          alt="Visit Instagram"
+          style={{ width: 32, height: 32, borderRadius: '50%' }}
+        />
+      </a>
+    </div>
+  );
+};
+

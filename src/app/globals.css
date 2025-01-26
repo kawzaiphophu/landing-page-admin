@@ -58,3 +58,10 @@ main {
 .MuiInputLabel-asterisk {
   color: #ee3741;
 }
+
+.title {
+  padding: 8px 20px;
+  border-radius: 20px;
+  background: #cdcbcb;
+  display: inline-block;
+}

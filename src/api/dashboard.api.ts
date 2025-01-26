@@ -1,7 +1,7 @@
 import { MainApi } from "./axios";
 import { AxiosResponse } from "axios";
 import { ISupplier } from "@/types/supplier.type";
-import { ILateProject, IMaProject, IOrderWaranty, ISummary, ISummaryYear } from "@/types/dashboard.type";
+import { IFileMissing, ILateProject, IMaProject, IOrderWaranty, ISummary, ISummaryYear } from "@/types/dashboard.type";
 import { IProject } from "@/types/project.type";
 
 
@@ -19,26 +19,19 @@ export default class DashboardApi {
             (response) => response.data
         );
     }
-    static projectLate():  Promise<ILateProject[]> {
-        return MainApi.get(`${path}/late-projects`).then(
+
+    static project():  Promise<{fileMissing:IFileMissing[],lateProjects:ILateProject[],maProjects:IMaProject[]}> {
+        return MainApi.get(`${path}/projects`).then(
             (response) => response.data
         );
     }
-    static projectMa():  Promise<IMaProject[]> {
-        return MainApi.get(`${path}/ma-projects`).then(
-            (response) => response.data
-        );
-    }
+
     static orderWaranty():  Promise<IOrderWaranty[]> {
         return MainApi.get(`${path}/warranty-orders`).then(
             (response) => response.data
         );
     }
-    static projectFileInComplete():  Promise<IProject[]> {
-        return MainApi.get(`${path}/missing-files-projects`).then(
-            (response) => response.data
-        );
-    }
+
 
 }
 //!==================================================================================================

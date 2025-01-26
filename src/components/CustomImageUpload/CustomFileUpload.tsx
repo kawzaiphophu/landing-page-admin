@@ -123,6 +123,7 @@ export default function CustomFileUpload(props: CustomFileUploadProps) {
 
                 borderRadius: "50%",
               }}
+              disabled={disabled}
             >
               <CancelRoundedIcon color="error" />
             </IconButton>

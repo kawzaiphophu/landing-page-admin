@@ -1,61 +1,64 @@
 export const TYPE = [
   {
-    name: "ฮาร์ดแวร์และการติดตั้ง",
+    name: "สินค้าและบริการ",
     value: "HARDWARE_IMPLEMENTATION",
   },
   {
-    name: "การให้คำปรึกษา",
-    value: "CONSULT",
+    name: "สินค้า",
+    value: "HARDWARE",
   },
   {
-    name: "การติดตั้ง",
+    name: "ติดตั้ง",
     value: "IMPLEMENTATION",
   },
   {
     name: "การบำรุงรักษา",
     value: "MAINTENANCE",
   },
+  {
+    name: "การให้คำปรึกษา",
+    value: "CONSULT",
+  },
 ];
 
 export const STATUS = [
   {
-    name: "งวดงานที่ 1 ",
-    value: "TYPE_1",
+    name: "สั่งซื้อสินค้า / บริการ",
+    value: "ORDERED",
   },
   {
-    name: "งวดงานที่ 2 ",
-    value: "TYPE_2",
+    name: "ส่งสินค้าเรียบร้อย",
+    value: "DELIVERED",
   },
   {
-    name: "งวดงานที่ 3  ",
-    value: "TYPE_3",
+    name: "ติดตั้งเรียบร้อย",
+    value: "INSTALLED",
   },
   {
-    name: "งวดงานที่ 4  ",
-    value: "TYPE_4",
+    name: "ส่งมอบงานเรียบร้อยแต่ยังรับเงินไม่ครบ",
+    value: "PARTIAL_PAYMENT",
   },
   {
-    name: "งวดงานที่ 5",
-    value: "TYPE_5",
+    name: "ส่งมอบงานและเก็บเงินเรียบร้อย",
+    value: "FULL_PAYMENT",
   },
   {
-    name: "งวดงานที่ 6",
-    value: "TYPE_6",
+    name: "อื่นๆ ระบุ",
+    value: "OTHER",
+  },
+];
+
+export const ROLE = [
+  {
+    name: "ฝ่ายขาย",
+    value: "SALE",
   },
   {
-    name: "งวดงานที่ 7",
-    value: "TYPE_7",
+    name: "ผู้จัดการโครงการ",
+    value: "PROJECT_MANAGER",
   },
   {
-    name: "งวดงานที่ 8",
-    value: "TYPE_8",
-  },
-  {
-    name: "งวดงานที่ 9",
-    value: "TYPE_9",
-  },
-  {
-    name: "ระดับที่ 10 ส่งมอบงานเรียบร้อย",
-    value: "TYPE_10",
+    name: "แอดมิน",
+    value: "ADMIN",
   },
 ];

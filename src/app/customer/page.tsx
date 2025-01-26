@@ -60,32 +60,19 @@ type Props = {};
 export default function Customer({}: Props) {
   const theme = useTheme();
   const router = useRouter();
-  const [images, setImages] = useState<string[]>([]);
-  const [row, setRow] = useState<number>(2);
   const [page, setPage] = useState<number>(1);
   const [searchValue, setSearchValue] = useState<string>("");
   const [pageLimit, setPageLimit] = useState<number>(15);
   const [totalPages, setTotalPages] = useState<number>(10);
   const [totalItems, setTotalItems] = useState<number>(0);
   const [customers, setCustomers] = useState<ICustomer[]>([]);
-  // const customers = [
-  //   {
-  //     name: "test",
-  //     branch: "สาขาใหญ่",
-  //     address: "131 bangphalt bangkok 10700",
-  //     email: "asdads@asd.com",
-  //     tel: "0998772123",
-  //     fax: "0928312312",
-  //     contract: "test test",
-  //   },
-  // ];
 
   useEffect(() => {
     getAllCustomer(page, pageLimit);
   }, [page, pageLimit]);
 
-  const getAllCustomer = async (page: number, pageLimit: number) => {
-    const param = { page, pageLimit };
+  const getAllCustomer = async (page: number, pageLimit: number,searchValue?:string) => {
+    const param = { page, pageLimit, sort: "DESC", sortBy: "createdAt" ,search:searchValue};
     try {
       const { data, totalItems, totalPages } = await CustomerApi.findAll(param);
       setCustomers(data);
@@ -96,10 +83,14 @@ export default function Customer({}: Props) {
   //?==============================================================================
 
   const gotoCreate = () => {
-    router.push(`customer/crete`);
+    router.push(`customer/create`);
   };
   const gotoEdit = (id: number) => {
     router.push(`customer/edit?customerId=${id}`);
+  };
+
+  const gotoView = (id: number) => {
+    router.push(`customer/view?customerId=${id}`);
   };
 
   const handleDelete = async (id: number) => {
@@ -121,6 +112,7 @@ export default function Customer({}: Props) {
       }
     }
   };
+
   //?==============================================================================
 
   return (
@@ -141,7 +133,16 @@ export default function Customer({}: Props) {
           Customer
         </Typography>
       </Box>
-      <Box display={"flex"} justifyContent={"end"} pt={2}>
+      <Box display={"flex"} justifyContent={"space-between"} pt={2}>
+        <Box width={"50%"} display={"flex"} gap={2}>
+          <CustomTextfield
+            type="search"
+            label=""
+            placeholder="ค้นหาลูกค้า"
+            onChange={(v) => setSearchValue(v)}
+          />
+          <CustomButton  text="ค้นหา" size="medium" onClick={()=> getAllCustomer(page,pageLimit,searchValue)}/>
+        </Box>
         <Button variant="outlined" color="secondary" onClick={gotoCreate}>
           Create Customer
         </Button>
@@ -209,6 +210,10 @@ export default function Customer({}: Props) {
                         align="center"
                       >
                         <Box display={"flex"} gap={1} justifyContent={"center"}>
+                          <BoxWithColor
+                            icon="detail"
+                            onClick={() => gotoView(customer.id as any)}
+                          />
                           <BoxWithColor
                             icon="edit"
                             onClick={() => gotoEdit(customer.id as any)}

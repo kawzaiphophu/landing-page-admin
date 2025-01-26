@@ -13,9 +13,9 @@ export default function DashboardStats() {
  
   const stats = [
     { title: "Total Project", value: summary?.totalProjects, color: "#4CAF50" },
-    { title: "Total TotalPrice", value: summary?.totalPrice, color: "#2196F3" },
+    { title: "Total Price", value: summary?.totalPrice, color: "#2196F3" },
     { title: "Total Cost", value: summary?.totalCost, color: "#FFC107" },
-    { title: "Total TotalProfit", value: summary?.totalProfit, color: "#9C27B0" },
+    { title: "Total Profit", value: summary?.totalProfit, color: "#9C27B0" },
   ];
   useEffect(() => {
     getSummary();

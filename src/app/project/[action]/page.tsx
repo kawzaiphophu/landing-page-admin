@@ -42,6 +42,9 @@ import { STATUS, TYPE } from "@/constants/app";
 import CustomFileUpload from "@/components/CustomImageUpload/CustomFileUpload";
 import { formatPrice } from "@/utils/formatData";
 import BasicModal from "./Modal";
+import ConfirmSwal from "@/components/Alert/ConfirmSwal";
+import CustomDropdown from "@/components/Dropdown/CustomDropdown";
+import CustomCheckbox from "@/components/CheckBox/CustomCheckBox";
 
 type Props = {};
 
@@ -68,7 +71,7 @@ const initailError = {
 const initialState: IProject = {
   projectName: "",
   projectScope: "",
-  projectStatus: "TYPE_1",
+  projectStatus: "ORDERED",
   projectWaranty: "",
   projectMa: 0,
   projectMaPerYear: 0,
@@ -81,7 +84,8 @@ const initialState: IProject = {
     {
       supplierId: null,
       orderName: "",
-      orderStatus: "",
+      orderStatus: "ORDERED",
+      orderStatusOther: "",
       orderDueDate: "",
       remark: "",
       orderCost: 0,
@@ -96,15 +100,21 @@ const initialState: IProject = {
       ],
     },
   ],
-  documents: [
+  documents: [],
+  documentsMa: [],
+  periods: [
     {
-      docPeriod: "",
-      docNo: "",
-      docType: "",
-      filePath: "",
+      periodDue: "",
+      paymentDue: "",
+      amount: 0,
+      receive: 0,
+      detail: "",
+      status: "ORDERED",
+      statusOther: "",
+      documents: [],
+      isPaid: false,
     },
   ],
-  documentsMa: [],
 };
 
 export default function ProjectAction({}: Props) {
@@ -118,10 +128,12 @@ export default function ProjectAction({}: Props) {
   const [selectedCustomer, setSelectedCustomer] = useState<ICustomer>();
   const [selectedSupplier, setSelectedSupplier] = useState<ISupplier[]>([]);
   const [tab, setTab] = useState<any>(0);
+  const [tabProject, setTabProject] = useState<any>(0);
   const [popupsOpen, setPopupsOpen] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
+  const isDisableAll = action === "view";
 
   useEffect(() => {
     getAllCustomer(1, 1000);
@@ -129,6 +141,14 @@ export default function ProjectAction({}: Props) {
     if (projectId) {
       getProjectDetail(projectId);
     }
+    const setProjectStatus = () => {
+      const currentPeriodStatus = form.periods.find(
+        (p) => (p.status! = "FULL_PAYMENT")
+      )?.status;
+
+      handleChange("projectStatus", currentPeriodStatus);
+    };
+    setProjectStatus();
   }, []);
 
   useEffect(() => {
@@ -187,16 +207,19 @@ export default function ProjectAction({}: Props) {
     }
   };
 
-  const handleChangeAutocomplete = async (value: ICustomer, type: string) => {
+  const handleChangeAutocomplete = async (
+    value: ICustomer | ISupplier,
+    type: string
+  ) => {
     if (type === "customer") {
-      setSelectedCustomer(value);
+      setSelectedCustomer(value as ICustomer);
       if (value) {
         handleChange("customerId", value.id);
       }
     } else {
       setSelectedSupplier((prev) => {
         const newArray = [...prev];
-        newArray[tab] = value;
+        newArray[tab] = value as ISupplier;
         return newArray;
       });
       if (value) {
@@ -205,13 +228,17 @@ export default function ProjectAction({}: Props) {
     }
   };
 
-  const handleClearAutocomplete = async () => {
-    try {
+  const handleClearAutocomplete = async (type: string) => {
+    if (type === "project") {
       setSelectedCustomer(undefined);
       handleChange("customerId", null);
-    } catch (error) {
-      throw error;
-    } finally {
+    } else {
+      setSelectedSupplier((prev) => {
+        const updatedSuppliers = [...prev];
+        updatedSuppliers[tab] = undefined as any;
+        return updatedSuppliers;
+      });
+      handleChange("supplierId", null, tab);
     }
   };
 
@@ -320,12 +347,12 @@ export default function ProjectAction({}: Props) {
   };
 
   const handleSubmit = async () => {
+
     const newErrors = setErrObject(form, errors);
 
     newErrors.customerId === !form.customerId;
     delete newErrors.projectProfit;
     setErrors(newErrors);
-    console.log(newErrors);
 
     const isHasError =
       Object.values(newErrors).some((error) => error === true) || // Check main object
@@ -407,48 +434,106 @@ export default function ProjectAction({}: Props) {
     setTab(newValue);
   };
 
-  const handleChangeNumDocuments = (num: number) => {
+  const handleChangeTabProject = (
+    event: React.SyntheticEvent,
+    newValue: number
+  ) => {
+    setTabProject(newValue);
+  };
+
+  const handleChangeNumPeriods = (num: number) => {
     setForm((prev: any) => ({
       ...prev,
-      documents:
-        num <= (prev?.documents?.length || 0)
-          ? prev?.documents?.slice(0, num) // Truncate the array
+      periods:
+        num <= (prev?.periods?.length || 0)
+          ? prev?.periods?.slice(0, num)
           : [
-              ...(prev?.documents || []),
-              ...Array(Math.max(num - (prev?.documents?.length || 0), 0)).fill({
-                docPeriod: "",
-                docNo: "",
-                docType: "",
-                filePath: "",
+              ...(prev?.periods || []),
+              ...Array(Math.max(num - (prev?.periods?.length || 0), 0)).fill({
+                periodDue: "",
+                paymentDue: "",
+                amount: 0,
+                receive: 0,
+                detail: "",
+                status: "ORDERED",
+                documents: [],
+                isPaid: false,
               }),
             ],
     }));
+
+    setTabProject(num - 1);
   };
 
-  const handleChangeDocuments = (key: string, value: string, index: number) => {
-    setForm((prev: any) => {
-      const updatedArr = [...prev.documents];
-      updatedArr[index] = {
-        ...updatedArr[index],
-        [key]: value,
-      };
+  const handleChangePeriod = (key: string, value: any, index?: number) => {
+    if (index != undefined) {
+      setForm((prev: IProject) => {
+        const updatedArr = [...prev.periods];
+        const updatedDocuments = [...updatedArr[tabProject].documents];
 
-      return { ...prev, documents: updatedArr };
-    });
+        updatedDocuments[index] = {
+          ...updatedDocuments[index],
+          [key]: value,
+        };
+
+        updatedArr[tabProject] = {
+          ...updatedArr[tabProject],
+          documents: updatedDocuments,
+        };
+
+        return { ...prev, periods: updatedArr };
+      });
+    } else {
+      setForm((prev: IProject) => {
+        const updatedArr = [...prev.periods];
+        updatedArr[tabProject] = {
+          ...updatedArr[tabProject],
+          [key]: value,
+        };
+        return { ...prev, periods: updatedArr };
+      });
+    }
   };
 
   const handleChangeFileProjectUpload = async (files: any, idx: number) => {
     try {
+      if (!files) {
+        return setForm((prev: IProject) => {
+          const updatedArr = [...prev.periods];
+          const updatedDocuments = [...updatedArr[tabProject].documents];
+
+          updatedDocuments[idx] = {
+            ...updatedDocuments[idx],
+            filePath: "",
+          };
+
+          updatedArr[tabProject] = {
+            ...updatedArr[tabProject],
+            documents: updatedDocuments,
+          };
+
+          return { ...prev, periods: updatedArr };
+        });
+      }
       const uploadedFiles = await AppApi.uploadFile([files]);
 
       let combinedFiles = [...uploadedFiles];
-      setForm((prev: any) => {
-        const updatedArr = [...prev.documents];
-        updatedArr[idx] = {
-          ...updatedArr[idx],
+
+      setForm((prev: IProject) => {
+        const updatedArr = [...prev.periods];
+        const updatedDocuments = [...updatedArr[tabProject].documents];
+
+        updatedDocuments[idx] = {
+          ...updatedDocuments[idx],
           filePath: combinedFiles[0].filePath,
         };
-        return { ...prev, documents: updatedArr };
+
+        updatedArr[tabProject] = {
+          ...updatedArr[tabProject],
+          documents: updatedDocuments,
+        };
+
+        return { ...prev, periods: updatedArr };
       });
     } catch (error) {
       AlertSwal({
@@ -459,7 +544,7 @@ export default function ProjectAction({}: Props) {
     }
   };
 
-  const handleChangeNumDocumentsOrder = (num: number) => {
+  const handleChangeNumDocOrder = (num: number) => {
     setForm((prev: any) => {
       const updatedOrders = [...prev.orders];
 
@@ -563,8 +648,64 @@ export default function ProjectAction({}: Props) {
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
+  const handleChangeWarantyStatus = async (id: number,isOrder?:boolean) => {
+    const { isConfirmed } = await ConfirmSwal({
+      title: "ต้องการปรับสถานะเป็นไม่ต่อประกันใช่หรือไม่",
+      icon: "info",
+    });
+
+    if (isConfirmed) {
+      try {
+        const { data } = await ProjectApi.updateStatus(id,isOrder?'statusOrder':'status','COMPLETED');
+        if (data) {
+          AlertSwal({ title: "ปรับสถานะสำเร็จ", icon: "success" });
+        }
+      } catch (error) {
+        AlertSwal({ title: "ปรับสถานะไม่สำเร็จ", icon: "error" });
+      } finally {
+        getProjectDetail(projectId);
+      }
+    }
+  };
+
+  const handleOpenMA = () => setPopupsOpen(true);
+  const handleCloseMA = () => setPopupsOpen(false);
+
+  const handleAddDocProject = () => {
+    setForm((prev: IProject) => {
+      const updatedPeriods = [...prev.periods];
+      const targetPeriod = { ...updatedPeriods[tabProject] };
+      const updatedDocuments = [
+        ...targetPeriod.documents,
+        {
+          docPeriod: (tabProject + 1).toString(),
+          docNo: "",
+          docType: "",
+          filePath: "",
+        },
+      ];
+
+      targetPeriod.documents = updatedDocuments;
+      updatedPeriods[tabProject] = targetPeriod;
+
+      return { ...prev, periods: updatedPeriods };
+    });
+  };
+
+  const totalReceive = form?.periods.reduce(
+    (total, period) => total + period.receive,
+    0
+  );
+
   return (
     <Box p={2} sx={{ border: "1px solid #DEDEDE", borderRadius: "8px" }}>
+      {popupsOpen && (
+        <BasicModal
+          projectDetail={form}
+          getProjectDetail={getProjectDetail}
+          handleClose={handleCloseMA}
+        />
+      )}
       <Box
         display={"flex"}
         sx={{
@@ -585,14 +726,21 @@ export default function ProjectAction({}: Props) {
           <Grid item xs={12} mb={2}>
             <Box display={"flex"} justifyContent={"space-between"}>
               <Typography variant="h4" color="initial">
-                ข้อมูลโปรเจ็ค
+                Project Detail
               </Typography>
-              <Box display={"flex"} gap={2}>
+              <Box display={"flex"} gap={2} alignItems={"center"}>
                 {form.projectStartWarantyDate && (
-                  <BasicModal
-                    projectDetail={form}
-                    getProjectDetail={getProjectDetail}
-                  />
+                  <>
+                    <CustomDropdown
+                      icon="arrow"
+                      label={"จัดการโปรเจกต์"}
+                      titles={["ปรับสถานะกรณีไม่ต่อประกัน", "รายละเอียด MA"]}
+                      actions={[
+                        () => handleChangeWarantyStatus(projectId),
+                        handleOpenMA,
+                      ]}
+                    />
+                  </>
                 )}
                 <Button
                   aria-describedby={id}
@@ -648,59 +796,71 @@ export default function ProjectAction({}: Props) {
           </Grid>
           <Grid item xs={12} sm={3}>
             <CustomTextfield
-              label="ชื่อโปรเจ็ค"
+              label="ชื่อโปรเจกต์"
               value={form?.projectName}
               onChange={(value) => handleChange("projectName", value)}
               error={errors?.projectName}
               required
+              disabled={isDisableAll}
             />
           </Grid>
 
           <Grid item xs={12} sm={3}>
             <CustomSelect
-              label="ประเภทโปรเจ็ค"
+              label="ประเภทโปรเจกต์"
               options={TYPE.map((t) => t.value)}
               getOptionLabel={(o) => TYPE.find((t) => t.value === o)?.name}
               value={form.projectType}
               error={errors.projectType}
               onChange={(v) => handleChange("projectType", v)}
               required
+              disabled={isDisableAll}
             />
           </Grid>
           <Grid item xs={12} sm={3}>
             <CustomSelect
-              label="สถานะโปรเจ็ค"
+              label="สถานะโปรเจกต์"
               options={STATUS.map((t) => t.value)}
               getOptionLabel={(o) => STATUS.find((t) => t.value === o)?.name}
-              value={form.projectStatus}
-              onChange={(v) => handleChange("projectStatus", v)}
-              disabled={!form.projectId}
-              error={errors?.projectStatus}
-              required
+              value={form.periods[(form.currentPeriod || 1) - 1]?.status}
+              onChange={(v) => null}
+              disabled
             />
           </Grid>
+          {form.periods[(form.currentPeriod || 1) - 1]?.status === "OTHER" && (
+            <Grid item xs={12} sm={3}>
+              <CustomTextfield
+                label="สถานะโปรเจกต์อื่นๆ"
+                value={form.periods[(form.currentPeriod || 1) - 1]?.statusOther}
+                onChange={(v) => null}
+                disabled
+              />
+            </Grid>
+          )}
           <Grid item xs={12} sm={3}>
             <CustomTextfield
-              label="รายละเอียดโปรเจ็ค"
+              label="รายละเอียดโปรเจกต์"
               value={form?.projectScope}
               onChange={(value) => handleChange("projectScope", value)}
               error={errors?.projectScope}
               required
+              disabled={isDisableAll}
             />
           </Grid>
           <Grid item xs={12} sm={3}>
             <CustomTextfield
-              label="ราคาโปรเจ็ค (บาท)"
+              label="ราคาโปรเจกต์ (บาท)"
               type="numberWithComma"
               value={formatPrice(form?.projectPrice)}
               onChange={(value) => handleChange("projectPrice", value)}
               error={errors?.projectPrice}
               required
+              disabled={isDisableAll}
             />
           </Grid>
           <Grid item xs={12} sm={3}>
             <CustomTextfield
-              label="ต้นทุนโปรเจ็ค (บาท)"
+              label="ต้นทุนโปรเจกต์ (บาท)"
               type="numberWithComma"
               value={formatPrice(form?.projectCost)}
               disabled
@@ -708,9 +868,17 @@ export default function ProjectAction({}: Props) {
           </Grid>
           <Grid item xs={12} sm={3}>
             <CustomTextfield
-              label="กำไรโปรเจ็ค (บาท)"
+              label="กำไรโปรเจกต์ (บาท)"
               type="numberWithComma"
               value={formatPrice(form?.projectProfit)}
+              disabled
+            />
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <CustomTextfield
+              label="รับชำระเเล้ว"
+              type="numberWithComma"
+              value={formatPrice(totalReceive)}
               disabled
             />
           </Grid>
@@ -722,15 +890,17 @@ export default function ProjectAction({}: Props) {
               onChange={(value) => handleChange("projectDueDate", value)}
               error={errors?.projectDueDate}
               required
+              disabled={isDisableAll}
             />
           </Grid>
           <Grid item xs={12} sm={3}>
             <CustomTextfield
-              label="โปรเจ็ค MA (เดือน)"
+              label="โปรเจกต์ MA (เดือน)"
               type="number"
               value={form?.projectMa}
               onChange={(value) => handleChange("projectMa", value)}
               error={errors?.projectMa}
+              disabled={isDisableAll}
             />
           </Grid>
           <Grid item xs={12} sm={3}>
@@ -740,6 +910,7 @@ export default function ProjectAction({}: Props) {
               value={form?.projectMaPerYear}
               onChange={(value) => handleChange("projectMaPerYear", value)}
               error={errors?.projectMaPerYear}
+              disabled={isDisableAll}
             />
           </Grid>
           <Grid item xs={12} sm={3}>
@@ -749,32 +920,32 @@ export default function ProjectAction({}: Props) {
               value={form?.projectWaranty}
               onChange={(value) => handleChange("projectWaranty", value)}
               error={errors?.projectWaranty}
+              disabled={isDisableAll}
             />
           </Grid>
-
-          <Grid item xs={6} />
           <Grid item xs={12}>
-            <Divider />
-          </Grid>
-          <Grid item xs={6}>
+            <Typography variant="h5" color="initial" className="title">
+              รายชื่อลูกค้า
+            </Typography>
             <CustomInputWithTags
               options={customers}
               value={selectedCustomer}
               onInputChange={(v) => handleInputChange(v, "customer")}
               onChange={(v) => handleChangeAutocomplete(v, "customer")}
-              label="รายชื่อลูกค้า"
+              label=""
               placeholder="ค้นหาโดยชื่อ"
               minRows={1}
               getOptionLabel={(option: ICustomer) =>
                 ` ${option?.name} ${option?.branch} | ${option?.tel}`
               }
               onClear={() => {
-                handleClearAutocomplete();
+                handleClearAutocomplete("project");
               }}
               require
               error={errors.customerId}
+              disabled={isDisableAll}
             />
-            {selectedCustomer?.contactPersons?.length && (
+            {(selectedCustomer?.contactPersons?.length as number) > 0 && (
               <Box>
                 <Typography
                   variant="body1"
@@ -798,7 +969,7 @@ export default function ProjectAction({}: Props) {
                       <TableRow sx={{ height: "40px" }}>
                         <TableCell align="center">ลำดับ</TableCell>
                         <TableCell>ชื่อผู้ติดต่อ</TableCell>
-                        <TableCell>เบอร์โทรศัพท์</TableCell>
+                        <TableCell>เบอร์โทรศัพท์ท์</TableCell>
                         <TableCell>บทบาท</TableCell>
                       </TableRow>
                     </TableHead>
@@ -817,118 +988,242 @@ export default function ProjectAction({}: Props) {
               </Box>
             )}
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} mt={5}>
+            <Typography variant="h5" color="initial" className="title">
+              จำนวนงวดทั้งหมด
+            </Typography>
             <CustomSelect
-              label="จำนวนเอกสารทั้งหมด"
+              label=""
               options={[...Array(10)].map((_, idx) => idx + 1)}
-              value={form?.documents?.length}
-              onChange={(v) => handleChangeNumDocuments(v)}
+              value={form?.periods?.length}
+              onChange={(v) => handleChangeNumPeriods(v)}
+              disabled={isDisableAll}
             />
-            {form?.documents?.length && (
-              <Box>
-                <Typography
-                  variant="body1"
-                  color="initial"
-                  fontWeight={500}
-                  pb={1}
+
+            {form?.periods?.length && (
+              <Box mx={2}>
+                <Tabs
+                  value={tabProject}
+                  onChange={handleChangeTabProject}
+                  aria-label="basic tabs example"
+                  sx={{ mx: 1 }}
                 >
-                  เอกสารทั้งหมด
-                </Typography>
-                <TableContainer
+                  {form?.periods?.map((_, index) => (
+                    <Tab
+                      sx={{
+                        ml: 0.5,
+                        fontSize: 18,
+                        bgcolor: "#D3D3D3",
+                        borderTopLeftRadius: 4,
+                        borderTopRightRadius: 4,
+                        "&.Mui-selected": {
+                          bgcolor: "#ffdfad",
+                        },
+                      }}
+                      label={`งวดที่ ${index + 1}`}
+                    />
+                  ))}
+                </Tabs>
+                <Box
+                  component={Paper}
                   sx={{
                     border: "1px solid #DEDEDE",
                     borderRadius: 2,
-                    p: 2,
+                    p: 3,
                     maxHeight: "400px",
                   }}
-                  component={Paper}
                 >
-                  <Table sx={{ border: "1px solid #DEDEDE" }}>
-                    <TableHead>
-                      <TableRow sx={{ height: "40px" }}>
-                        <TableCell align="center">ลำดับ</TableCell>
-                        <TableCell>งวดที่</TableCell>
-                        <TableCell>เอกสาร</TableCell>
-                        <TableCell>เลขที่เอกสาร</TableCell>
-                        <TableCell>ประเภทเอกสาร</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {form?.documents?.map((doc, index) => (
-                        <TableRow sx={{ height: "20px" }}>
-                          <TableCell align="center">{index + 1}</TableCell>
-                          <TableCell width={"1%"}>
-                            <CustomSelect
-                              sx={{
-                                ".MuiOutlinedInput-root": {
-                                  height: "25px",
-                                  width: "90px",
-                                  fontSize: 16,
-                                },
-                                ".MuiInputBase-input::placeholder": {
-                                  fontSize: 16,
-                                },
-                              }}
-                              placeholder="งวดที่"
-                              value={doc?.docPeriod}
-                              options={[...Array(10)].map((_, idx) =>
-                                (idx + 1).toString()
-                              )}
-                              onChange={(v) =>
-                                handleChangeDocuments("docPeriod", v, index)
-                              }
-                            />
-                          </TableCell>
-                          <TableCell align="center">
-                            <CustomFileUpload
-                              value={form?.documents[index]?.filePath}
-                              onChange={(file) =>
-                                handleChangeFileProjectUpload(file, index)
-                              }
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <CustomTextfield
-                              sx={{
-                                ".MuiOutlinedInput-root": {
-                                  height: "25px",
-                                  fontSize: 16,
-                                },
-                                ".MuiInputBase-input::placeholder": {
-                                  fontSize: 16,
-                                },
-                              }}
-                              placeholder="กรอกเลขที่เอกสาร"
-                              value={doc?.docNo}
-                              onChange={(v) =>
-                                handleChangeDocuments("docNo", v, index)
-                              }
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <CustomSelect
-                              sx={{
-                                ".MuiOutlinedInput-root": {
-                                  height: "25px",
-                                  fontSize: 16,
-                                },
-                                ".MuiInputBase-input::placeholder": {
-                                  fontSize: 16,
-                                },
-                              }}
-                              placeholder="เลือกชนิดเอกสาร"
-                              value={doc?.docType}
-                              options={["ใบเสร็จ", "ใบกำกับ", "อื่นๆ"]}
-                              onChange={(v) =>
-                                handleChangeDocuments("docType", v, index)
-                              }
-                            />
-                          </TableCell>
+                  <Typography variant="h5" color="initial">
+                    รายละเอียดงวด ที่ {tabProject + 1}
+                  </Typography>
+                  <Grid container mt={1} spacing={2}>
+                    <Grid item xs={12} sm={3}>
+                      <CustomTextfield
+                        label="รายละเอียดงวด"
+                        value={form?.periods[tabProject]?.detail}
+                        onChange={(value) =>
+                          handleChangePeriod("detail", value)
+                        }
+                        disabled={isDisableAll}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={3}>
+                      <CustomSelect
+                        label="สถานะงวด"
+                        options={STATUS.map((t) => t.value)}
+                        getOptionLabel={(o) =>
+                          STATUS.find((t) => t.value === o)?.name
+                        }
+                        value={form?.periods[tabProject]?.status}
+                        onChange={(value) =>
+                          handleChangePeriod("status", value)
+                        }
+                        disabled={isDisableAll}
+                        required
+                      />
+                    </Grid>
+                    {form?.periods[tabProject]?.status === "OTHER" && (
+                      <Grid item xs={12} sm={3}>
+                        <CustomTextfield
+                          label="สถานะงวดอื่นๆ"
+                          value={form?.periods[tabProject]?.statusOther}
+                          onChange={(v) => handleChangePeriod("statusOther", v)}
+                        />
+                      </Grid>
+                    )}
+                    <Grid item xs={12} sm={3}>
+                      <CustomDatePicker
+                        label="วันที่ครบกำหนดส่งงาน"
+                        value={form?.periods[tabProject]?.periodDue}
+                        onChange={(value) =>
+                          handleChangePeriod("periodDue", value)
+                        }
+                        disabled={isDisableAll}
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={3}>
+                      <CustomDatePicker
+                        label="วันที่ครบกำหนดชำระ"
+                        value={form?.periods[tabProject]?.paymentDue}
+                        onChange={(value) =>
+                          handleChangePeriod("paymentDue", value)
+                        }
+                        disabled={isDisableAll}
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={3}>
+                      <CustomTextfield
+                        label="ยอดเงินที่ต้องชำระ"
+                        type="numberWithComma"
+                        value={form?.periods[tabProject]?.amount}
+                        onChange={(value) =>
+                          handleChangePeriod("amount", Number(value))
+                        }
+                        disabled={isDisableAll}
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={3}>
+                      <CustomTextfield
+                        label="ยอดเงินที่รับชำระ"
+                        type="numberWithComma"
+                        placeholder="0.00"
+                        value={form?.periods[tabProject]?.receive}
+                        onChange={(value) =>
+                          handleChangePeriod("receive", Number(value))
+                        }
+                        disabled={isDisableAll}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={3} sx={{ display: "flex" }}>
+                      <CustomCheckbox
+                        label="ชำระทั้งหมดเเล้ว"
+                        checked={form?.periods[tabProject]?.isPaid}
+                        onChange={() =>
+                          handleChangePeriod(
+                            "isPaid",
+                            !form?.periods[tabProject]?.isPaid
+                          )
+                        }
+                        disabled={isDisableAll}
+                      />
+                    </Grid>
+                  </Grid>
+                  <TableContainer>
+                    <Table sx={{ border: "1px solid #DEDEDE" }}>
+                      <TableHead>
+                        <TableRow sx={{ height: "40px" }}>
+                          <TableCell align="center">ลำดับ</TableCell>
+                          <TableCell>เอกสาร</TableCell>
+                          <TableCell>เลขที่เอกสาร</TableCell>
+                          <TableCell>ประเภทเอกสาร</TableCell>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                      </TableHead>
+                      <TableBody>
+                        {form?.periods[tabProject]?.documents?.map(
+                          (doc, index) => (
+                            <TableRow sx={{ height: "20px" }}>
+                              <TableCell align="center">{index + 1}</TableCell>
+                              <TableCell align="center">
+                                <CustomFileUpload
+                                  value={
+                                    form?.periods[tabProject].documents[index]
+                                      ?.filePath
+                                  }
+                                  onChange={(file) =>
+                                    handleChangeFileProjectUpload(file, index)
+                                  }
+                                  disabled={isDisableAll}
+                                />
+                              </TableCell>
+                              <TableCell>
+                                <CustomTextfield
+                                  sx={{
+                                    ".MuiOutlinedInput-root": {
+                                      height: "25px",
+                                      fontSize: 16,
+                                    },
+                                    ".MuiInputBase-input::placeholder": {
+                                      fontSize: 16,
+                                    },
+                                  }}
+                                  placeholder="กรอกเลขที่เอกสาร"
+                                  value={doc?.docNo}
+                                  onChange={(v) =>
+                                    handleChangePeriod("docNo", v, index)
+                                  }
+                                  disabled={isDisableAll}
+                                />
+                              </TableCell>
+                              <TableCell>
+                                <CustomSelect
+                                  sx={{
+                                    ".MuiOutlinedInput-root": {
+                                      height: "25px",
+                                      fontSize: 16,
+                                    },
+                                    ".MuiInputBase-input::placeholder": {
+                                      fontSize: 16,
+                                    },
+                                  }}
+                                  placeholder="เลือกชนิดเอกสาร"
+                                  value={doc?.docType}
+                                  options={["ใบเสร็จ", "ใบกำกับ", "อื่นๆ"]}
+                                  onChange={(v) =>
+                                    handleChangePeriod("docType", v, index)
+                                  }
+                                  disabled={isDisableAll}
+                                />
+                              </TableCell>
+                            </TableRow>
+                          )
+                        )}
+                        {form?.periods[tabProject]?.documents?.length < 4 && (
+                          <TableRow>
+                            <TableCell
+                              align="center"
+                              colSpan={5}
+                              sx={{
+                                bgcolor: "#cdcbcb",
+                                borderRadius: "4px",
+                                m: 1,
+                                height: "20px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() =>
+                                !isDisableAll ? handleAddDocProject() : null
+                              }
+                            >
+                              + เพิ่มเอกสาร
+                            </TableCell>
+                          </TableRow>
+                        )}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Box>
               </Box>
             )}
           </Grid>
@@ -952,7 +1247,7 @@ export default function ProjectAction({}: Props) {
           mb={2}
         >
           <Typography variant="h4" color="initial">
-            ข้อมูลออเดอร์
+            ข้อมูลคำสั่งซื้อสินค้า
           </Typography>
           <CustomButton
             style={"outlined"}
@@ -979,7 +1274,7 @@ export default function ProjectAction({}: Props) {
                   bgcolor: "#ffdfad",
                 },
               }}
-              label={`ออเดอร์ ที่ ${index + 1}`}
+              label={`รายการที่ ${index + 1}`}
             />
           ))}
         </Tabs>
@@ -998,8 +1293,20 @@ export default function ProjectAction({}: Props) {
               justifyContent={"space-between"}
             >
               <Typography variant="h4" color="initial">
-                รายละเอียดออเดอร์ ที่ {tab + 1}
+                รายการคำสั่งซื้อสินค้า ที่ {tab + 1}
               </Typography>
+              {form?.orders[tab]?.orderStartWarantyDate && (
+                  <>
+                    <CustomDropdown
+                      icon="arrow"
+                      label={"จัดการคำสั่งซื้อ"}
+                      titles={["ปรับสถานะกรณีไม่ต่อประกัน"]}
+                      actions={[
+                        () => handleChangeWarantyStatus(form?.orders[tab]?.orderId as number,true),
+                      ]}
+                    />
+                  </>
+                )}
               {form.orders.length > 1 && (
                 <CustomButton
                   text="ลบ ออเดอร์"
@@ -1011,16 +1318,17 @@ export default function ProjectAction({}: Props) {
 
             <Grid item xs={12} mb={2}>
               <Typography variant="h4" color="initial">
-                ข้อมูลออเดอร์
+                ข้อมูลคำสั่งซื้อสินค้า
               </Typography>
             </Grid>
             <Grid item xs={12} sm={3}>
               <CustomTextfield
-                label="ชื่อออเดอร์"
+                label="ชื่อคำสั่งซื้อสินค้า"
                 value={form?.orders[tab]?.orderName}
                 onChange={(value) => handleChange("orderName", value, tab)}
                 error={errors?.orders[tab]?.orderName}
                 required
+                disabled={isDisableAll}
               />
             </Grid>
             <Grid item xs={12} sm={3}>
@@ -1031,20 +1339,30 @@ export default function ProjectAction({}: Props) {
                 onChange={(value) => handleChange("orderCost", value, tab)}
                 error={errors?.orders[tab]?.orderCost}
                 required
+                disabled={isDisableAll}
               />
             </Grid>
             <Grid item xs={12} sm={3}>
               <CustomSelect
-                label="สถานะออเดอร์"
+                label="สถานะคำสั่งซื้อสินค้า"
                 options={STATUS.map((t) => t.value)}
                 getOptionLabel={(o) => STATUS.find((t) => t.value === o)?.name}
                 value={form?.orders[tab]?.orderStatus}
                 onChange={(value) => handleChange("orderStatus", value, tab)}
-                disabled={!form.orders[tab].orderId}
+                disabled={!form.orders[tab].orderId || isDisableAll}
                 error={errors?.orders[tab]?.orderStatus}
                 required
               />
             </Grid>
+            {form?.orders[tab]?.orderStatus === "OTHER" && (
+              <Grid item xs={12} sm={3}>
+                <CustomTextfield
+                  label="สถานะคำสั่งซื้อสินค้าอื่นๆ"
+                  value={form?.orders[tab]?.orderStatusOther}
+                  onChange={(v) => handleChange("orderStatusOther", v, tab)}
+                />
+              </Grid>
+            )}
             <Grid item xs={12} sm={3}>
               <CustomDatePicker
                 label="วันที่กำหนดส่ง"
@@ -1052,6 +1370,7 @@ export default function ProjectAction({}: Props) {
                 onChange={(value) => handleChange("orderDueDate", value, tab)}
                 error={errors?.orders[tab]?.orderDueDate}
                 required
+                disabled={isDisableAll}
               />
             </Grid>
 
@@ -1063,6 +1382,7 @@ export default function ProjectAction({}: Props) {
                 onChange={(value) => handleChange("orderWaranty", value, tab)}
                 error={errors?.orders[tab]?.orderWaranty}
                 required
+                disabled={isDisableAll}
               />
             </Grid>
             <Grid item xs={12} sm={3}>
@@ -1070,27 +1390,33 @@ export default function ProjectAction({}: Props) {
                 label="หมายเหตุ"
                 value={form?.orders[tab]?.remark}
                 onChange={(value) => handleChange("remark", value, tab)}
+                disabled={isDisableAll}
               />
             </Grid>
             <Grid item xs={9} />
-            <Grid item xs={6}>
+            <Grid item xs={12}>
+              <Typography variant="h5" color="initial" className="title">
+                รายชื่อซัพพลายเออร์
+              </Typography>
               <CustomInputWithTags
                 options={suppliers}
                 value={selectedSupplier[tab]}
                 onInputChange={(v) => handleInputChange(v, "supplier")}
                 onChange={(v) => handleChangeAutocomplete(v, "supplier")}
-                label="รายชื่อซัพพลายเออร์"
+                label=""
                 placeholder="ค้นหาโดยชื่อ"
                 minRows={1}
                 getOptionLabel={(option: ISupplier) =>
                   ` ${option?.name} | ${option?.tel}`
                 }
+                error={errors.orders[tab].supplierId}
                 onClear={() => {
-                  handleClearAutocomplete();
+                  handleClearAutocomplete("order");
                 }}
                 require
+                disabled={isDisableAll}
               />
-              {selectedSupplier[tab]?.contactPersons.length > 0 && (
+              {selectedSupplier[tab]?.contactPersons?.length > 0 && (
                 <Box>
                   <Typography
                     variant="body1"
@@ -1113,7 +1439,8 @@ export default function ProjectAction({}: Props) {
                         <TableRow sx={{ height: "40px" }}>
                           <TableCell align="center">ลำดับ</TableCell>
                           <TableCell>ชื่อผู้ติดต่อ</TableCell>
-                          <TableCell>เบอร์โทรศัพ</TableCell>
+                          <TableCell>เบอร์โทรศัพท์</TableCell>
+                          <TableCell>อีเมล</TableCell>
                           <TableCell>บทบาท</TableCell>
                         </TableRow>
                       </TableHead>
@@ -1122,9 +1449,10 @@ export default function ProjectAction({}: Props) {
                           (person, index) => (
                             <TableRow sx={{ height: "40px" }}>
                               <TableCell align="center">{index + 1}</TableCell>
-                              <TableCell>{person.name}</TableCell>
-                              <TableCell>{person.tel}</TableCell>
-                              <TableCell>{person.role}</TableCell>
+                              <TableCell>{person.name || "-"}</TableCell>
+                              <TableCell>{person.tel || "-"}</TableCell>
+                              <TableCell>{person.email || "-"}</TableCell>
+                              <TableCell>{person.role || "-"}</TableCell>
                             </TableRow>
                           )
                         )}
@@ -1134,12 +1462,16 @@ export default function ProjectAction({}: Props) {
                 </Box>
               )}
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} mt={5}>
+              <Typography variant="h5" color="initial" className="title">
+                จำนวนเอกสารทั้งหมด
+              </Typography>
               <CustomSelect
-                label="จำนวนเอกสารทั้งหมด"
+                label=""
                 options={[...Array(10)].map((_, idx) => idx + 1)}
                 value={form?.orders[tab]?.documents?.length}
-                onChange={(v) => handleChangeNumDocumentsOrder(v)}
+                onChange={(v) => handleChangeNumDocOrder(v)}
+                disabled={isDisableAll}
               />
               {form?.orders[tab]?.documents?.length > 0 && (
                 <Box>
@@ -1199,6 +1531,7 @@ export default function ProjectAction({}: Props) {
                                     index
                                   )
                                 }
+                                disabled={isDisableAll}
                               />
                             </TableCell>
                             <TableCell align="center">
@@ -1209,6 +1542,7 @@ export default function ProjectAction({}: Props) {
                                 onChange={(file) =>
                                   handleChangeFileOrderUpload(file, tab, index)
                                 }
+                                disabled={isDisableAll}
                               />
                             </TableCell>
                             <TableCell>
@@ -1232,6 +1566,7 @@ export default function ProjectAction({}: Props) {
                                     index
                                   )
                                 }
+                                disabled={isDisableAll}
                               />
                             </TableCell>
                             <TableCell>
@@ -1256,6 +1591,7 @@ export default function ProjectAction({}: Props) {
                                     index
                                   )
                                 }
+                                disabled={isDisableAll}
                               />
                             </TableCell>
                           </TableRow>

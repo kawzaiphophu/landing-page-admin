@@ -6,7 +6,7 @@ import CustomImageUpload from "@/components/CustomImageUpload/CustomImageUpload"
 import CustomTextfield from "@/components/Textfield/CustomTextfield";
 import theme from "@/theme/theme";
 import { capitalizeFirstChar, setErrObject } from "@/utils/app";
-import { Box, Typography, Grid, IconButton } from "@mui/material";
+import { Box, Typography, Grid, IconButton, Divider } from "@mui/material";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import {
@@ -27,9 +27,6 @@ type Props = {};
 
 const initailError = {
   name: false,
-  nameEn: false,
-  email: false,
-  tel: false,
   // fax: false,
   address: false,
   province: false,
@@ -37,7 +34,7 @@ const initailError = {
   subDistrict: false,
   zipcode: false,
   country: false,
-  contactPersons: [{ name: false, tel: false, role: false }],
+  contactPersons: [{ name: false, tel: false, role: false, email: false }],
 };
 
 export default function CustomerAction({}: Props) {
@@ -48,7 +45,7 @@ export default function CustomerAction({}: Props) {
   const [form, setForm] = useState<ICustomer>({
     name: "",
     nameEn: "",
-    branch: "สาขาใหญ่",
+    branch: "สำนักงานใหญ่",
     email: "",
     taxNumber: "",
     tel: "",
@@ -59,10 +56,12 @@ export default function CustomerAction({}: Props) {
     district: "",
     subDistrict: "",
     zipcode: "",
-    contactPersons: [{ name: "", tel: "", role: "" }],
+    contactPersons: [{ name: "", tel: "", role: "", email: "" }],
   });
 
   const [errors, setErrors] = useState<any>(initailError);
+
+  const isDisableAll = action === "view";
 
   useEffect(() => {
     if (customerId) {
@@ -147,21 +146,19 @@ export default function CustomerAction({}: Props) {
     }
 
     try {
-      let data
+      let data;
 
       if (customerId) {
-        data = await CustomerApi.update(customerId,form);
-      }else{
+        data = await CustomerApi.update(customerId, form);
+      } else {
         data = await CustomerApi.create(form);
       }
-      
+
       if (data) {
         AlertSwal({
           icon: "success",
           text: `${
-            customerId
-            ? "แก้ไขข้อมูลลูกค้าสำเร็จ"
-            : "สร้างลูกค้าใหม่สำเร็จ"
+            customerId ? "แก้ไขข้อมูลลูกค้าสำเร็จ" : "สร้างลูกค้าใหม่สำเร็จ"
           }`,
         });
         router.back();
@@ -170,17 +167,23 @@ export default function CustomerAction({}: Props) {
           icon: "error",
           text: `${
             customerId
-            ? "แก้ไขข้อมูลลูกค้าไม่สำเร็จ"
-            : "สร้างลูกค้าใหม่ไม่สำเร็จ"
+              ? "แก้ไขข้อมูลลูกค้าไม่สำเร็จ"
+              : "สร้างลูกค้าใหม่ไม่สำเร็จ"
           }`,
         });
       }
     } catch (error) {
       AlertSwal({
         icon: "error",
-        text: `${customerId ?'แก้ไขข้อมูลลูกค้าไม่สำเร็จ':'สร้างลูกค้าใหม่ไม่สำเร็จ'}`,
+        text: `${
+          customerId ? "แก้ไขข้อมูลลูกค้าไม่สำเร็จ" : "สร้างลูกค้าใหม่ไม่สำเร็จ"
+        }`,
       });
     }
+  };
+
+  const handleBack = () => {
+    router.back();
   };
 
   return (
@@ -199,107 +202,117 @@ export default function CustomerAction({}: Props) {
           {capitalizeFirstChar(action)} Customer
         </Typography>
       </Box>
-      <Box display="flex" alignItems="flex-start">
-        <Box display="flex" flex={1} height="auto">
+      <Box display="flex"  flexDirection={'column'}>
+        <Box >
           <Grid container spacing={2} p={3} xs={12}>
             <Grid item xs={12} mb={3}>
               <Typography variant="h4" color="initial">
                 ข้อมูลลูกค้า
               </Typography>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={3}>
               <CustomTextfield
                 label="ชื่อบริษัท (ภาษาไทย)"
                 placeholder="กรุณากรอกชื่อบริษัท"
                 value={form?.name}
                 onChange={(value) => handleChange("name", value)}
                 error={errors?.name}
+                disabled={isDisableAll}
                 required
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={3}>
               <CustomTextfield
                 label="ชื่อบริษัท (ภาษาอังกฤษ)"
                 placeholder="กรุณากรอกชื่อบริษัท"
                 value={form?.nameEn}
                 onChange={(value) => handleChange("nameEn", value)}
                 error={errors?.nameEn}
-                required
+                disabled={isDisableAll}
+
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={3}>
               <CustomTextfield
                 label="สาขา"
+                type="phone"
+                maxLength={5}
                 value={form?.branch}
+                disabled={isDisableAll}
                 onChange={(value) => handleChange("branch", value)}
               />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={3}>
               <CustomTextfield
                 label="เลขผู้เสียภาษี"
                 value={form?.taxNumber}
                 type="number"
+                disabled={isDisableAll}
                 onChange={(value) => handleChange("taxNumber", value)}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={3}>
               <CustomTextfield
                 label="อีเมล"
                 placeholder="กรุณากรอกอีเมล"
                 value={form?.email}
                 type="email"
+                disabled={isDisableAll}
                 onChange={(value) => handleChange("email", value)}
                 error={errors?.email}
-                required
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={3}>
               <CustomTextfield
                 label="หมายเลขโทรศัพท์"
                 type="phone"
                 maxLength={10}
+                disabled={isDisableAll}
                 placeholder="กรุณากรอกหมายเลขโทรศัพท์"
                 value={form?.tel}
                 onChange={(value) => handleChange("tel", value)}
                 error={errors?.tel}
-                required
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={3}>
               <CustomTextfield
                 label="หมายเลขโทรสาร"
                 type="phone"
                 maxLength={10}
                 placeholder="กรุณากรอกหมายเลขโทรสาร"
                 value={form?.fax}
+                disabled={isDisableAll}
                 onChange={(value) => handleChange("fax", value)}
                 error={errors?.fax}
               />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={3}>
               <CustomTextfield
                 label="ที่อยู่"
                 value={form?.address}
+                disabled={isDisableAll}
                 onChange={(value) => handleChange("address", value)}
                 error={errors?.address}
                 required
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={3}>
               <CustomTextfield
                 label="ประเทศ"
                 value={form?.country}
+                disabled={isDisableAll}
                 onChange={(value) => handleChange("country", value)}
                 error={errors?.country}
                 required
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={3}>
               <CustomSelect
                 label="จังหวัด"
                 required
+                disabled={isDisableAll}
                 options={provinces.map((province) => province.provinceCode)}
                 value={form?.province}
                 getOptionLabel={(v) => getProvinceNameByCode(v)}
@@ -307,10 +320,11 @@ export default function CustomerAction({}: Props) {
                 error={errors?.province}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={3}>
               <CustomSelect
                 label="เขต/อำเภอ"
                 required
+                disabled={isDisableAll}
                 options={getDistrictCodesByProvinceCode(form?.province)}
                 getOptionLabel={(v) => getDistrictNameByCode(v)}
                 value={form?.district}
@@ -318,12 +332,13 @@ export default function CustomerAction({}: Props) {
                 error={errors?.district}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={3}>
               <CustomSelect
                 label="แขวง/ตำบล"
                 options={getSubdistrictCodesByDistrictCode(form?.district)}
                 getOptionLabel={(v) => getSubdistrictNameByCode(v)}
                 required
+                disabled={isDisableAll}
                 onChange={(value) => {
                   handleChange("subDistrict", value);
                   zipcode
@@ -353,7 +368,7 @@ export default function CustomerAction({}: Props) {
               />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={3}>
               {zipcodeArr?.length ? (
                 <CustomSelect
                   label="รหัสไปรษณีย์"
@@ -363,6 +378,7 @@ export default function CustomerAction({}: Props) {
                   onChange={(v) => handleChange("zipcode", v)}
                   error={errors?.zipcode}
                   required
+                  disabled={isDisableAll}
                 />
               ) : (
                 <CustomTextfield
@@ -377,8 +393,11 @@ export default function CustomerAction({}: Props) {
             </Grid>
           </Grid>
         </Box>
-        <Box display="flex" flex={1} height="100%" alignItems="flex-start">
-          <Grid container spacing={2} p={5} xs={12}>
+        <Divider
+            sx={{ borderWidth: 4, borderRadius: 4, borderColor: "#898989" }}
+          />
+        <Box>
+          <Grid container spacing={2} p={3} xs={12}>
             <Box display={"flex"} flexDirection={"column"} width={"100%"}>
               <Box display={"flex"} justifyContent={"space-between"} mb={5}>
                 <Typography variant="h4" color="initial">
@@ -391,21 +410,23 @@ export default function CustomerAction({}: Props) {
                   size="small"
                   icon={<AddIcon />}
                   onClick={() => handleAddContact()}
+                  disabled={isDisableAll}
                 />
               </Box>
-              <Box display={"flex"} flexDirection={"column"} gap={2}>
+              <Box display={"flex"} flexDirection={"column"}   >
                 {[...Array(form?.contactPersons?.length)].map((_, idx) => (
-                  <Grid container spacing={2} key={idx}>
-                    <Grid item xs={3.6}>
+                  <Grid container spacing={2} key={idx} >
+                    <Grid item xs={3}>
                       <CustomTextfield
                         label="ชื่อผู้ติดต่อ"
                         value={form.contactPersons[idx]?.name}
                         onChange={(value) => handleChange("name", value, idx)}
                         error={errors?.contactPersons?.[idx]?.name}
                         required
+                        disabled={isDisableAll}
                       />
                     </Grid>
-                    <Grid item xs={3.6}>
+                    <Grid item xs={3}>
                       <CustomTextfield
                         label="เบอร์โทรศัพท์"
                         maxLength={10}
@@ -413,21 +434,35 @@ export default function CustomerAction({}: Props) {
                         onChange={(value) => handleChange("tel", value, idx)}
                         error={errors?.contactPersons?.[idx]?.tel}
                         required
+                        disabled={isDisableAll}
                       />
                     </Grid>
-                    <Grid item xs={3.6}>
+                    <Grid item xs={3}>
                       <CustomTextfield
                         label="หน้าที่รับผิดชอบ"
                         value={form.contactPersons[idx]?.role}
                         onChange={(value) => handleChange("role", value, idx)}
                         error={errors?.contactPersons?.[idx]?.role}
                         required
+                        disabled={isDisableAll}
                       />
                     </Grid>
-                    <Grid item xs={1} display={"flex"} alignItems={"center"}>
+                    <Grid item xs={2.5}>
+                      <CustomTextfield
+                        label="email"
+                        type="email"
+                        value={form.contactPersons[idx]?.email}
+                        onChange={(value) => handleChange("email", value, idx)}
+                        error={errors?.contactPersons?.[idx]?.email}
+                        required
+                        disabled={isDisableAll}
+                      />
+                    </Grid>
+                    <Grid item xs={0.5} display={"flex"} alignItems={"center"}>
                       <IconButton
                         aria-label=""
                         onClick={() => handleDeleteContact(idx)}
+                        disabled={isDisableAll}
                       >
                         <DeleteOutlineIcon color="error" />
                       </IconButton>
@@ -446,11 +481,12 @@ export default function CustomerAction({}: Props) {
         alignSelf="flex-end"
         pt={1}
       >
-        <CustomButton text="Cancel" style="outlined" />
+        <CustomButton text="Cancel" style="outlined" onClick={handleBack} />
         <CustomButton
           text="Submit"
           style="contained"
-          onClick={handleSubmit} // Call handleSubmit when submitting the form
+          onClick={handleSubmit}
+          disabled={isDisableAll}
         />
       </Box>
     </Box>

@@ -70,23 +70,13 @@ export default function supplier({}: Props) {
   const [totalPages, setTotalPages] = useState<number>(10);
   const [totalItems, setTotalItems] = useState<number>(0);
   const [suppliers, setSuppliers] = useState<ISupplier[]>([]);
-  // const Suppliers = [
-  //   {
-  //     name: "test",
-  //     branch: "สาขาใหญ่",
-  //     address: "131 bangphalt bangkok 10700",
-  //     email: "asdads@asd.com",
-  //     tel: "0998772123",
-  //     fax: "0928312312",
-  //     contract: "test test",
-  //   },
-  // ];
+
   useEffect(() => {
     getAllsupplier(page, pageLimit);
   }, []);
 
-  const getAllsupplier = async (page: number, pageLimit: number) => {
-    const param = { page, pageLimit };
+  const getAllsupplier = async (page: number, pageLimit: number,search?:string) => {
+    const param = { page, pageLimit ,search};
     try {
       const { data, totalItems, totalPages } = await SupplierApi.findAll(param);
       setSuppliers(data);
@@ -97,10 +87,14 @@ export default function supplier({}: Props) {
   //?==============================================================================
 
   const gotoCreate = () => {
-    router.push(`supplier/crete`);
+    router.push(`supplier/create`);
   };
   const gotoEdit = (id: number) => {
     router.push(`supplier/edit?supplierId=${id}`);
+  };
+
+  const gotoView = (id: number) => {
+    router.push(`supplier/view?supplierId=${id}`);
   };
 
   const handleDelete = async (id: number) => {
@@ -142,7 +136,25 @@ export default function supplier({}: Props) {
           Supplier
         </Typography>
       </Box>
-      <Box display={"flex"} justifyContent={"end"} pt={2}>
+      <Box
+        display={"flex"}
+        justifyContent={"space-between"}
+        pt={2}
+        alignItems={"center"}
+      >
+        <Box width={"50%"} display={"flex"} gap={2}>
+          <CustomTextfield
+            type="search"
+            label=""
+            placeholder="ค้นหาซัพพลายเออร์"
+            onChange={(v) => setSearchValue(v)}
+          />
+          <CustomButton
+            text="ค้นหา"
+            size="medium"
+            onClick={() => getAllsupplier(page, pageLimit, searchValue)}
+          />
+        </Box>
         <Button variant="outlined" color="secondary" onClick={gotoCreate}>
           Create Supplier
         </Button>
@@ -205,6 +217,10 @@ export default function supplier({}: Props) {
                         align="center"
                       >
                         <Box display={"flex"} gap={1} justifyContent={"center"}>
+                          <BoxWithColor
+                            icon="detail"
+                            onClick={() => gotoView(supplier.id as any)}
+                          />
                           <BoxWithColor
                             icon="edit"
                             onClick={() => gotoEdit(supplier.id as any)}

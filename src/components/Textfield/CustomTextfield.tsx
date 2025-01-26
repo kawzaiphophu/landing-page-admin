@@ -320,23 +320,6 @@ export default function CustomTextfield({
               </InputAdornment>
             ) : null,
         }}
-        sx={
-          type === "search"
-            ? {
-                "& .MuiInputBase-root": {
-                  borderRight: "none",
-                  borderTopRightRadius: "0px",
-                  borderBottomRightRadius: "0px",
-                },
-                "& .MuiOutlinedInput-root": {},
-              }
-            : {
-                "& .MuiOutlinedInput-root": {
-                  maxHeight: `${minRows ? minRows * 40 : "auto"}px`,
-                  ...(minRows && { paddingX: "16px" }), // Add padding if minRows is defined
-                },
-              }
-        }
       />
 
       {(error || validateError) && (

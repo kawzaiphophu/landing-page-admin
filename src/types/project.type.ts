@@ -23,6 +23,8 @@ export interface IProject {
   expiredDate?:string
   currentMa?:string
   dueMaDate?:string
+  currentPeriod?:number
+  periods:Period[]
 }
 
 export interface Order {
@@ -31,8 +33,10 @@ export interface Order {
   supplierId: number | null;
   orderName: string;
   orderStatus: string;
+  orderStatusOther: string;
   orderDueDate: string;
   orderWaranty: string;
+  orderStartWarantyDate?: string;
   remark: string;
   orderCost: number;
   documents: Document[];
@@ -53,5 +57,17 @@ export interface Document {
   docPeriod: string;
   docNo: string;
   docType: string;
-  filePath?: string;
+  filePath: string;
+}
+
+interface Period {
+  detail:string
+  status:string
+  statusOther:string
+  periodDue:string
+  paymentDue:string
+  amount:number
+  receive:number
+  isPaid:boolean
+  documents: Document[];
 }

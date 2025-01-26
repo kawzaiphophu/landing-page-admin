@@ -5,6 +5,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import Fade from "@mui/material/Fade";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+
+
 type LoanStatus = {
   text: string;
   value: string;
@@ -80,10 +82,6 @@ export default function BoxWithColor({
           iconSrc = <RemoveRedEyeOutlinedIcon />;
           tooltip = "รายละเอียด";
           break;
-      //   case "eye":
-      //     iconSrc = eye_icon;
-      //     tooltip = "View";
-      //     break;
       //   case "money":
       //     iconSrc = money_icon;
       //     tooltip = "รายละเอียดกำหนดชำระ";

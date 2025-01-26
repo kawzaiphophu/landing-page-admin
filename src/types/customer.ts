@@ -23,4 +23,5 @@ export interface ContactPerson {
     tel:  string;
     role: string;
     id?:   number;
+    email:string
 }

@@ -49,6 +49,14 @@ export default class ProjectApi {
     return MainApi.delete(`${path}/${customerId}`).then((response) => response);
   }
 
+  static updateStatus(
+    id: number,
+    type: 'status' | 'statusOrder',
+    status: string
+  ): Promise<AxiosResponse> {
+    return MainApi.patch(`${path}/${id}/${type}`, { status : status}).then((response) => response);
+  }
+
   static update(borrowerId: number, params: IProject): Promise<number> {
     return MainApi.patch(`${path}/${borrowerId}`, { ...params }).then(
       (response) => {

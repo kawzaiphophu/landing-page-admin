@@ -42,10 +42,11 @@ const style = {
 type Props = {
   projectDetail: IProject;
   getProjectDetail:any
+  handleClose: ()=>void
 };
 
-export default function BasicModal({ projectDetail,getProjectDetail }: Props) {
-  const [open, setOpen] = React.useState(false);
+export default function BasicModal({ projectDetail,getProjectDetail ,handleClose}: Props) {
+
   const [form, setForm] = useState<IProject>();
 
   useEffect(() => {
@@ -105,9 +106,6 @@ export default function BasicModal({ projectDetail,getProjectDetail }: Props) {
     }
   };
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
   const handleSubmit = async () => {
     try {
       const data = await ProjectApi.updateMaDoc(
@@ -126,15 +124,8 @@ export default function BasicModal({ projectDetail,getProjectDetail }: Props) {
 
   return (
     <div>
-      <Button
-        onClick={handleOpen}
-        variant={"text"}
-        sx={{ border: "1px solid #DEDEDE" }}
-      >
-        รายละเอียด MA{" "}
-      </Button>
       <Modal
-        open={open}
+        open={true}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
