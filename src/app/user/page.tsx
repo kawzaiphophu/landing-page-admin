@@ -53,6 +53,7 @@ import { getAddress } from "@/utils/formatData";
 import UserApi from "@/api/user.api";
 import { IUser } from "@/types/user.type";
 import ActionUserModal from "./ActionUserModal";
+import { ROLE } from "@/constants/app";
 
 //?================================================================================
 
@@ -226,7 +227,9 @@ export default function User({}: Props) {
                         </TableCell>
                         <TableCell align="center">{user?.tel || "-"}</TableCell>
                         <TableCell align="center">{user?.username}</TableCell>
-                        <TableCell align="center">{user?.role}</TableCell>
+                        <TableCell align="center">
+                          {ROLE.find((r) => r.value === user?.role)?.name}
+                        </TableCell>
                         <TableCell
                           sx={{
                             position: "sticky",

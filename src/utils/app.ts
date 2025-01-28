@@ -1,6 +1,7 @@
 import districts from "@/assets/districts.json";
 import provinces from "@/assets/provinces.json";
 import subDistricts from "@/assets/subDistricts.json";
+import { ROLE } from "@/constants/app";
 
 export function hexToRgba(hex: string, opacity: number): string {
   const bigint = parseInt(hex.slice(1), 16);
@@ -103,4 +104,17 @@ export function setErrObject(form: any, initialErrorState: any) {
   };
 
   return recursiveSetErrors(form, errorsObject);
+}
+
+export function getRole() {
+  if (typeof window === "undefined") {
+    return { isAdmin: false, isSale: false, isPM: false };
+  }
+
+  const role = localStorage.getItem("role");
+  const isAdmin = role === "ADMIN";
+  const isSale = role === "SALE";
+  const isPM = role === "PROJECT_MANAGER";
+
+  return { isAdmin, isSale, isPM };
 }

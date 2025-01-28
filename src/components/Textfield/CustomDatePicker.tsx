@@ -108,7 +108,7 @@ export default function CustomDatePicker({
             views={views}
             disableFuture={disableFuture}
             disablePast={disablePast}
-            minDate={minDate}
+            minDate={minDate || undefined}
             maxDate={maxDate}
             label={label}
             value={dayjs(value).isValid() ? dayjs(value) : undefined}

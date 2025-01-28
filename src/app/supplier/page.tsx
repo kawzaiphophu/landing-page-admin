@@ -52,6 +52,7 @@ import AlertSwal from "@/components/Alert/AlertSwal";
 import { getAddress } from "@/utils/formatData";
 import SupplierApi from "@/api/supplier.api";
 import { ISupplier } from "@/types/supplier.type";
+import { getRole } from "@/utils/app";
 
 //?================================================================================
 
@@ -60,10 +61,9 @@ type Props = {};
 //?================================================================================
 
 export default function supplier({}: Props) {
+  const { isAdmin, isPM } = getRole();
   const theme = useTheme();
   const router = useRouter();
-  const [images, setImages] = useState<string[]>([]);
-  const [row, setRow] = useState<number>(2);
   const [page, setPage] = useState<number>(1);
   const [searchValue, setSearchValue] = useState<string>("");
   const [pageLimit, setPageLimit] = useState<number>(15);
@@ -75,8 +75,12 @@ export default function supplier({}: Props) {
     getAllsupplier(page, pageLimit);
   }, []);
 
-  const getAllsupplier = async (page: number, pageLimit: number,search?:string) => {
-    const param = { page, pageLimit ,search};
+  const getAllsupplier = async (
+    page: number,
+    pageLimit: number,
+    search?: string
+  ) => {
+    const param = { page, pageLimit, search };
     try {
       const { data, totalItems, totalPages } = await SupplierApi.findAll(param);
       setSuppliers(data);
@@ -225,11 +229,14 @@ export default function supplier({}: Props) {
                             icon="edit"
                             onClick={() => gotoEdit(supplier.id as any)}
                           />
-                          <BoxWithColor
-                            icon="del"
-                            color="error"
-                            onClick={() => handleDelete(supplier.id as any)}
-                          />
+                          {isAdmin ||
+                            (isPM && (
+                              <BoxWithColor
+                                icon="del"
+                                color="error"
+                                onClick={() => handleDelete(supplier.id as any)}
+                              />
+                            ))}
                         </Box>
                       </TableCell>
                     </TableRow>

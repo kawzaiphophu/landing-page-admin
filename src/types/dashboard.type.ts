@@ -128,3 +128,72 @@ export interface Document {
   docPeriod: string;
   docNo:     string;
 }
+export interface IPeriod {
+  id:          number;
+  detail:      string;
+  status:      string;
+  statusOther: string;
+  paymentDue:  Date;
+  periodDue:   Date;
+  amount:      number;
+  receive:     number;
+  isPaid:      boolean;
+  project:     Project;
+  late:        boolean;
+  diffDate:    number;
+  periodNo:    number;
+}
+
+export interface Project {
+  projectId:               number;
+  customerId:              number;
+  projectName:             string;
+  projectScope:            string;
+  projectStatus:           string;
+  status:                  string;
+  projectWaranty:          string;
+  projectStartWarantyDate: Date;
+  projectMa:               number;
+  projectMaPerYear:        number;
+  currentMa:               number;
+  projectType:             string;
+  projectDueDate:          Date;
+  projectPrice:            string;
+  projectCost:             string;
+  projectProfit:           string;
+  createdAt:               Date;
+  updatedAt:               Date;
+  createdBy:               string;
+  updatedBy:               string;
+  currentPeriod:           number;
+}
+
+export interface IOrderMissingFile {
+  orderId:               number;
+  projectId:             number;
+  supplierId:            number;
+  orderName:             string;
+  orderWaranty:          string;
+  orderStatus:           string;
+  status:                string;
+  orderStatusOther:      string;
+  orderDueDate:          Date;
+  orderStartWarantyDate: Date | null;
+  remark:                string;
+  orderCost:             string;
+  createdAt:             Date;
+  updatedAt:             Date;
+  createdBy:             string;
+  updatedBy:             string;
+  documents:             Document[];
+  project:               Project;
+  missingFilePaths:      number[];
+}
+
+export interface Document {
+  id:        number;
+  filePath:  string;
+  docType:   string;
+  docPeriod: string;
+  docNo:     string;
+}

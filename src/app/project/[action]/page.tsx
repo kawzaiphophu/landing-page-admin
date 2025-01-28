@@ -45,6 +45,7 @@ import BasicModal from "./Modal";
 import ConfirmSwal from "@/components/Alert/ConfirmSwal";
 import CustomDropdown from "@/components/Dropdown/CustomDropdown";
 import CustomCheckbox from "@/components/CheckBox/CustomCheckBox";
+import dayjs from "dayjs";
 
 type Props = {};
 
@@ -66,6 +67,7 @@ const initailError = {
       orderWaranty: false,
     },
   ],
+  periods: [{ periodDue: false, paymentDue: false, amount: false }],
 };
 
 const initialState: IProject = {
@@ -141,14 +143,14 @@ export default function ProjectAction({}: Props) {
     if (projectId) {
       getProjectDetail(projectId);
     }
-    const setProjectStatus = () => {
-      const currentPeriodStatus = form.periods.find(
-        (p) => (p.status! = "FULL_PAYMENT")
-      )?.status;
+    // const setProjectStatus = () => {
+    //   const currentPeriodStatus = form.periods.find(
+    //     (p) => (p.status! = "FULL_PAYMENT")
+    //   )?.status;
 
-      handleChange("projectStatus", currentPeriodStatus);
-    };
-    setProjectStatus();
+    //   handleChange("projectStatus", currentPeriodStatus);
+    // };
+    // setProjectStatus();
   }, []);
 
   useEffect(() => {
@@ -262,6 +264,25 @@ export default function ProjectAction({}: Props) {
           }
         }
       }
+      setErrors((prev: any) => ({
+        ...prev,
+        periods:
+          data?.periods?.length <= (prev?.periods?.length || 0)
+            ? prev?.periods?.slice(0, data?.periods?.length)
+            : [
+                ...(prev?.periods || []),
+                ...Array(
+                  Math.max(
+                    data?.periods?.length - (prev?.periods?.length || 0),
+                    0
+                  )
+                ).fill({
+                  periodDue: false,
+                  paymentDue: false,
+                  amount: false,
+                }),
+              ],
+      }));
     } catch (error) {
       console.error(error);
     }
@@ -347,7 +368,6 @@ export default function ProjectAction({}: Props) {
   };
 
   const handleSubmit = async () => {
-
     const newErrors = setErrObject(form, errors);
 
     newErrors.customerId === !form.customerId;
@@ -365,6 +385,18 @@ export default function ProjectAction({}: Props) {
     if (isHasError) {
       return;
     }
+    const totalPeriodAmount = form.periods.reduce(
+      (sum, period) => sum + period.amount,
+      0
+    );
+    if (totalPeriodAmount != form.projectPrice) {
+      return AlertSwal({
+        title: "ยอดเงินที่ต้องชำระไม่ถูกต้อง",
+        icon: "warning",
+        text: "กรุณาตรวจสอบ ยอดเงินที่ต้องชำระแต่ละงวด",
+        timer: 5000,
+      });
+    }
 
     let body = form;
     body.projectPrice = Number(form.projectPrice);
@@ -377,6 +409,8 @@ export default function ProjectAction({}: Props) {
       orderCost: Number(order.orderCost),
       projectId,
     }));
+    body.projectStatus =
+      body?.periods[(body?.currentPeriod as number) - 1 || 0]?.status;
 
     try {
       let data;
@@ -389,18 +423,14 @@ export default function ProjectAction({}: Props) {
       if (data) {
         AlertSwal({
           icon: "success",
-          text: `${
-            projectId ? "แก้ไขข้อมูลลูกค้าสำเร็จ" : "สร้างลูกค้าใหม่สำเร็จ"
-          }`,
+          text: `${projectId ? "แก้ไขโปรเจกต์สำเร็จ" : "สร้างโปรเจกต์สำเร็จ"}`,
         });
         router.back();
       } else {
         AlertSwal({
           icon: "error",
           text: `${
-            projectId
-              ? "แก้ไขข้อมูลลูกค้าไม่สำเร็จ"
-              : "สร้างลูกค้าใหม่ไม่สำเร็จ"
+            projectId ? "แก้ไขโปรเจกต์ไม่สำเร็จ" : "สร้างโปรเจกต์ไม่สำเร็จ"
           }`,
         });
       }
@@ -461,7 +491,20 @@ export default function ProjectAction({}: Props) {
               }),
             ],
     }));
-
+    setErrors((prev: any) => ({
+      ...prev,
+      periods:
+        num <= (prev?.periods?.length || 0)
+          ? prev?.periods?.slice(0, num)
+          : [
+              ...(prev?.periods || []),
+              ...Array(Math.max(num - (prev?.periods?.length || 0), 0)).fill({
+                periodDue: false,
+                paymentDue: false,
+                amount: false,
+              }),
+            ],
+    }));
     setTabProject(num - 1);
   };
 
@@ -491,6 +534,14 @@ export default function ProjectAction({}: Props) {
           [key]: value,
         };
         return { ...prev, periods: updatedArr };
+      });
+      setErrors((prevErrors: any) => {
+        const updatedErr = [...prevErrors.periods];
+        updatedErr[tabProject] = {
+          ...updatedErr[tabProject],
+          [key]: false,
+        };
+        return { ...prevErrors, periods: updatedErr };
       });
     }
   };
@@ -648,7 +699,7 @@ export default function ProjectAction({}: Props) {
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
-  const handleChangeWarantyStatus = async (id: number,isOrder?:boolean) => {
+  const handleChangeWarantyStatus = async (id: number, isOrder?: boolean) => {
     const { isConfirmed } = await ConfirmSwal({
       title: "ต้องการปรับสถานะเป็นไม่ต่อประกันใช่หรือไม่",
       icon: "info",
@@ -656,7 +707,11 @@ export default function ProjectAction({}: Props) {
 
     if (isConfirmed) {
       try {
-        const { data } = await ProjectApi.updateStatus(id,isOrder?'statusOrder':'status','COMPLETED');
+        const { data } = await ProjectApi.updateStatus(
+          id,
+          isOrder ? "statusOrder" : "status",
+          "COMPLETED"
+        );
         if (data) {
           AlertSwal({ title: "ปรับสถานะสำเร็จ", icon: "success" });
         }
@@ -907,6 +962,7 @@ export default function ProjectAction({}: Props) {
             <CustomSelect
               label="จำนวน MA ต่อปี (ครั้ง)"
               options={[...Array(12)].map((_, idx) => idx + 1)}
+              disabledOption={(opion)=>opion > form?.projectMa}
               value={form?.projectMaPerYear}
               onChange={(value) => handleChange("projectMaPerYear", value)}
               error={errors?.projectMaPerYear}
@@ -1078,7 +1134,15 @@ export default function ProjectAction({}: Props) {
                         onChange={(value) =>
                           handleChangePeriod("periodDue", value)
                         }
+                        minDate={
+                          form?.periods[tabProject - 1]?.periodDue
+                            ? dayjs(form?.periods[tabProject - 1]?.periodDue)
+                            : undefined
+                        }
+                        maxDate={dayjs(form.projectDueDate)}
+                        disablePast={false}
                         disabled={isDisableAll}
+                        error={errors.periods[tabProject]?.periodDue}
                         required
                       />
                     </Grid>
@@ -1090,6 +1154,7 @@ export default function ProjectAction({}: Props) {
                           handleChangePeriod("paymentDue", value)
                         }
                         disabled={isDisableAll}
+                        error={errors.periods[tabProject]?.paymentDue}
                         required
                       />
                     </Grid>
@@ -1102,6 +1167,7 @@ export default function ProjectAction({}: Props) {
                           handleChangePeriod("amount", Number(value))
                         }
                         disabled={isDisableAll}
+                        error={errors.periods[tabProject]?.amount}
                         required
                       />
                     </Grid>
@@ -1296,17 +1362,21 @@ export default function ProjectAction({}: Props) {
                 รายการคำสั่งซื้อสินค้า ที่ {tab + 1}
               </Typography>
               {form?.orders[tab]?.orderStartWarantyDate && (
-                  <>
-                    <CustomDropdown
-                      icon="arrow"
-                      label={"จัดการคำสั่งซื้อ"}
-                      titles={["ปรับสถานะกรณีไม่ต่อประกัน"]}
-                      actions={[
-                        () => handleChangeWarantyStatus(form?.orders[tab]?.orderId as number,true),
-                      ]}
-                    />
-                  </>
-                )}
+                <>
+                  <CustomDropdown
+                    icon="arrow"
+                    label={"จัดการคำสั่งซื้อ"}
+                    titles={["ปรับสถานะกรณีไม่ต่อประกัน"]}
+                    actions={[
+                      () =>
+                        handleChangeWarantyStatus(
+                          form?.orders[tab]?.orderId as number,
+                          true
+                        ),
+                    ]}
+                  />
+                </>
+              )}
               {form.orders.length > 1 && (
                 <CustomButton
                   text="ลบ ออเดอร์"
@@ -1409,7 +1479,7 @@ export default function ProjectAction({}: Props) {
                 getOptionLabel={(option: ISupplier) =>
                   ` ${option?.name} | ${option?.tel}`
                 }
-                error={errors.orders[tab].supplierId}
+                error={errors.orders[tab]?.supplierId}
                 onClear={() => {
                   handleClearAutocomplete("order");
                 }}

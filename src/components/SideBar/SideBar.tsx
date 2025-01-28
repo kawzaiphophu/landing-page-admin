@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { styled, Theme, CSSObject } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -14,7 +14,7 @@ const drawerWidth = 221;
 //*------------------------------------------------------------------------
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
-  transition: "width 0.3s ease-in-out",  
+  transition: "width 0.3s ease-in-out",
   overflowX: "hidden",
   background: `linear-gradient(
     to bottom, 
@@ -56,24 +56,36 @@ const Drawer = styled(MuiDrawer, {
 }));
 //*------------------------------------------------------------------------
 
+function getRoleFromLocalStorage() {
+  if (typeof window === "undefined") return { isAdmin: false };
+  const role = localStorage?.getItem("role");
+  return {
+    isAdmin: role === "ADMIN",
+  };
+}
+
 export default function SideBar() {
+  const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const theme = useTheme();
-  const handleDrawerOpen = () => {
-    setOpen(!open);
-  };
 
-  const isMobile = useMediaQuery("(max-width:1000px)");
+  // Get the role on the client side
+  useEffect(() => {
+    const roleData = getRoleFromLocalStorage();
+    setIsAdmin(roleData.isAdmin);
+  }, []);
 
+  // Process pathname to determine the current path
   const cleanPath = pathname
-    .split("?")[0]
+    ?.split("?")[0]
     .replace(/\/$/, "")
     .split("/")
     .filter(Boolean)[0];
-  const currentPath = `/${cleanPath}`;
-  const hideSideBar =
-    pathname.includes("/edit") || pathname.includes("/create");
+  const currentPath = `/${cleanPath || ""}`;
+
+  // Determine the menu items based on the role
+  const menu = isAdmin ? menuItems.ADMIN : menuItems.ADMIN.slice(0, -1);
 
   //*----------------------------------------------------------------
 
@@ -86,13 +98,13 @@ export default function SideBar() {
         variant="permanent"
         open={open}
         sx={{
-          display:  "flex",
+          display: "flex",
           borderRadius: "20px",
           transition: "width 0.3s",
           "&:hover": {
             width: drawerWidth,
             "& .drawer-content": {
-              display: "block", 
+              display: "block",
             },
           },
         }}
@@ -100,7 +112,7 @@ export default function SideBar() {
         onMouseLeave={() => setOpen(false)}
       >
         <List sx={{ pt: "6rem", px: 1 }}>
-          {menuItems.ADMIN.map(({ text, path, icon }) => (
+          {menu.map(({ text, path, icon }) => (
             <ListItem
               key={text}
               disablePadding
@@ -135,7 +147,7 @@ export default function SideBar() {
                     textDecoration: "none",
                     color: "inherit",
                     textWrap: "nowrap",
-                    fontWeight: 600, 
+                    fontWeight: 600,
                   }}
                 >
                   {icon} {open && text}
@@ -152,7 +164,7 @@ export default function SideBar() {
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined";
 import BarChartIcon from "@mui/icons-material/BarChart";
-import { hexToRgba } from "@/utils/app";
+import { getRole, hexToRgba } from "@/utils/app";
 import { usePathname } from "next/navigation";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";

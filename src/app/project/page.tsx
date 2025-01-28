@@ -52,6 +52,7 @@ import { formatPrice, getAddress } from "@/utils/formatData";
 import { IProject } from "@/types/project.type";
 import ProjectApi from "@/api/project.api";
 import { STATUS } from "@/constants/app";
+import { getRole } from "@/utils/app";
 
 //?================================================================================
 
@@ -60,10 +61,9 @@ type Props = {};
 //?================================================================================
 
 export default function Project({}: Props) {
+  const { isAdmin, isPM } = getRole();
   const theme = useTheme();
   const router = useRouter();
-  const [images, setImages] = useState<string[]>([]);
-  const [row, setRow] = useState<number>(2);
   const [page, setPage] = useState<number>(1);
   const [searchValue, setSearchValue] = useState<string>("");
   const [pageLimit, setPageLimit] = useState<number>(15);
@@ -247,13 +247,16 @@ export default function Project({}: Props) {
                             icon="edit"
                             onClick={() => gotoEdit(project.projectId as any)}
                           />
-                          <BoxWithColor
-                            icon="del"
-                            color="error"
-                            onClick={() =>
-                              handleDelete(project.projectId as any)
-                            }
-                          />
+                          {isAdmin ||
+                            (isPM && (
+                              <BoxWithColor
+                                icon="del"
+                                color="error"
+                                onClick={() =>
+                                  handleDelete(project.projectId as any)
+                                }
+                              />
+                            ))}
                         </Box>
                       </TableCell>
                     </TableRow>

@@ -41,33 +41,39 @@ const style = {
 
 type Props = {
   projectDetail: IProject;
-  getProjectDetail:any
-  handleClose: ()=>void
+  getProjectDetail: any;
+  handleClose: () => void;
 };
 
-export default function BasicModal({ projectDetail,getProjectDetail ,handleClose}: Props) {
-
+export default function BasicModal({
+  projectDetail,
+  getProjectDetail,
+  handleClose,
+}: Props) {
   const [form, setForm] = useState<IProject>();
 
   useEffect(() => {
     if (!form?.documentsMa?.length) {
       const totalMa =
         Number(projectDetail.projectMa) /
-        (12 / Number(projectDetail.projectMaPerYear));
+        (projectDetail.projectMa / Number(projectDetail.projectMaPerYear));
+
+      const requiredDocs = Math.max(
+        totalMa - (projectDetail?.documentsMa?.length || 0)
+      );
+      
       setForm((prev: any) => ({
         ...prev,
         documentsMa: [
           ...(projectDetail?.documentsMa || []),
-          ...Array(
-            Math.max(totalMa - (projectDetail?.documentsMa?.length || 0), 0)
-          )
-            .fill(null)
-            .map((_, index) => ({
-              docPeriod: projectDetail?.documentsMa?.length + index + 1,
-              docNo: "",
-              docType: "เอกสาร MA",
-              filePath: "",
-            })),
+          ...Array.from({
+            length: requiredDocs,
+          }).map((_, index) => ({
+            docPeriod: (projectDetail?.documentsMa?.length || 0) + index + 1,
+            docNo: "",
+            docType: "เอกสาร MA",
+            filePath: "",
+          })),
         ],
       }));
     }
@@ -86,6 +92,17 @@ export default function BasicModal({ projectDetail,getProjectDetail ,handleClose
 
   const handleChangeFileProjectUpload = async (files: any, idx: number) => {
     try {
+      if (!files) {
+        return setForm((prev: any) => {
+          const updatedArr = [...prev.documentsMa];
+          updatedArr[idx] = {
+            ...updatedArr[idx],
+            filePath: "",
+          };
+
+          return { ...prev, documentsMa: updatedArr };
+        });
+      }
       const uploadedFiles = await AppApi.uploadFile([files]);
 
       let combinedFiles = [...uploadedFiles];
@@ -114,7 +131,7 @@ export default function BasicModal({ projectDetail,getProjectDetail ,handleClose
       );
       if (data === 200) {
         AlertSwal({ title: "อัพเดตเอกสาร MA สำเร็จ", icon: "success" });
-        getProjectDetail(projectDetail.projectId)
+        getProjectDetail(projectDetail.projectId);
         handleClose();
       }
     } catch (error) {
@@ -134,41 +151,46 @@ export default function BasicModal({ projectDetail,getProjectDetail ,handleClose
           <Typography id="modal-modal-title" variant="h5" component="h2">
             รายละเอียด Ma : {projectDetail.projectName}
           </Typography>
-          <Box
-            mt={2}
-            border={"1px solid #DEDEDE"}
-            borderRadius={4}
-            p={2}
-            display={"flex"}
-            gap={4}
-          >
-            <Typography sx={{ display: "flex", gap: 1 }}>
-              MA ครั้งที่ :
-              <Typography variant="body1" color="initial">
-                {projectDetail.currentMa || "-"}
-              </Typography>
-            </Typography>
-            <Typography sx={{ display: "flex", gap: 1 }}>
-              วันที่ครบกำหนด MA :
-              <Typography variant="body1" color="initial">
-                {formatDate(projectDetail?.dueMaDate as any) || "-"}
-              </Typography>
-            </Typography>
-            <Typography sx={{ display: "flex", gap: 1 }}>
-              ระยะเวลา MA :
-              <Typography variant="body1" color="initial">
-                {projectDetail.projectMa} (
-                {projectDetail?.projectMaPerYear || "-"} ครั้ง/ปี)
-              </Typography>
-            </Typography>
-            <Typography sx={{ display: "flex", gap: 1 }}>
-              วันที่ :
-              <Typography variant="body1" color="initial">
-                {formatDate(projectDetail?.projectStartWarantyDate as any) ||
-                  "-"}{" "}
-                - {formatDate(projectDetail?.expiredDate as any) || "-"}
-              </Typography>
-            </Typography>
+          <Box mt={2} border={"1px solid #DEDEDE"} borderRadius={4} p={2}>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <Typography sx={{ display: "flex", gap: 1 }}>
+                  MA ครั้งที่ :
+                  <Typography variant="body1" color="initial">
+                    {projectDetail.currentMa || "-"}
+                  </Typography>
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography sx={{ display: "flex", gap: 1 }}>
+                  ระยะเวลา MA :
+                  <Typography variant="body1" color="initial">
+                    {projectDetail.projectMa} เดือน (
+                    {projectDetail?.projectMaPerYear || "-"} ครั้ง/ปี)
+                  </Typography>
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography sx={{ display: "flex", gap: 1 }}>
+                  วันที่ครบกำหนด MA ครั้งที่ {projectDetail.currentMa || "-"}:
+                  <Typography variant="body1" color="initial">
+                    {formatDate(projectDetail?.dueMaDate as any) || "-"}
+                  </Typography>
+                </Typography>
+              </Grid>
+
+              <Grid item xs={6}>
+                <Typography sx={{ display: "flex", gap: 1 }}>
+                  วันที่ :
+                  <Typography variant="body1" color="initial">
+                    {formatDate(
+                      projectDetail?.projectStartWarantyDate as any
+                    ) || "-"}{" "}
+                    - {formatDate(projectDetail?.expiredDate as any) || "-"}
+                  </Typography>
+                </Typography>
+              </Grid>
+            </Grid>
           </Box>
           <Grid item xs={12} mt={4}>
             {projectDetail?.projectStartWarantyDate && (

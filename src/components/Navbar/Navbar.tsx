@@ -5,10 +5,6 @@ import MuiAppBar from "@mui/material/AppBar";
 import {
   Box,
   Button,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
   Typography,
   useMediaQuery,
   useTheme,
@@ -67,74 +63,13 @@ export default function NavBar() {
   };
   
 
-  const toggleDrawer = (newOpen: boolean) => () => {
-    setOpen(newOpen);
-  };
-
   const cleanPath = pathname
     .split("?")[0]
     .replace(/\/$/, "")
     .split("/")
     .filter(Boolean)[0];
 
-  const currentPath = `/${cleanPath}`;
-
-  const DrawerList = (
-    <Box
-      sx={{
-        width: 250,
-
-        height: "100%",
-      }}
-      role="temporary"
-      onClick={toggleDrawer(false)}
-    >
-      <List sx={{ pt: "6rem", px: 1 }}>
-        {menuItems.ADMIN.map(({ text, path, icon }) => (
-          <ListItem
-            key={text}
-            disablePadding
-            sx={{ display: "flex", pb: "4px" }}
-          >
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2,
-                borderRadius: "16px",
-                mx: 1,
-                color: "white",
-                transition: "color 0.3s, background-color 0.3s",
-                backgroundColor: path === currentPath ? "#365486" : "",
-                "&:hover": {
-                  backgroundColor: "#EBF4F6",
-                  color: theme.palette.secondary.main,
-                  "& img": {
-                    filter: "invert(1)",
-                    transition: "filter 0.3s",
-                  },
-                },
-              }}
-              component={Link}
-              href={path}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 2,
-                  textDecoration: "none",
-                  color: "inherit",
-                }}
-              >
-                {icon} {open && text}
-              </Box>
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  );
+  
 
   //*------------------------------------------------------------------------
 

@@ -50,6 +50,7 @@ import { ICustomer } from "@/types/customer";
 import ConfirmSwal from "@/components/Alert/ConfirmSwal";
 import AlertSwal from "@/components/Alert/AlertSwal";
 import { getAddress } from "@/utils/formatData";
+import { getRole } from "@/utils/app";
 
 //?================================================================================
 
@@ -58,6 +59,7 @@ type Props = {};
 //?================================================================================
 
 export default function Customer({}: Props) {
+  const { isAdmin, isPM } = getRole();
   const theme = useTheme();
   const router = useRouter();
   const [page, setPage] = useState<number>(1);
@@ -71,8 +73,18 @@ export default function Customer({}: Props) {
     getAllCustomer(page, pageLimit);
   }, [page, pageLimit]);
 
-  const getAllCustomer = async (page: number, pageLimit: number,searchValue?:string) => {
-    const param = { page, pageLimit, sort: "DESC", sortBy: "createdAt" ,search:searchValue};
+  const getAllCustomer = async (
+    page: number,
+    pageLimit: number,
+    searchValue?: string
+  ) => {
+    const param = {
+      page,
+      pageLimit,
+      sort: "DESC",
+      sortBy: "createdAt",
+      search: searchValue,
+    };
     try {
       const { data, totalItems, totalPages } = await CustomerApi.findAll(param);
       setCustomers(data);
@@ -141,7 +153,11 @@ export default function Customer({}: Props) {
             placeholder="ค้นหาลูกค้า"
             onChange={(v) => setSearchValue(v)}
           />
-          <CustomButton  text="ค้นหา" size="medium" onClick={()=> getAllCustomer(page,pageLimit,searchValue)}/>
+          <CustomButton
+            text="ค้นหา"
+            size="medium"
+            onClick={() => getAllCustomer(page, pageLimit, searchValue)}
+          />
         </Box>
         <Button variant="outlined" color="secondary" onClick={gotoCreate}>
           Create Customer
@@ -218,11 +234,11 @@ export default function Customer({}: Props) {
                             icon="edit"
                             onClick={() => gotoEdit(customer.id as any)}
                           />
-                          <BoxWithColor
+                         {isAdmin || isPM && <BoxWithColor
                             icon="del"
                             color="error"
                             onClick={() => handleDelete(customer.id as any)}
-                          />
+                          />}
                         </Box>
                       </TableCell>
                     </TableRow>
