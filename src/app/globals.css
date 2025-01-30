@@ -28,7 +28,6 @@ a {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-
 main {
   display: flex;
   flex-direction: column;
@@ -39,7 +38,7 @@ main {
   padding: 1rem;
   border-radius: 16px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease, opacity 0.3s ease;
+
   background-color: rgb(220, 242, 241, 0.2);
 }
 
