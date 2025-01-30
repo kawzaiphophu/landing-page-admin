@@ -28,10 +28,7 @@ a {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.box {
-  transition: transform 0.3s ease, opacity 0.3s ease; /* Transition properties */
-  animation: fadeIn 0.3s ease; /* Apply fadeIn animation */
-}
+
 main {
   display: flex;
   flex-direction: column;
