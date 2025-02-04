@@ -837,23 +837,23 @@ export default function ProjectAction({}: Props) {
                     }}
                   >
                     <MenuItem
-                      onClick={() => handleDownloadTemplate("ใบกำกับภาษี")}
+                      onClick={() => handleDownloadTemplate("TaxInvoice")}
                     >
                       ใบกำกับภาษี
                     </MenuItem>
 
                     <MenuItem
-                      onClick={(e) => handleDownloadTemplate("ใบแจ้งหนี้")}
+                      onClick={(e) => handleDownloadTemplate("Invoice")}
                     >
                       ใบแจ้งหนี้
                     </MenuItem>
                     <MenuItem
-                      onClick={(e) => handleDownloadTemplate("ใบวางบิล")}
+                      onClick={(e) => handleDownloadTemplate("BillingNote")}
                     >
                       ใบวางบิล
                     </MenuItem>
                     <MenuItem
-                      onClick={(e) => handleDownloadTemplate("ใบเสร็จรับเงิน")}
+                      onClick={(e) => handleDownloadTemplate("Receipt")}
                     >
                       ใบเสร็จรับเงิน
                     </MenuItem>
