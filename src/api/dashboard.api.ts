@@ -4,6 +4,7 @@ import { ISupplier } from "@/types/supplier.type";
 import {
   IFileMissing,
   ILateProject,
+  ILateYear,
   IMaProject,
   IOrderMissingFile,
   IOrderWaranty,
@@ -25,8 +26,14 @@ export default class DashboardApi {
       params: { ...params },
     }).then((response) => response.data);
   }
+
   static projectSummaryYear(): Promise<ISummaryYear[]> {
     return MainApi.get(`${path}/project-summary-year`).then(
+      (response) => response.data
+    );
+  }
+  static lateSummaryYear(): Promise<ILateYear[]> {
+    return MainApi.get(`${path}/late-payment`).then(
       (response) => response.data
     );
   }

@@ -131,9 +131,9 @@ export default function User({}: Props) {
                       <TableCell align="center">table</TableCell>
                       <TableCell align="center">id</TableCell>
                       <TableCell align="center">type</TableCell>
-                      <TableCell align="center">create By</TableCell>
-                      <TableCell align="center">create At</TableCell>
                       <TableCell align="center">data change</TableCell>
+                      <TableCell align="center">create At</TableCell>
+                      <TableCell align="center">create By</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody sx={{ position: "relative" }}>
@@ -154,11 +154,8 @@ export default function User({}: Props) {
                           {log?.entityId || "-"}
                         </TableCell>
                         <TableCell align="center">{log?.action}</TableCell>
-                        <TableCell align="center">{log?.changedBy}</TableCell>
-                        <TableCell align="center">
-                          {formatDateWithTime(log?.createdAt)}
-                        </TableCell>
-                        <TableCell align="left">
+
+                        <TableCell align="left" width={'50%'}>
                           <Accordion>
                             <AccordionSummary
                               expandIcon={<ArrowDownwardIcon />}
@@ -172,20 +169,20 @@ export default function User({}: Props) {
                             <AccordionDetails>
                               {log?.changes?.map((change, index) => (
                                 <Typography key={index}>
-                                  {`${change.column} (${
-                                    typeof change.before === "object"
-                                      ? JSON.stringify(change.before)
-                                      : change.before || "-"
-                                  } change to ${
-                                    typeof change.after === "object"
-                                      ? JSON.stringify(change.after)
-                                      : change.after || "-"
-                                  })`}
+                                  {` ${change.column} (${JSON.stringify(
+                                    change.before
+                                  )} -> ${JSON.stringify(
+                                    change.after
+                                  )}) `}
                                 </Typography>
                               ))}
                             </AccordionDetails>
                           </Accordion>
                         </TableCell>
+                        <TableCell align="center">
+                          {formatDateWithTime(log?.createdAt)}
+                        </TableCell>
+                        <TableCell align="center">{log?.changedBy}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

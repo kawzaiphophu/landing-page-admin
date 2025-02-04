@@ -85,7 +85,7 @@ export default function SideBar() {
   const currentPath = `/${cleanPath || ""}`;
 
   // Determine the menu items based on the role
-  const menu = isAdmin ? menuItems.ADMIN : menuItems.ADMIN.slice(0, -1);
+  const menu = isAdmin ? menuItems.ADMIN : menuItems.ADMIN.slice(0, -2);
 
   //*----------------------------------------------------------------
 
@@ -168,6 +168,7 @@ import { getRole, hexToRgba } from "@/utils/app";
 import { usePathname } from "next/navigation";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import HistoryIcon from '@mui/icons-material/History';
 export const menuItems = {
   ADMIN: [
     {
@@ -194,6 +195,11 @@ export const menuItems = {
       text: "Users",
       path: "/user",
       icon: <ManageAccountsIcon />,
+    },
+    {
+      text: "Logs Activity",
+      path: "/log-activity",
+      icon: <HistoryIcon />,
     },
   ],
 };

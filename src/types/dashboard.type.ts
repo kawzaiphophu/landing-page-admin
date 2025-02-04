@@ -14,186 +14,192 @@ export interface ISummaryYear {
 }
 
 export interface ILateProject {
-  projectId:      number;
-  customerId:     number;
-  projectName:    string;
-  projectScope:   string;
-  projectStatus:  string;
-  status:         string;
+  projectId: number;
+  customerId: number;
+  projectName: string;
+  projectScope: string;
+  projectStatus: string;
+  status: string;
   projectWaranty: string;
-  projectMa:      string;
-  projectType:    string;
+  projectMa: string;
+  projectType: string;
   projectDueDate: Date;
-  projectPrice:   string;
-  projectCost:    string;
-  projectProfit:  string;
-  createdAt:      Date;
-  updatedAt:      Date;
-  createdBy:      string;
-  updatedBy:      string;
-  late:           boolean;
-  diffDate:       number;
+  projectPrice: string;
+  projectCost: string;
+  projectProfit: string;
+  createdAt: Date;
+  updatedAt: Date;
+  createdBy: string;
+  updatedBy: string;
+  late: boolean;
+  diffDate: number;
 }
 
 export interface IMaProject {
-  projectId:               number;
-  projectName:             string;
+  projectId: number;
+  projectName: string;
   projectStartWarantyDate: Date;
-  projectMa:               number;
-  projectMaPerYear:        number;
-  currentMa:               number;
-  dueMaDate:               Date;
-  diffDate:              number;
-  expiredDate:             Date;
+  projectMa: number;
+  projectMaPerYear: number;
+  currentMa: number;
+  dueMaDate: Date;
+  diffDate: number;
+  expiredDate: Date;
 }
 
 export interface Supplier {
-  id:          number;
-  name:        string;
-  email:       string;
-  tel:         string;
-  address:     string;
-  country:     string;
-  province:    string;
-  district:    string;
+  id: number;
+  name: string;
+  email: string;
+  tel: string;
+  address: string;
+  country: string;
+  province: string;
+  district: string;
   subDistrict: string;
-  zipcode:     string;
-  status:      string;
-  createdAt:   Date;
-  update_by:   null;
-  update_at:   null;
+  zipcode: string;
+  status: string;
+  createdAt: Date;
+  update_by: null;
+  update_at: null;
 }
 
 export interface IOrderWaranty {
-  orderId:               number;
-  projectId:             number;
-  supplierId:            number;
-  orderName:             string;
-  orderWaranty:          string;
-  orderStatus:           string;
-  orderDueDate:          Date;
+  orderId: number;
+  projectId: number;
+  supplierId: number;
+  orderName: string;
+  orderWaranty: string;
+  orderStatus: string;
+  orderDueDate: Date;
   orderStartWarantyDate: Date;
-  remark:                string;
-  orderCost:             string;
-  createdAt:             Date;
-  updatedAt:             Date;
-  createdBy:             string;
-  updatedBy:             string;
-  endDateWaranty:        Date;
-  remainingWarranty:     number;
-  supplier:              Supplier;
+  remark: string;
+  orderCost: string;
+  createdAt: Date;
+  updatedAt: Date;
+  createdBy: string;
+  updatedBy: string;
+  endDateWaranty: Date;
+  remainingWarranty: number;
+  supplier: Supplier;
 }
 export interface IFileMissing {
-  projectId:               number;
-  customerId:              number;
-  projectName:             string;
-  projectScope:            string;
-  projectStatus:           string;
-  status:                  string;
-  projectWaranty:          string;
+  projectId: number;
+  customerId: number;
+  projectName: string;
+  projectScope: string;
+  projectStatus: string;
+  status: string;
+  projectWaranty: string;
   projectStartWarantyDate: Date | null;
-  projectMa:               number;
-  projectMaPerYear:        number;
-  currentMa:               number;
-  projectType:             string;
-  projectDueDate:          Date;
-  projectPrice:            string;
-  projectCost:             string;
-  projectProfit:           string;
-  createdAt:               Date;
-  updatedAt:               Date;
-  createdBy:               string;
-  updatedBy:               string;
-  currentPeriod:           number;
-  periods:                 Period[];
-  periodFileMissing:       number[];
+  projectMa: number;
+  projectMaPerYear: number;
+  currentMa: number;
+  projectType: string;
+  projectDueDate: Date;
+  projectPrice: string;
+  projectCost: string;
+  projectProfit: string;
+  createdAt: Date;
+  updatedAt: Date;
+  createdBy: string;
+  updatedBy: string;
+  currentPeriod: number;
+  periods: Period[];
+  periodFileMissing: number[];
 }
 
 export interface Period {
-  id:         number;
-  detail:     string;
-  status:     string;
+  id: number;
+  detail: string;
+  status: string;
   paymentDue: string;
-  periodDue:  string;
-  amount:     number;
-  receive:    number;
-  isPaid:     boolean;
-  documents:  Document[];
+  periodDue: string;
+  amount: number;
+  receive: number;
+  isPaid: boolean;
+  documents: Document[];
 }
 
 export interface Document {
-  id:        number;
-  filePath:  string;
-  docType:   string;
+  id: number;
+  filePath: string;
+  docType: string;
   docPeriod: string;
-  docNo:     string;
+  docNo: string;
 }
 export interface IPeriod {
-  id:          number;
-  detail:      string;
-  status:      string;
+  id: number;
+  detail: string;
+  status: string;
   statusOther: string;
-  paymentDue:  Date;
-  periodDue:   Date;
-  amount:      number;
-  receive:     number;
-  isPaid:      boolean;
-  project:     Project;
-  late:        boolean;
-  diffDate:    number;
-  periodNo:    number;
+  paymentDue: Date;
+  periodDue: Date;
+  amount: number;
+  receive: number;
+  isPaid: boolean;
+  project: Project;
+  late: boolean;
+  diffDate: number;
+  periodNo: number;
 }
 
 export interface Project {
-  projectId:               number;
-  customerId:              number;
-  projectName:             string;
-  projectScope:            string;
-  projectStatus:           string;
-  status:                  string;
-  projectWaranty:          string;
+  projectId: number;
+  customerId: number;
+  projectName: string;
+  projectScope: string;
+  projectStatus: string;
+  status: string;
+  projectWaranty: string;
   projectStartWarantyDate: Date;
-  projectMa:               number;
-  projectMaPerYear:        number;
-  currentMa:               number;
-  projectType:             string;
-  projectDueDate:          Date;
-  projectPrice:            string;
-  projectCost:             string;
-  projectProfit:           string;
-  createdAt:               Date;
-  updatedAt:               Date;
-  createdBy:               string;
-  updatedBy:               string;
-  currentPeriod:           number;
+  projectMa: number;
+  projectMaPerYear: number;
+  currentMa: number;
+  projectType: string;
+  projectDueDate: Date;
+  projectPrice: string;
+  projectCost: string;
+  projectProfit: string;
+  createdAt: Date;
+  updatedAt: Date;
+  createdBy: string;
+  updatedBy: string;
+  currentPeriod: number;
 }
 
 export interface IOrderMissingFile {
-  orderId:               number;
-  projectId:             number;
-  supplierId:            number;
-  orderName:             string;
-  orderWaranty:          string;
-  orderStatus:           string;
-  status:                string;
-  orderStatusOther:      string;
-  orderDueDate:          Date;
+  orderId: number;
+  projectId: number;
+  supplierId: number;
+  orderName: string;
+  orderWaranty: string;
+  orderStatus: string;
+  status: string;
+  orderStatusOther: string;
+  orderDueDate: Date;
   orderStartWarantyDate: Date | null;
-  remark:                string;
-  orderCost:             string;
-  createdAt:             Date;
-  updatedAt:             Date;
-  createdBy:             string;
-  updatedBy:             string;
-  documents:             Document[];
-  project:               Project;
-  missingFilePaths:      number[];
+  remark: string;
+  orderCost: string;
+  createdAt: Date;
+  updatedAt: Date;
+  createdBy: string;
+  updatedBy: string;
+  documents: Document[];
+  project: Project;
+  missingFilePaths: number[];
 }
 
 export interface Document {
-  id:        number;
-  filePath:  string;
-  docType:   string;
+  id: number;
+  filePath: string;
+  docType: string;
   docPeriod: string;
-  docNo:     string;
+  docNo: string;
+}
+
+export interface ILateYear {
+  month: string;
+  costProject: number;
+  costOrder: number;
 }
