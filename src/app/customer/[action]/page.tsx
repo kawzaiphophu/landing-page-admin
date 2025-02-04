@@ -27,7 +27,7 @@ type Props = {};
 
 const initailError = {
   name: false,
-  // fax: false,
+  taxNumber: false,
   address: false,
   province: false,
   district: false,
@@ -77,6 +77,18 @@ export default function CustomerAction({}: Props) {
   };
 
   const handleChange = (key: string, value: any, idx?: number) => {
+    if (key === "name") {
+      setErrors((prevErrors: any) => ({
+        ...prevErrors,
+        nameEn: false,
+      }));
+    }
+    if (key === "nameEn") {
+      setErrors((prevErrors: any) => ({
+        ...prevErrors,
+        name: false,
+      }));
+    }
     if (idx !== undefined) {
       setForm((prev: any) => {
         const updatedcontactPersons = [...prev.contactPersons];
@@ -136,7 +148,8 @@ export default function CustomerAction({}: Props) {
 
   const handleSubmit = async () => {
     const newErrors = setErrObject(form, initailError);
-
+    newErrors.name = !form.name && !form.nameEn;
+    newErrors.nameEn = !form.name && !form.nameEn;
     setErrors(newErrors);
 
     const isHasError = Object.values(newErrors).some((error) => error === true);
@@ -218,7 +231,7 @@ export default function CustomerAction({}: Props) {
                 onChange={(value) => handleChange("name", value)}
                 error={errors?.name}
                 disabled={isDisableAll}
-                required
+                required={!form?.nameEn}
               />
             </Grid>
             <Grid item xs={12} sm={3}>
@@ -229,7 +242,7 @@ export default function CustomerAction({}: Props) {
                 onChange={(value) => handleChange("nameEn", value)}
                 error={errors?.nameEn}
                 disabled={isDisableAll}
-
+                required={!form.name}
               />
             </Grid>
             <Grid item xs={12} sm={3}>
@@ -237,7 +250,7 @@ export default function CustomerAction({}: Props) {
                 label="สาขา"
                 type="phone"
                 maxLength={5}
-                value={form?.branch}
+                value={form?.branch === '00000' ? 'สาขาใหญ่' : form?.branch}
                 disabled={isDisableAll}
                 onChange={(value) => handleChange("branch", value)}
               />
@@ -245,11 +258,14 @@ export default function CustomerAction({}: Props) {
 
             <Grid item xs={12} sm={3}>
               <CustomTextfield
-                label="เลขผู้เสียภาษี"
+                label="เลขประจำตัวผู้เสียภาษี"
+                type="phone"
+                maxLength={15}
                 value={form?.taxNumber}
-                type="number"
                 disabled={isDisableAll}
                 onChange={(value) => handleChange("taxNumber", value)}
+                error={errors?.taxNumber}
+                required
               />
             </Grid>
             <Grid item xs={12} sm={3}>
@@ -267,7 +283,7 @@ export default function CustomerAction({}: Props) {
               <CustomTextfield
                 label="หมายเลขโทรศัพท์"
                 type="phone"
-                maxLength={10}
+                maxLength={20}
                 disabled={isDisableAll}
                 placeholder="กรุณากรอกหมายเลขโทรศัพท์"
                 value={form?.tel}
@@ -428,11 +444,23 @@ export default function CustomerAction({}: Props) {
                     </Grid>
                     <Grid item xs={3}>
                       <CustomTextfield
-                        label="เบอร์โทรศัพท์"
-                        maxLength={10}
+                        label="หมายเลขโทรศัพท์"
+                        maxLength={20}
                         value={form.contactPersons[idx]?.tel}
                         onChange={(value) => handleChange("tel", value, idx)}
                         error={errors?.contactPersons?.[idx]?.tel}
+                        required
+                        disabled={isDisableAll}
+                      />
+                    </Grid>
+                   
+                    <Grid item xs={2.5}>
+                      <CustomTextfield
+                        label="email"
+                        type="email"
+                        value={form.contactPersons[idx]?.email}
+                        onChange={(value) => handleChange("email", value, idx)}
+                        error={errors?.contactPersons?.[idx]?.email}
                         required
                         disabled={isDisableAll}
                       />
@@ -443,17 +471,6 @@ export default function CustomerAction({}: Props) {
                         value={form.contactPersons[idx]?.role}
                         onChange={(value) => handleChange("role", value, idx)}
                         error={errors?.contactPersons?.[idx]?.role}
-                        required
-                        disabled={isDisableAll}
-                      />
-                    </Grid>
-                    <Grid item xs={2.5}>
-                      <CustomTextfield
-                        label="email"
-                        type="email"
-                        value={form.contactPersons[idx]?.email}
-                        onChange={(value) => handleChange("email", value, idx)}
-                        error={errors?.contactPersons?.[idx]?.email}
                         required
                         disabled={isDisableAll}
                       />

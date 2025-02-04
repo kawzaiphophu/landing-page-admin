@@ -103,7 +103,7 @@ export default function Project({}: Props) {
 
   const handleDelete = async (id: number) => {
     const { isConfirmed } = await ConfirmSwal({
-      title: "ต้องการลบโปรเจกต์ใช่หรือไม่",
+      title: "ต้องการลบProjectใช่หรือไม่",
       icon: "info",
     });
 
@@ -150,7 +150,7 @@ export default function Project({}: Props) {
           <CustomTextfield
             type="search"
             label=""
-            placeholder="ค้นหาโปรเจกต์"
+            placeholder="ค้นหาProject"
             onChange={(v) => setSearchValue(v)}
           />
           <CustomButton
@@ -174,7 +174,7 @@ export default function Project({}: Props) {
                 <TableHead>
                   <TableRow sx={{ height: "72px", zIndex: 10 }}>
                     <TableCell align="center">ลำดับ</TableCell>
-                    <TableCell>ชื่อโปรเจกต์</TableCell>
+                    <TableCell>ชื่อProject</TableCell>
                     <TableCell>สถานะ</TableCell>
                     <TableCell>รายละเอียด</TableCell>
                     <TableCell align="center">ระยะเวลาประกัน</TableCell>
@@ -202,7 +202,7 @@ export default function Project({}: Props) {
                   {projects?.map((project, index) => (
                     <TableRow
                       sx={{
-                        height: "72px",
+                        height: "50px",
                       }}
                       key={index}
                     >
@@ -247,16 +247,15 @@ export default function Project({}: Props) {
                             icon="edit"
                             onClick={() => gotoEdit(project.projectId as any)}
                           />
-                          {isAdmin ||
-                            (isPM && (
-                              <BoxWithColor
-                                icon="del"
-                                color="error"
-                                onClick={() =>
-                                  handleDelete(project.projectId as any)
-                                }
-                              />
-                            ))}
+                          {(isAdmin || isPM) && (
+                            <BoxWithColor
+                              icon="del"
+                              color="error"
+                              onClick={() =>
+                                handleDelete(project.projectId as any)
+                              }
+                            />
+                          )}
                         </Box>
                       </TableCell>
                     </TableRow>

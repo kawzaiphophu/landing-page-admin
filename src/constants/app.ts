@@ -50,15 +50,15 @@ export const STATUS = [
 
 export const ROLE = [
   {
-    name: "ฝ่ายขาย",
+    name: "User",
     value: "SALE",
   },
   {
-    name: "ผู้จัดการโครงการ",
+    name: "Moderator",
     value: "PROJECT_MANAGER",
   },
   {
-    name: "แอดมิน",
+    name: "Admin",
     value: "ADMIN",
   },
 ];

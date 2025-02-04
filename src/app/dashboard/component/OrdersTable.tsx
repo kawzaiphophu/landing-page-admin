@@ -166,7 +166,7 @@ export default function OrdersTable() {
                   <Table stickyHeader>
                     <TableHead>
                       <TableRow sx={{ height: "40px", zIndex: 10 }}>
-                        <TableCell>ชื่อโปรเจกต์</TableCell>
+                        <TableCell>ชื่อProject</TableCell>
                         <TableCell>วันกำหนดส่ง</TableCell>
                         <TableCell>วันคงเหลือ</TableCell>
                         <TableCell
@@ -261,7 +261,7 @@ export default function OrdersTable() {
                     <TableHead>
                       <TableRow sx={{ height: "40px", zIndex: 10 }}>
                         <TableCell align="center">ครั้งที่</TableCell>
-                        <TableCell>ชื่อโปรเจกต์</TableCell>
+                        <TableCell>ชื่อProject</TableCell>
                         <TableCell align="center">ระยะเวลา MA</TableCell>
 
                         <TableCell align="center">วันที่</TableCell>
@@ -367,7 +367,7 @@ export default function OrdersTable() {
                   <Table stickyHeader>
                     <TableHead>
                       <TableRow sx={{ height: "40px", zIndex: 10 }}>
-                        <TableCell>ชื่อโปรเจกต์</TableCell>
+                        <TableCell>ชื่อProject</TableCell>
                         <TableCell align="center">งวดที่</TableCell>
                         <TableCell align="center">วันกำหนดส่ง</TableCell>
                         <TableCell align="center">วันคงเหลือ</TableCell>
@@ -466,7 +466,7 @@ export default function OrdersTable() {
                   <Table stickyHeader>
                     <TableHead>
                       <TableRow sx={{ height: "40px", zIndex: 10 }}>
-                        <TableCell>ชื่อโปรเจกต์</TableCell>
+                        <TableCell>ชื่อProject</TableCell>
                         <TableCell align="center">งวดที่</TableCell>
                         <TableCell align="center">วันกำหนดชำระ</TableCell>
                         <TableCell align="center">วันคงเหลือ</TableCell>
@@ -567,7 +567,7 @@ export default function OrdersTable() {
                   <Table stickyHeader>
                     <TableHead>
                       <TableRow sx={{ height: "40px", zIndex: 10 }}>
-                        <TableCell>ชื่อโปรเจกต์</TableCell>
+                        <TableCell>ชื่อProject</TableCell>
                         <TableCell align="center">วันกำหนดส่ง</TableCell>
                         <TableCell align="center">งวดที่ไม่มีเอกสาร</TableCell>
                         <TableCell
@@ -774,7 +774,7 @@ export default function OrdersTable() {
                   <Table stickyHeader>
                     <TableHead>
                       <TableRow sx={{ height: "40px", zIndex: 10 }}>
-                        <TableCell >ชื่อโปรเจกต์</TableCell>
+                        <TableCell >ชื่อProject</TableCell>
                         <TableCell align="center">วันกำหนดส่ง</TableCell>
                         <TableCell align="center">งวดที่ไม่มีเอกสาร</TableCell>
                         <TableCell

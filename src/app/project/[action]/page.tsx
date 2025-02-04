@@ -143,15 +143,12 @@ export default function ProjectAction({}: Props) {
     if (projectId) {
       getProjectDetail(projectId);
     }
-    // const setProjectStatus = () => {
-    //   const currentPeriodStatus = form.periods.find(
-    //     (p) => (p.status! = "FULL_PAYMENT")
-    //   )?.status;
-
-    //   handleChange("projectStatus", currentPeriodStatus);
-    // };
-    // setProjectStatus();
   }, []);
+
+  useEffect(() => {
+    const lastPeriod = form.periods[form.periods.length - 1];
+    handleChange("projectDueDate", lastPeriod.periodDue);
+  }, [form.periods]);
 
   useEffect(() => {
     const totalCost = form.orders.reduce(
@@ -389,7 +386,8 @@ export default function ProjectAction({}: Props) {
       (sum, period) => sum + period.amount,
       0
     );
-    if (totalPeriodAmount != form.projectPrice) {
+
+    if (totalPeriodAmount != Number(form.projectPrice)) {
       return AlertSwal({
         title: "ยอดเงินที่ต้องชำระไม่ถูกต้อง",
         icon: "warning",
@@ -404,6 +402,11 @@ export default function ProjectAction({}: Props) {
     body.projectProfit = Number(form.projectProfit);
     body.projectMa = Number(form.projectMa);
     body.projectMaPerYear = Number(form.projectMaPerYear);
+    body.projectMaPerYear = Number(form.projectMaPerYear);
+    body.projectMaPerYear = Number(form.projectMaPerYear);
+    body.projectMaPerYear = Number(form.projectMaPerYear);
+    body.projectMaPerYear = Number(form.projectMaPerYear);
+
     body.orders = body.orders = body.orders.map((order) => ({
       ...order,
       orderCost: Number(order.orderCost),
@@ -423,14 +426,14 @@ export default function ProjectAction({}: Props) {
       if (data) {
         AlertSwal({
           icon: "success",
-          text: `${projectId ? "แก้ไขโปรเจกต์สำเร็จ" : "สร้างโปรเจกต์สำเร็จ"}`,
+          text: `${projectId ? "แก้ไขProjectสำเร็จ" : "สร้างProjectสำเร็จ"}`,
         });
         router.back();
       } else {
         AlertSwal({
           icon: "error",
           text: `${
-            projectId ? "แก้ไขโปรเจกต์ไม่สำเร็จ" : "สร้างโปรเจกต์ไม่สำเร็จ"
+            projectId ? "แก้ไขProjectไม่สำเร็จ" : "สร้างProjectไม่สำเร็จ"
           }`,
         });
       }
@@ -509,6 +512,16 @@ export default function ProjectAction({}: Props) {
   };
 
   const handleChangePeriod = (key: string, value: any, index?: number) => {
+    if (key === "isPaid" && value === true) {
+      setForm((prev: IProject) => {
+        const updatedArr = [...prev.periods];
+        updatedArr[tabProject] = {
+          ...updatedArr[tabProject],
+          receive: form.periods[tabProject].amount,
+        };
+        return { ...prev, periods: updatedArr };
+      });
+    }
     if (index != undefined) {
       setForm((prev: IProject) => {
         const updatedArr = [...prev.periods];
@@ -788,7 +801,7 @@ export default function ProjectAction({}: Props) {
                   <>
                     <CustomDropdown
                       icon="arrow"
-                      label={"จัดการโปรเจกต์"}
+                      label={"จัดการProject"}
                       titles={["ปรับสถานะกรณีไม่ต่อประกัน", "รายละเอียด MA"]}
                       actions={[
                         () => handleChangeWarantyStatus(projectId),
@@ -851,7 +864,7 @@ export default function ProjectAction({}: Props) {
           </Grid>
           <Grid item xs={12} sm={3}>
             <CustomTextfield
-              label="ชื่อโปรเจกต์"
+              label="ชื่อProject"
               value={form?.projectName}
               onChange={(value) => handleChange("projectName", value)}
               error={errors?.projectName}
@@ -862,7 +875,7 @@ export default function ProjectAction({}: Props) {
 
           <Grid item xs={12} sm={3}>
             <CustomSelect
-              label="ประเภทโปรเจกต์"
+              label="ประเภทProject"
               options={TYPE.map((t) => t.value)}
               getOptionLabel={(o) => TYPE.find((t) => t.value === o)?.name}
               value={form.projectType}
@@ -873,11 +886,9 @@ export default function ProjectAction({}: Props) {
             />
           </Grid>
           <Grid item xs={12} sm={3}>
-            <CustomSelect
-              label="สถานะโปรเจกต์"
-              options={STATUS.map((t) => t.value)}
-              getOptionLabel={(o) => STATUS.find((t) => t.value === o)?.name}
-              value={form.periods[(form.currentPeriod || 1) - 1]?.status}
+            <CustomTextfield
+              label="สถานะProject"
+              value={`งวดงานที่ ${form.currentPeriod || 1}`}
               onChange={(v) => null}
               disabled
             />
@@ -885,7 +896,7 @@ export default function ProjectAction({}: Props) {
           {form.periods[(form.currentPeriod || 1) - 1]?.status === "OTHER" && (
             <Grid item xs={12} sm={3}>
               <CustomTextfield
-                label="สถานะโปรเจกต์อื่นๆ"
+                label="สถานะProjectอื่นๆ"
                 value={form.periods[(form.currentPeriod || 1) - 1]?.statusOther}
                 onChange={(v) => null}
                 disabled
@@ -893,18 +904,30 @@ export default function ProjectAction({}: Props) {
             </Grid>
           )}
           <Grid item xs={12} sm={3}>
+            <CustomDatePicker
+              label="วันที่กำหนดส่ง"
+              value={form?.projectDueDate}
+              onChange={(value) => handleChange("projectDueDate", value)}
+              error={errors?.projectDueDate}
+              disabled
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
             <CustomTextfield
-              label="รายละเอียดโปรเจกต์"
+              label="รายละเอียดProject"
               value={form?.projectScope}
+              minRows={3}
               onChange={(value) => handleChange("projectScope", value)}
               error={errors?.projectScope}
               required
               disabled={isDisableAll}
             />
           </Grid>
+          <Grid item xs={12} sm={6} />
           <Grid item xs={12} sm={3}>
             <CustomTextfield
-              label="ราคาโปรเจกต์ (บาท)"
+              label="ราคาProject (บาท)"
               type="numberWithComma"
               value={formatPrice(form?.projectPrice)}
               onChange={(value) => handleChange("projectPrice", value)}
@@ -915,7 +938,7 @@ export default function ProjectAction({}: Props) {
           </Grid>
           <Grid item xs={12} sm={3}>
             <CustomTextfield
-              label="ต้นทุนโปรเจกต์ (บาท)"
+              label="ต้นทุนProject (บาท)"
               type="numberWithComma"
               value={formatPrice(form?.projectCost)}
               disabled
@@ -923,7 +946,7 @@ export default function ProjectAction({}: Props) {
           </Grid>
           <Grid item xs={12} sm={3}>
             <CustomTextfield
-              label="กำไรโปรเจกต์ (บาท)"
+              label="กำไรProject (บาท)"
               type="numberWithComma"
               value={formatPrice(form?.projectProfit)}
               disabled
@@ -939,18 +962,8 @@ export default function ProjectAction({}: Props) {
           </Grid>
 
           <Grid item xs={12} sm={3}>
-            <CustomDatePicker
-              label="วันที่กำหนดส่ง"
-              value={form?.projectDueDate}
-              onChange={(value) => handleChange("projectDueDate", value)}
-              error={errors?.projectDueDate}
-              required
-              disabled={isDisableAll}
-            />
-          </Grid>
-          <Grid item xs={12} sm={3}>
             <CustomTextfield
-              label="โปรเจกต์ MA (เดือน)"
+              label="Project MA (เดือน)"
               type="number"
               value={form?.projectMa}
               onChange={(value) => handleChange("projectMa", value)}
@@ -962,7 +975,7 @@ export default function ProjectAction({}: Props) {
             <CustomSelect
               label="จำนวน MA ต่อปี (ครั้ง)"
               options={[...Array(12)].map((_, idx) => idx + 1)}
-              disabledOption={(opion)=>opion > form?.projectMa}
+              disabledOption={(opion) => opion > form?.projectMa}
               value={form?.projectMaPerYear}
               onChange={(value) => handleChange("projectMaPerYear", value)}
               error={errors?.projectMaPerYear}
@@ -1026,7 +1039,7 @@ export default function ProjectAction({}: Props) {
                         <TableCell align="center">ลำดับ</TableCell>
                         <TableCell>ชื่อผู้ติดต่อ</TableCell>
                         <TableCell>เบอร์โทรศัพท์ท์</TableCell>
-                        <TableCell>บทบาท</TableCell>
+                        <TableCell> ตำแหน่ง</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -1093,9 +1106,10 @@ export default function ProjectAction({}: Props) {
                     รายละเอียดงวด ที่ {tabProject + 1}
                   </Typography>
                   <Grid container mt={1} spacing={2}>
-                    <Grid item xs={12} sm={3}>
+                    <Grid item xs={12} sm={6}>
                       <CustomTextfield
                         label="รายละเอียดงวด"
+                        minRows={3}
                         value={form?.periods[tabProject]?.detail}
                         onChange={(value) =>
                           handleChangePeriod("detail", value)
@@ -1180,7 +1194,7 @@ export default function ProjectAction({}: Props) {
                         onChange={(value) =>
                           handleChangePeriod("receive", Number(value))
                         }
-                        disabled={isDisableAll}
+                        disabled={isDisableAll || form?.periods[tabProject]?.isPaid}
                       />
                     </Grid>
                     <Grid item xs={12} sm={3} sx={{ display: "flex" }}>
@@ -1313,7 +1327,7 @@ export default function ProjectAction({}: Props) {
           mb={2}
         >
           <Typography variant="h4" color="initial">
-            ข้อมูลคำสั่งซื้อสินค้า
+            ข้อมูลคำสั่งซื้อสินค้า 
           </Typography>
           <CustomButton
             style={"outlined"}
@@ -1385,10 +1399,9 @@ export default function ProjectAction({}: Props) {
                 />
               )}
             </Grid>
-
-            <Grid item xs={12} mb={2}>
-              <Typography variant="h4" color="initial">
-                ข้อมูลคำสั่งซื้อสินค้า
+            <Grid item xs={12} mb={3}>
+              <Typography variant="h5" color="initial" className="title">
+                ข้อมูลคำสั่งซื้อสินค้า (แยกตามรายการรับประกันสินค้าจากผู้ผลิต)
               </Typography>
             </Grid>
             <Grid item xs={12} sm={3}>
@@ -1455,9 +1468,11 @@ export default function ProjectAction({}: Props) {
                 disabled={isDisableAll}
               />
             </Grid>
-            <Grid item xs={12} sm={3}>
+            <Grid item xs={12} sm={6}/>
+            <Grid item xs={12} sm={6}>
               <CustomTextfield
                 label="หมายเหตุ"
+                minRows={3}
                 value={form?.orders[tab]?.remark}
                 onChange={(value) => handleChange("remark", value, tab)}
                 disabled={isDisableAll}
@@ -1511,7 +1526,7 @@ export default function ProjectAction({}: Props) {
                           <TableCell>ชื่อผู้ติดต่อ</TableCell>
                           <TableCell>เบอร์โทรศัพท์</TableCell>
                           <TableCell>อีเมล</TableCell>
-                          <TableCell>บทบาท</TableCell>
+                          <TableCell> ตำแหน่ง</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>

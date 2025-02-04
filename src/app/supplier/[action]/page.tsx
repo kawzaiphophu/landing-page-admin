@@ -29,6 +29,7 @@ type Props = {};
 
 const initailError = {
   name: false,
+  nameEn: false,
   branch: false,
   address: false,
   province: false,
@@ -77,6 +78,18 @@ export default function SupplierAction({}: Props) {
   };
 
   const handleChange = (key: string, value: any, idx?: number) => {
+    if (key === "name") {
+      setErrors((prevErrors: any) => ({
+        ...prevErrors,
+        nameEn: false,
+      }));
+    }
+    if (key === "nameEn") {
+      setErrors((prevErrors: any) => ({
+        ...prevErrors,
+        name: false,
+      }));
+    }
     if (idx !== undefined) {
       setForm((prev: any) => {
         const updatedcontactPersons = [...prev.contactPersons];
@@ -136,7 +149,8 @@ export default function SupplierAction({}: Props) {
 
   const handleSubmit = async () => {
     const newErrors = setErrObject(form, initailError);
-
+    newErrors.name = !form.name && !form.nameEn;
+    newErrors.nameEn = !form.name && !form.nameEn;
     setErrors(newErrors);
 
     const isHasError = Object.values(newErrors).some((error) => error === true);
@@ -220,7 +234,7 @@ export default function SupplierAction({}: Props) {
                 onChange={(value) => handleChange("name", value)}
                 error={errors?.name}
                 disabled={isDisableAll}
-                required
+                required={!form?.nameEn}
               />
             </Grid>
             <Grid item xs={12} sm={3}>
@@ -231,6 +245,7 @@ export default function SupplierAction({}: Props) {
                 onChange={(value) => handleChange("nameEn", value)}
                 error={errors?.nameEn}
                 disabled={isDisableAll}
+                required={!form.name}
               />
             </Grid>
             <Grid item xs={12} sm={3}>
@@ -238,7 +253,7 @@ export default function SupplierAction({}: Props) {
                 label="สาขา"
                 type="phone"
                 maxLength={5}
-                value={form?.branch}
+                value={form?.branch === "00000" ? "สาขาใหญ่" : form?.branch}
                 disabled={isDisableAll}
                 onChange={(value) => handleChange("branch", value)}
                 error={errors?.branch}
@@ -248,6 +263,7 @@ export default function SupplierAction({}: Props) {
               <CustomTextfield
                 label="เลขประจำตัวผู้เสียภาษี"
                 type="phone"
+                maxLength={15}
                 value={form?.taxNumber}
                 disabled={isDisableAll}
                 onChange={(value) => handleChange("taxNumber", value)}
@@ -270,7 +286,7 @@ export default function SupplierAction({}: Props) {
               <CustomTextfield
                 label="หมายเลขโทรศัพท์"
                 type="phone"
-                maxLength={10}
+                maxLength={20}
                 disabled={isDisableAll}
                 placeholder="กรุณากรอกหมายเลขโทรศัพท์"
                 value={form?.tel}
@@ -385,8 +401,8 @@ export default function SupplierAction({}: Props) {
           </Grid>
         </Box>
         <Divider
-            sx={{ borderWidth: 4, borderRadius: 4, borderColor: "#898989" }}
-          />
+          sx={{ borderWidth: 4, borderRadius: 4, borderColor: "#898989" }}
+        />
         <Box p={3}>
           <Box display={"flex"} justifyContent={"space-between"}>
             <Typography variant="h4" color="initial">
@@ -402,7 +418,7 @@ export default function SupplierAction({}: Props) {
               disabled={isDisableAll}
             />
           </Box>
-         
+
           <Box mt={3}>
             {[...Array(form?.contactPersons?.length)].map((_, idx) => (
               <Grid container spacing={2} key={idx} mb={2}>
@@ -418,21 +434,11 @@ export default function SupplierAction({}: Props) {
                 </Grid>
                 <Grid item xs={3}>
                   <CustomTextfield
-                    label="เบอร์โทรศัพท์"
-                    maxLength={10}
+                    label="หมายเลขโทรศัพท์"
+                    maxLength={20}
                     value={form.contactPersons[idx]?.tel}
                     onChange={(value) => handleChange("tel", value, idx)}
                     error={errors?.contactPersons?.[idx]?.tel}
-                    required
-                    disabled={isDisableAll}
-                  />
-                </Grid>
-                <Grid item xs={3}>
-                  <CustomTextfield
-                    label="หน้าที่รับผิดชอบ"
-                    value={form.contactPersons[idx]?.role}
-                    onChange={(value) => handleChange("role", value, idx)}
-                    error={errors?.contactPersons?.[idx]?.role}
                     required
                     disabled={isDisableAll}
                   />
@@ -448,6 +454,17 @@ export default function SupplierAction({}: Props) {
                     disabled={isDisableAll}
                   />
                 </Grid>
+                <Grid item xs={3}>
+                  <CustomTextfield
+                    label="หน้าที่รับผิดชอบ"
+                    value={form.contactPersons[idx]?.role}
+                    onChange={(value) => handleChange("role", value, idx)}
+                    error={errors?.contactPersons?.[idx]?.role}
+                    required
+                    disabled={isDisableAll}
+                  />
+                </Grid>
+
                 <Grid item xs={0.5} display={"flex"} alignItems={"center"}>
                   <IconButton
                     aria-label=""

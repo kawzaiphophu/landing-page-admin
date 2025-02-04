@@ -201,7 +201,7 @@ export default function Customer({}: Props) {
                   {customers?.map((customer, index) => (
                     <TableRow
                       sx={{
-                        height: "72px",
+                        height: "50px",
                       }}
                       key={index}
                     >
@@ -234,11 +234,13 @@ export default function Customer({}: Props) {
                             icon="edit"
                             onClick={() => gotoEdit(customer.id as any)}
                           />
-                         {isAdmin || isPM && <BoxWithColor
-                            icon="del"
-                            color="error"
-                            onClick={() => handleDelete(customer.id as any)}
-                          />}
+                          {(isAdmin || isPM) && (
+                            <BoxWithColor
+                              icon="del"
+                              color="error"
+                              onClick={() => handleDelete(customer.id as any)}
+                            />
+                          )}
                         </Box>
                       </TableCell>
                     </TableRow>

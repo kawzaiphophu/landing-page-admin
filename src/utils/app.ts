@@ -112,6 +112,8 @@ export function getRole() {
   }
 
   const role = localStorage.getItem("role");
+
+  
   const isAdmin = role === "ADMIN";
   const isSale = role === "SALE";
   const isPM = role === "PROJECT_MANAGER";

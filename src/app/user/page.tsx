@@ -195,7 +195,7 @@ export default function User({}: Props) {
                       <TableCell align="center">ชื่อ</TableCell>
                       <TableCell align="center">เบอร์โทรศัพท์</TableCell>
                       <TableCell align="center">ชื่อผู้ใช้งาน</TableCell>
-                      <TableCell align="center">บทบาท</TableCell>
+                      <TableCell align="center"> ตำแหน่ง</TableCell>
                       <TableCell
                         align="center"
                         width={"7%"}
@@ -215,7 +215,7 @@ export default function User({}: Props) {
                     {users?.map((user, index) => (
                       <TableRow
                         sx={{
-                          height: "72px",
+                          height: "50px",
                         }}
                         key={index}
                       >

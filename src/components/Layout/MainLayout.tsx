@@ -31,7 +31,6 @@ export function MainLayout({ children }: { children: ReactNode }) {
                     width: "90vw",
                     height: "auto",
                     background: "#FFF",
-                    transition: "width 3s ease-in-out",  
                   }}
                 >
                   <NavBar />

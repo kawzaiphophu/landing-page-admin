@@ -179,7 +179,7 @@ export default function ActionUserModal({
               </Grid>
               <Grid item xs={4}>
                 <CustomTextfield
-                  label="ชื่อผู้ใช้"
+                  label="User ID"
                   value={form.username}
                   required
                   error={error.username}
@@ -216,7 +216,7 @@ export default function ActionUserModal({
               </Grid>
               <Grid item xs={4}>
                 <CustomSelect
-                  label="บทบาท"
+                  label=" ตำแหน่ง"
                   options={ROLE.map((t) => t.value)}
                   getOptionLabel={(o) =>
                     ROLE.find((t) => t.value === o)?.name

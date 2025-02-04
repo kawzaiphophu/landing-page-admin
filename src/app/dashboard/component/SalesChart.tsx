@@ -41,7 +41,7 @@ export default function SalesChart() {
   return (
     <Box sx={{ height: 400, p: 2 }}>
       <Typography variant="h6" mb={2}>
-        Sales Overview
+        Overview
       </Typography>
       <ResponsiveContainer
         width="100%"
@@ -69,7 +69,7 @@ export default function SalesChart() {
           />
           <Tooltip
             formatter={(value) => {
-              return new Intl.NumberFormat("th-TH").format(value as any);  
+              return new Intl.NumberFormat("th-TH").format(value as any);
             }}
           />
 

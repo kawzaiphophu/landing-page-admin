@@ -197,7 +197,7 @@ export default function supplier({}: Props) {
                   {suppliers?.map((supplier, index) => (
                     <TableRow
                       sx={{
-                        height: "72px",
+                        height: "50px",
                       }}
                       key={index}
                     >
@@ -229,14 +229,13 @@ export default function supplier({}: Props) {
                             icon="edit"
                             onClick={() => gotoEdit(supplier.id as any)}
                           />
-                          {isAdmin ||
-                            (isPM && (
+                            {(isAdmin || isPM) && (
                               <BoxWithColor
                                 icon="del"
                                 color="error"
                                 onClick={() => handleDelete(supplier.id as any)}
                               />
-                            ))}
+                            )}
                         </Box>
                       </TableCell>
                     </TableRow>
