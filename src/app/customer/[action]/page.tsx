@@ -413,8 +413,8 @@ export default function CustomerAction({}: Props) {
             sx={{ borderWidth: 4, borderRadius: 4, borderColor: "#898989" }}
           />
         <Box>
-          <Grid container spacing={2} p={3} xs={12}>
-            <Box display={"flex"} flexDirection={"column"} width={"100%"}>
+          <Grid container spacing={2} p={3} xs={12} >
+            <Box display={"flex"} flexDirection={"column"} width={"100%"} >
               <Box display={"flex"} justifyContent={"space-between"} mb={5}>
                 <Typography variant="h4" color="initial">
                   ข้อมูลผู้ติดต่อ
@@ -431,7 +431,7 @@ export default function CustomerAction({}: Props) {
               </Box>
               <Box display={"flex"} flexDirection={"column"}   >
                 {[...Array(form?.contactPersons?.length)].map((_, idx) => (
-                  <Grid container spacing={2} key={idx} >
+                  <Grid container spacing={2} key={idx} mb={2} >
                     <Grid item xs={3}>
                       <CustomTextfield
                         label="ชื่อผู้ติดต่อ"

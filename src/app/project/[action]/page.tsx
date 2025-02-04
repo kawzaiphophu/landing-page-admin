@@ -1101,7 +1101,7 @@ export default function ProjectAction({}: Props) {
                     border: "1px solid #DEDEDE",
                     borderRadius: 2,
                     p: 3,
-                    maxHeight: "400px",
+                    minHeight: "400px",
                   }}
                 >
                   <Typography variant="h5" color="initial">
