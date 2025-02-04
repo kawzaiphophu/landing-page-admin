@@ -1005,7 +1005,9 @@ export default function ProjectAction({}: Props) {
               placeholder="ค้นหาโดยชื่อ"
               minRows={1}
               getOptionLabel={(option: ICustomer) =>
-                ` ${option?.name} ${option?.branch} | ${option?.tel}`
+                ` ${option?.name} ${
+                  option?.branch === "00000" ? "สำนักงานใหญ่" : option.branch
+                } | ${option?.tel}`
               }
               onClear={() => {
                 handleClearAutocomplete("project");
@@ -1194,7 +1196,9 @@ export default function ProjectAction({}: Props) {
                         onChange={(value) =>
                           handleChangePeriod("receive", Number(value))
                         }
-                        disabled={isDisableAll || form?.periods[tabProject]?.isPaid}
+                        disabled={
+                          isDisableAll || form?.periods[tabProject]?.isPaid
+                        }
                       />
                     </Grid>
                     <Grid item xs={12} sm={3} sx={{ display: "flex" }}>
@@ -1327,7 +1331,7 @@ export default function ProjectAction({}: Props) {
           mb={2}
         >
           <Typography variant="h4" color="initial">
-            ข้อมูลคำสั่งซื้อสินค้า 
+            ข้อมูลคำสั่งซื้อสินค้า
           </Typography>
           <CustomButton
             style={"outlined"}
@@ -1468,7 +1472,7 @@ export default function ProjectAction({}: Props) {
                 disabled={isDisableAll}
               />
             </Grid>
-            <Grid item xs={12} sm={6}/>
+            <Grid item xs={12} sm={6} />
             <Grid item xs={12} sm={6}>
               <CustomTextfield
                 label="หมายเหตุ"
