@@ -253,7 +253,7 @@ export default function SupplierAction({}: Props) {
                 label="สาขา"
                 type="phone"
                 maxLength={5}
-                value={form?.branch === "00000" ? "สาขาใหญ่" : form?.branch}
+                value={form?.branch === "00000" ? "สำนักงานใหญ่" : form?.branch}
                 disabled={isDisableAll}
                 onChange={(value) => handleChange("branch", value)}
                 error={errors?.branch}

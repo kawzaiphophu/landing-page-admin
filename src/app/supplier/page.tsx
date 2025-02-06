@@ -204,7 +204,9 @@ export default function supplier({}: Props) {
                       <TableCell align="center">
                         {pageLimit * (page - 1) + index + 1}
                       </TableCell>
-                      <TableCell>{supplier?.name || "-"}</TableCell>
+                      <TableCell>
+                        {supplier?.name || supplier?.nameEn || "-"}
+                      </TableCell>
                       <TableCell>{supplier?.email || "-"}</TableCell>
                       <TableCell align="center">
                         {supplier?.tel || "-"}
@@ -229,13 +231,13 @@ export default function supplier({}: Props) {
                             icon="edit"
                             onClick={() => gotoEdit(supplier.id as any)}
                           />
-                            {(isAdmin || isPM) && (
-                              <BoxWithColor
-                                icon="del"
-                                color="error"
-                                onClick={() => handleDelete(supplier.id as any)}
-                              />
-                            )}
+                          {(isAdmin || isPM) && (
+                            <BoxWithColor
+                              icon="del"
+                              color="error"
+                              onClick={() => handleDelete(supplier.id as any)}
+                            />
+                          )}
                         </Box>
                       </TableCell>
                     </TableRow>

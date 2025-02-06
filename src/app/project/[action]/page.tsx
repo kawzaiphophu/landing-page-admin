@@ -46,6 +46,7 @@ import ConfirmSwal from "@/components/Alert/ConfirmSwal";
 import CustomDropdown from "@/components/Dropdown/CustomDropdown";
 import CustomCheckbox from "@/components/CheckBox/CustomCheckBox";
 import dayjs from "dayjs";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 type Props = {};
 
@@ -407,7 +408,7 @@ export default function ProjectAction({}: Props) {
     body.projectMaPerYear = Number(form.projectMaPerYear);
     body.projectMaPerYear = Number(form.projectMaPerYear);
 
-    body.orders = body.orders = body.orders.map((order) => ({
+    body.orders = body.orders.map((order) => ({
       ...order,
       orderCost: Number(order.orderCost),
       projectId,
@@ -415,6 +416,11 @@ export default function ProjectAction({}: Props) {
     body.projectStatus =
       body?.periods[(body?.currentPeriod as number) - 1 || 0]?.status;
 
+    body.periods = body.periods.map((period) => ({
+      ...period,
+      receive: Number(period.receive),
+      amount: Number(period.amount),
+    }));
     try {
       let data;
       if (projectId) {
@@ -518,6 +524,17 @@ export default function ProjectAction({}: Props) {
         updatedArr[tabProject] = {
           ...updatedArr[tabProject],
           receive: form.periods[tabProject].amount,
+          status: 'FULL_PAYMENT',
+        };
+        return { ...prev, periods: updatedArr };
+      });
+    }
+    if (key === "receive" && value) {
+      setForm((prev: IProject) => {
+        const updatedArr = [...prev.periods];
+        updatedArr[tabProject] = {
+          ...updatedArr[tabProject],
+          isPaid: form.periods[tabProject].amount === value,
         };
         return { ...prev, periods: updatedArr };
       });
@@ -765,6 +782,19 @@ export default function ProjectAction({}: Props) {
     0
   );
 
+  const handleDeletePeriodDoc = (index: number) => {
+    setForm((prev: IProject) => {
+      const updatedPeriods = [...prev.periods];
+      const targetPeriod = { ...updatedPeriods[tabProject] };
+      const updatedDocuments = targetPeriod.documents.filter(
+        (_, i) => i !== index
+      );
+      targetPeriod.documents = updatedDocuments;
+      updatedPeriods[tabProject] = targetPeriod;
+
+      return { ...prev, periods: updatedPeriods };
+    });
+  };
   return (
     <Box p={2} sx={{ border: "1px solid #DEDEDE", borderRadius: "8px" }}>
       {popupsOpen && (
@@ -1155,7 +1185,6 @@ export default function ProjectAction({}: Props) {
                             ? dayjs(form?.periods[tabProject - 1]?.periodDue)
                             : undefined
                         }
-                        maxDate={dayjs(form.projectDueDate)}
                         disablePast={false}
                         disabled={isDisableAll}
                         error={errors.periods[tabProject]?.periodDue}
@@ -1178,7 +1207,7 @@ export default function ProjectAction({}: Props) {
                       <CustomTextfield
                         label="ยอดเงินที่ต้องชำระ"
                         type="numberWithComma"
-                        value={form?.periods[tabProject]?.amount}
+                        value={formatPrice(form?.periods[tabProject]?.amount)}
                         onChange={(value) =>
                           handleChangePeriod("amount", Number(value))
                         }
@@ -1192,7 +1221,7 @@ export default function ProjectAction({}: Props) {
                         label="ยอดเงินที่รับชำระ"
                         type="numberWithComma"
                         placeholder="0.00"
-                        value={form?.periods[tabProject]?.receive}
+                        value={formatPrice(form?.periods[tabProject]?.receive)}
                         onChange={(value) =>
                           handleChangePeriod("receive", Number(value))
                         }
@@ -1223,6 +1252,7 @@ export default function ProjectAction({}: Props) {
                           <TableCell>เอกสาร</TableCell>
                           <TableCell>เลขที่เอกสาร</TableCell>
                           <TableCell>ประเภทเอกสาร</TableCell>
+                          <TableCell></TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -1280,6 +1310,13 @@ export default function ProjectAction({}: Props) {
                                   }
                                   disabled={isDisableAll}
                                 />
+                              </TableCell>
+                              <TableCell>
+                                <IconButton
+                                  onClick={() => handleDeletePeriodDoc(index)}
+                                >
+                                  <DeleteOutlineIcon color="error" />
+                                </IconButton>
                               </TableCell>
                             </TableRow>
                           )

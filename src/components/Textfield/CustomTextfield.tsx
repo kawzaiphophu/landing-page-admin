@@ -167,6 +167,10 @@ export default function CustomTextfield({
         validatedValue = removeSpecialCharacters(validatedValue);
         break;
       case "numberWithComma":
+        const numericinput = (validatedValue);
+        if (maxValue && Number(numericinput) > Number(maxValue)) {
+          return String(maxValue);
+        }
         const cleanedInputValue = inputValue.replace(/,/g, "");
         validatedValue = cleanedInputValue
           .replace(/[^0-9.eE]/g, "")
@@ -181,12 +185,9 @@ export default function CustomTextfield({
           validatedValue = validatedValue.slice(0, maxLength);
         }
 
-        const numericinput = Number(validatedValue);
-        if (maxValue && numericinput > Number(maxValue)) {
-          return String(maxValue);
-        }
+    
 
-        if (!isNaN(numericinput)) {
+        if (!isNaN(Number(numericinput))) {
           validatedValue = numericinput.toLocaleString();
         } else {
           return "";
@@ -228,6 +229,7 @@ export default function CustomTextfield({
       "v",
       "c",
       "a",
+      '.'
     ];
 
     if (event.ctrlKey || event.metaKey) {

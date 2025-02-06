@@ -247,7 +247,7 @@ export default function OrdersTable() {
                 display="inline-flex"
                 color="#FFF"
               >
-                MA project due date
+                MA Project Due Date
               </Box>
             </Typography>
             {projectMa?.length ? (
@@ -263,10 +263,10 @@ export default function OrdersTable() {
                         <TableCell align="center">ครั้งที่</TableCell>
                         <TableCell>ชื่อProject</TableCell>
                         <TableCell align="center">ระยะเวลา MA</TableCell>
-
-                        <TableCell align="center">วันที่</TableCell>
-                        <TableCell align="center">วันที่ครบกำหนด MA</TableCell>
                         <TableCell>วันคงเหลือ</TableCell>
+                        <TableCell align="center">วันที่ครบกำหนด MA</TableCell>
+                        <TableCell align="center">วันที่</TableCell>
+              
                         <TableCell
                           align="center"
                           width={"7%"}
@@ -301,15 +301,17 @@ export default function OrdersTable() {
                               project?.projectMaPerYear || "-"
                             } ครั้ง/ปี)` || "-"}
                           </TableCell>
+                          <TableCell align="center">{project?.diffDate}</TableCell>
+                          <TableCell align="center">
+                            {formatDate(project?.dueMaDate) || "-"}
+                          </TableCell>
                           <TableCell align="center">
                             {formatDate(project?.projectStartWarantyDate) ||
                               "-"}{" "}
                             - {formatDate(project?.expiredDate) || "-"}
                           </TableCell>
-                          <TableCell align="center">
-                            {formatDate(project?.dueMaDate) || "-"}
-                          </TableCell>
-                          <TableCell align="center">{project?.diffDate}</TableCell>
+                        
+                    
                           <TableCell
                             sx={{
                               position: "sticky",
@@ -354,7 +356,7 @@ export default function OrdersTable() {
                 color="#FFF"
                 display="inline-flex"
               >
-                Period
+                งวดงาน
               </Box>
             </Typography>
             {latePeriod?.length ? (
@@ -453,7 +455,7 @@ export default function OrdersTable() {
                 color="#FFF"
                 display="inline-flex"
               >
-                Period Payment
+              งวดชำระ
               </Box>
             </Typography>
             {latePeriodPayment?.length ? (
@@ -554,7 +556,7 @@ export default function OrdersTable() {
                 color="#FFF"
                 mt={3}
               >
-                File upload is incomplete
+                File upload incomplete
               </Box>
             </Typography>
             {projectFileMissing?.length ? (
@@ -661,7 +663,7 @@ export default function OrdersTable() {
                 color="#FFF"
                 mt={3}
               >
-                Order Waranty due date
+                Order Waranty
               </Box>
             </Typography>
             {orderWaranty?.length ? (
@@ -676,8 +678,8 @@ export default function OrdersTable() {
                       <TableRow sx={{ height: "40px", zIndex: 10 }}>
                         <TableCell align="center">ชื่อออเดอร์</TableCell>
                         <TableCell align="center">ติดต่อ</TableCell>
-                        <TableCell align="center">วันที่ประกัน</TableCell>
                         <TableCell align="center">วันที่คงเหลือ</TableCell>
+                        <TableCell align="center">วันที่ประกัน</TableCell>
                         <TableCell
                           align="center"
                           width={"7%"}
@@ -710,13 +712,14 @@ export default function OrdersTable() {
                           <TableCell >
                             {order?.orderName}
                           </TableCell>
-                          <TableCell>{`${order?.supplier.name} | ${order?.supplier.tel} `}</TableCell>
+                          <TableCell>{`${order?.supplier.name}`}</TableCell>
+                         
+                          <TableCell align="center">
+                            {order?.remainingWarranty || "-"}
+                          </TableCell>
                           <TableCell align="center">
                             {formatDate(order?.orderStartWarantyDate) || "-"} -{" "}
                             {formatDate(order?.endDateWaranty) || "-"}
-                          </TableCell>
-                          <TableCell align="center">
-                            {order?.remainingWarranty || "-"}
                           </TableCell>
                           <TableCell
                             sx={{
@@ -761,7 +764,7 @@ export default function OrdersTable() {
                 color="#FFF"
                 mt={3}
               >
-                File upload is incomplete
+                File upload incomplete
               </Box>
             </Typography>
             {orderFileMissing?.length ? (

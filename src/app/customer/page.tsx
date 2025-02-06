@@ -208,8 +208,14 @@ export default function Customer({}: Props) {
                       <TableCell>
                         {pageLimit * (page - 1) + index + 1}
                       </TableCell>
-                      <TableCell>{customer?.name || "-"}</TableCell>
-                      <TableCell>{customer?.branch === '00000' ? 'สำนักงานใหญ่':customer?.branch || "-"}</TableCell>
+                      <TableCell>
+                        {customer?.name || customer?.nameEn || "-"}
+                      </TableCell>
+                      <TableCell>
+                        {customer?.branch === "00000"
+                          ? "สำนักงานใหญ่"
+                          : customer?.branch || "-"}
+                      </TableCell>
                       <TableCell>{customer?.taxNumber || "-"}</TableCell>
                       <TableCell>{customer?.email || "-"}</TableCell>
                       <TableCell>{customer?.tel || "-"}</TableCell>
