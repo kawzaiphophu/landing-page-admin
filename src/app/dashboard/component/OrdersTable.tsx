@@ -663,7 +663,7 @@ export default function OrdersTable() {
                 color="#FFF"
                 mt={3}
               >
-                Order Waranty
+                Order Warranty
               </Box>
             </Typography>
             {orderWaranty?.length ? (

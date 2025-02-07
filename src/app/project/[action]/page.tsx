@@ -100,6 +100,12 @@ const initialState: IProject = {
           docType: "",
           filePath: "",
         },
+        {
+          docPeriod: "",
+          docNo: "",
+          docType: "",
+          filePath: "",
+        },
       ],
     },
   ],
@@ -114,7 +120,20 @@ const initialState: IProject = {
       detail: "",
       status: "ORDERED",
       statusOther: "",
-      documents: [],
+      documents: [
+        {
+          docPeriod: "1",
+          docNo: "",
+          docType: "",
+          filePath: "",
+        },
+        {
+          docPeriod: "1",
+          docNo: "",
+          docType: "",
+          filePath: "",
+        },
+      ],
       isPaid: false,
     },
   ],
@@ -524,7 +543,7 @@ export default function ProjectAction({}: Props) {
         updatedArr[tabProject] = {
           ...updatedArr[tabProject],
           receive: form.periods[tabProject].amount,
-          status: 'FULL_PAYMENT',
+          status: "FULL_PAYMENT",
         };
         return { ...prev, periods: updatedArr };
       });
@@ -731,7 +750,10 @@ export default function ProjectAction({}: Props) {
 
   const handleChangeWarantyStatus = async (id: number, isOrder?: boolean) => {
     const { isConfirmed } = await ConfirmSwal({
-      title: "ต้องการปรับสถานะเป็นไม่ต่อประกันใช่หรือไม่",
+      title:
+        form.status === "COMPLETED"
+          ? "ต้องการปรับสถานะเป็นต่อประกันใช่หรือไม่"
+          : "ต้องการปรับสถานะเป็นไม่ต่อประกันใช่หรือไม่",
       icon: "info",
     });
 
@@ -740,7 +762,13 @@ export default function ProjectAction({}: Props) {
         const { data } = await ProjectApi.updateStatus(
           id,
           isOrder ? "statusOrder" : "status",
-          "COMPLETED"
+          isOrder
+            ? form.orders[tab].status === "COMPLETED"
+              ? "active"
+              : "COMPLETED"
+            : form.status === "COMPLETED"
+            ? "active"
+            : "COMPLETED"
         );
         if (data) {
           AlertSwal({ title: "ปรับสถานะสำเร็จ", icon: "success" });
@@ -832,7 +860,12 @@ export default function ProjectAction({}: Props) {
                     <CustomDropdown
                       icon="arrow"
                       label={"จัดการProject"}
-                      titles={["ปรับสถานะกรณีไม่ต่อประกัน", "รายละเอียด MA"]}
+                      titles={[
+                        form.status === "COMPLETED"
+                          ? "ปรับสถานะกรณีต่อประกัน"
+                          : "ปรับสถานะกรณีไม่ต่อประกัน",
+                        "รายละเอียด MA",
+                      ]}
                       actions={[
                         () => handleChangeWarantyStatus(projectId),
                         handleOpenMA,
@@ -1019,7 +1052,7 @@ export default function ProjectAction({}: Props) {
               value={form?.projectWaranty}
               onChange={(value) => handleChange("projectWaranty", value)}
               error={errors?.projectWaranty}
-              disabled={isDisableAll}
+              disabled={isDisableAll || form.status === "COMPLETED"}
             />
           </Grid>
           <Grid item xs={12}>
@@ -1035,7 +1068,7 @@ export default function ProjectAction({}: Props) {
               placeholder="ค้นหาโดยชื่อ"
               minRows={1}
               getOptionLabel={(option: ICustomer) =>
-                ` ${option?.name} ${
+                ` ${option?.name || option?.nameEn} ${
                   option?.branch === "00000" ? "สำนักงานใหญ่" : option.branch
                 } | ${option?.tel}`
               }
@@ -1304,7 +1337,11 @@ export default function ProjectAction({}: Props) {
                                   }}
                                   placeholder="เลือกชนิดเอกสาร"
                                   value={doc?.docType}
-                                  options={["ใบเสร็จ", "ใบกำกับ", "อื่นๆ"]}
+                                  options={[
+                                    "ใบเสร็จรับเงิน",
+                                    "ใบกำกับภาษี",
+                                    "อื่นๆ",
+                                  ]}
                                   onChange={(v) =>
                                     handleChangePeriod("docType", v, index)
                                   }
@@ -1421,7 +1458,11 @@ export default function ProjectAction({}: Props) {
                   <CustomDropdown
                     icon="arrow"
                     label={"จัดการคำสั่งซื้อ"}
-                    titles={["ปรับสถานะกรณีไม่ต่อประกัน"]}
+                    titles={[
+                      form.orders[tab].status === "COMPLETED"
+                        ? "ปรับสถานะกรณีต่อประกัน"
+                        : "ปรับสถานะกรณีไม่ต่อประกัน",
+                    ]}
                     actions={[
                       () =>
                         handleChangeWarantyStatus(
@@ -1497,7 +1538,6 @@ export default function ProjectAction({}: Props) {
                 disabled={isDisableAll}
               />
             </Grid>
-
             <Grid item xs={12} sm={3}>
               <CustomTextfield
                 label="ระยะเวลาประกัน (เดือน) "
@@ -1506,7 +1546,9 @@ export default function ProjectAction({}: Props) {
                 onChange={(value) => handleChange("orderWaranty", value, tab)}
                 error={errors?.orders[tab]?.orderWaranty}
                 required
-                disabled={isDisableAll}
+                disabled={
+                  isDisableAll || form.orders[tab].status === "COMPLETED"
+                }
               />
             </Grid>
             <Grid item xs={12} sm={6} />
@@ -1708,7 +1750,11 @@ export default function ProjectAction({}: Props) {
                                 }}
                                 placeholder="เลือกชนิดเอกสาร"
                                 value={doc?.docType}
-                                options={["ใบเสร็จ", "ใบกำกับ", "อื่นๆ"]}
+                                options={[
+                                  "ใบเสร็จรับเงิน",
+                                  "ใบกำกับภาษี",
+                                  "อื่นๆ",
+                                ]}
                                 onChange={(v) =>
                                   handleChangeDocumentsOrder(
                                     "docType",

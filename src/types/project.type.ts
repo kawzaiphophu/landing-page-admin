@@ -25,6 +25,7 @@ export interface IProject {
   dueMaDate?:string
   currentPeriod?:number
   periods:Period[]
+  status?:string
 }
 
 export interface Order {
@@ -44,6 +45,7 @@ export interface Order {
   updatedAt?: Date;
   createdBy?: string;
   updatedBy?: string;
+  status?:string
 }
 
 // export interface File {
