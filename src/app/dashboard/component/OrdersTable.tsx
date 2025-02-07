@@ -554,7 +554,7 @@ export default function OrdersTable() {
                 color="#FFF"
                 mt={3}
               >
-                File upload incomplete
+               เอกสารที่ยังไม่เรียบร้อย
               </Box>
             </Typography>
             {projectFileMissing?.length ? (
@@ -658,7 +658,7 @@ export default function OrdersTable() {
                 color="#FFF"
                 mt={3}
               >
-                Order Waranty
+                Order Warranty
               </Box>
             </Typography>
             {orderWaranty?.length ? (
@@ -759,7 +759,7 @@ export default function OrdersTable() {
                 color="#FFF"
                 mt={3}
               >
-                File upload incomplete
+               เอกสารที่ยังไม่เรียบร้อย
               </Box>
             </Typography>
             {orderFileMissing?.length ? (
