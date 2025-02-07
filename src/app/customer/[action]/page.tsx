@@ -432,7 +432,7 @@ export default function CustomerAction({}: Props) {
               <Box display={"flex"} flexDirection={"column"}   >
                 {[...Array(form?.contactPersons?.length)].map((_, idx) => (
                   <Grid container spacing={2} key={idx} mb={2} >
-                    <Grid item xs={3}>
+                    <Grid item xs={12} sm={3}>
                       <CustomTextfield
                         label="ชื่อผู้ติดต่อ"
                         value={form.contactPersons[idx]?.name}
@@ -442,7 +442,7 @@ export default function CustomerAction({}: Props) {
                         disabled={isDisableAll}
                       />
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={12} sm={3}>
                       <CustomTextfield
                         label="หมายเลขโทรศัพท์"
                         maxLength={20}
@@ -454,7 +454,7 @@ export default function CustomerAction({}: Props) {
                       />
                     </Grid>
                    
-                    <Grid item xs={2.5}>
+                    <Grid item xs={12} sm={2.5}>
                       <CustomTextfield
                         label="email"
                         type="email"
@@ -465,7 +465,7 @@ export default function CustomerAction({}: Props) {
                         disabled={isDisableAll}
                       />
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={12} sm={3}>
                       <CustomTextfield
                         label="หน้าที่รับผิดชอบ"
                         value={form.contactPersons[idx]?.role}

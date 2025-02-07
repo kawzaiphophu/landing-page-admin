@@ -35,9 +35,9 @@ const PaginationControl: React.FC<PaginationControlProps> = ({
   };
 
   return (
-    <Stack
+    <Box
       display={"flex"}
-      direction={{ xs: "column", sm: "row" }}
+      flexDirection={{ sm: "row" }}
       justifyContent="space-between"
       alignItems="center"
       sx={{ p: 2 }}
@@ -63,7 +63,7 @@ const PaginationControl: React.FC<PaginationControlProps> = ({
           actions={title.map((limit) => () => handlePageLimitChange(limit))}
           menuIcon={[]}
         />
-        <Typography variant="body2" color="##9E9E9E">
+        <Typography display={{xs:'none',sm:'flex'}} variant="body2" color="##9E9E9E">
           {pageLimit * page - pageLimit + 1} -{" "}
           {page * pageLimit > totalItem ? totalItem : page * pageLimit} จาก{" "}
           {totalItem || "0"}
@@ -76,7 +76,7 @@ const PaginationControl: React.FC<PaginationControlProps> = ({
           onChange={(_, newPage) => setPage(newPage)}
         />
       </Box>
-    </Stack>
+    </Box>
   );
 };
 

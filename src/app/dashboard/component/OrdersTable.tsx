@@ -16,6 +16,7 @@ import { formatDate, formatPrice } from "@/utils/formatData";
 import {
   Box,
   Divider,
+  Grid,
   Paper,
   Tab,
   Table,
@@ -135,15 +136,12 @@ export default function OrdersTable() {
         />
       </Tabs>
       {tab === 0 && (
-        <Box
-          bgcolor={"#FFF"}
-          display={"flex"}
-          borderRadius={"8px"}
-          p={4}
-          gap={2}
-          sx={{ border: "1px solid #DEDEDE", flexWrap: "wrap", flex: 1 }}
+        <Grid
+         container
+         spacing={2}
+         mt={2}
         >
-          <Box flex={0.5} minWidth={"45%"}>
+          <Grid item xs={12} sm={6}>
             <Typography variant="h4" mb={2}>
               <Box
                 borderRadius={8}
@@ -236,8 +234,8 @@ export default function OrdersTable() {
             ) : (
               <NotFoundTable />
             )}
-          </Box>
-          <Box flex={0.5} minWidth={"45%"}>
+          </Grid>
+          <Grid item xs={12} sm={6}>
             <Typography variant="h4" mb={2}>
               <Box
                 borderRadius={8}
@@ -345,8 +343,8 @@ export default function OrdersTable() {
             ) : (
               <NotFoundTable />
             )}
-          </Box>
-          <Box flex={0.5} minWidth={"45%"}>
+          </Grid>
+          <Grid item xs={12} sm={6}>
             <Typography variant="h4" mb={2}>
               <Box
                 borderRadius={8}
@@ -444,8 +442,8 @@ export default function OrdersTable() {
             ) : (
               <NotFoundTable />
             )}
-          </Box>
-          <Box flex={0.5} minWidth={"45%"}>
+          </Grid>
+          <Grid item xs={12} sm={6}>
             <Typography variant="h4" mb={2}>
               <Box
                 borderRadius={8}
@@ -543,9 +541,9 @@ export default function OrdersTable() {
             ) : (
               <NotFoundTable />
             )}
-          </Box>
+          </Grid>
 
-          <Box flex={0.5} minWidth={"45%"}>
+          <Grid item xs={12} sm={6}>
             <Typography variant="h4" mb={2}>
               <Box
                 borderRadius={8}
@@ -640,19 +638,16 @@ export default function OrdersTable() {
             ) : (
               <NotFoundTable />
             )}
-          </Box>
-        </Box>
+          </Grid>
+        </Grid>
       )}
       {tab === 1 && (
-        <Box
-          bgcolor={"#FFF"}
-          display={"flex"}
-          borderRadius={"8px"}
-          p={4}
-          gap={2}
-          sx={{ border: "1px solid #DEDEDE", flexWrap: "wrap", flex: 1 }}
+         <Grid
+         container
+         spacing={2}
+         mt={2}
         >
-          <Box flex={0.5} minWidth={"45%"}>
+          <Grid item xs={12} sm={6}>
             <Typography variant="h4" mb={2}>
               <Box
                 borderRadius={8}
@@ -663,7 +658,7 @@ export default function OrdersTable() {
                 color="#FFF"
                 mt={3}
               >
-                Order Warranty
+                Order Waranty
               </Box>
             </Typography>
             {orderWaranty?.length ? (
@@ -752,8 +747,8 @@ export default function OrdersTable() {
             ) : (
               <NotFoundTable />
             )}
-          </Box>
-          <Box flex={0.5} minWidth={"45%"}>
+          </Grid>
+          <Grid item xs={12} sm={6}>
             <Typography variant="h4" mb={2}>
               <Box
                 borderRadius={8}
@@ -848,8 +843,8 @@ export default function OrdersTable() {
             ) : (
               <NotFoundTable />
             )}
-          </Box>
-        </Box>
+          </Grid>
+        </Grid>
         
       )}
     </Box>

@@ -847,7 +847,7 @@ export default function ProjectAction({}: Props) {
         </Typography>
       </Box>
       {/*//!-------------------- project secction --------------------*/}
-      <Box display="flex" alignItems="flex-start" p={3}>
+      <Box display="flex" alignItems="flex-start" p={{xs:0,sm:3}}>
         <Grid container spacing={2} xs={12}>
           <Grid item xs={12} mb={2}>
             <Box display={"flex"} justifyContent={"space-between"}>
@@ -1395,7 +1395,8 @@ export default function ProjectAction({}: Props) {
         display="flex"
         flexDirection={"column"}
         alignItems="flex-start"
-        px={3}
+        px={{xs:0,sm:3}}
+
       >
         <Box
           display={"flex"}
@@ -1441,8 +1442,9 @@ export default function ProjectAction({}: Props) {
           elevation={1}
           border={"1px solid #DEDEDE"}
           borderRadius={4}
+          maxWidth={'100%'}
         >
-          <Grid container spacing={2} xs={12} p={2}>
+          <Grid container spacing={2} xs={12} p={1}>
             <Grid
               item
               xs={12}

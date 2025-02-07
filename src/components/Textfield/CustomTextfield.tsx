@@ -274,7 +274,8 @@ export default function CustomTextfield({
         fullWidth
         inputProps={{
           maxLength: maxLength,
-          inputMode: "numeric",
+          inputMode:
+            type === "number" ? "decimal" : type === "tel" ? "tel" : "text",
         }}
         InputLabelProps={{
           shrink: true,

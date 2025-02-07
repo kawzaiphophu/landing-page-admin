@@ -142,11 +142,11 @@ export default function Project({}: Props) {
       </Box>
       <Box
         display={"flex"}
+        flexDirection={{ xs: "column", sm: "row" }}
         justifyContent={"space-between"}
         pt={2}
-        alignItems={"center"}
       >
-        <Box width={"50%"} display={"flex"} gap={2}>
+        <Box width={"auto"} display={"flex"} gap={2}>
           <CustomTextfield
             type="search"
             label=""
@@ -159,9 +159,11 @@ export default function Project({}: Props) {
             onClick={() => getAllProject(page, pageLimit, searchValue)}
           />
         </Box>
-        <Button variant="outlined" color="secondary" onClick={gotoCreate}>
-          Create Project
-        </Button>
+        <Box display={"flex"} justifyContent={"end"}>
+          <Button variant="outlined" color="secondary" onClick={gotoCreate}>
+            Create Project
+          </Button>
+        </Box>
       </Box>
       <Box bgcolor={"#FFF"} p={"1rem"} borderRadius={"8px"}>
         {projects.length ? (

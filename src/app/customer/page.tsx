@@ -21,19 +21,8 @@ import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
 //?================================================================================
-const CustomImageUpload = dynamic(
-  () => import("@/components/CustomImageUpload/CustomImageUpload"),
-  { ssr: false }
-);
-const CustomSwitch = dynamic(() => import("@/components/Switch/Switch"), {
-  ssr: false,
-});
 const CustomTextfield = dynamic(
   () => import("@/components/Textfield/CustomTextfield"),
-  { ssr: false }
-);
-const CustomTextEditor = dynamic(
-  () => import("@/components/Editor/CustomTextEditor"),
   { ssr: false }
 );
 const CustomButton = dynamic(() => import("@/components/Button/CustomButton"), {
@@ -145,8 +134,8 @@ export default function Customer({}: Props) {
           Customer
         </Typography>
       </Box>
-      <Box display={"flex"} justifyContent={"space-between"} pt={2}>
-        <Box width={"50%"} display={"flex"} gap={2}>
+      <Box display={"flex"} flexDirection={{xs:'column',sm:'row'}} justifyContent={"space-between"} pt={2}>
+        <Box width={"auto"} display={"flex"} gap={2}>
           <CustomTextfield
             type="search"
             label=""
@@ -159,9 +148,11 @@ export default function Customer({}: Props) {
             onClick={() => getAllCustomer(page, pageLimit, searchValue)}
           />
         </Box>
-        <Button variant="outlined" color="secondary" onClick={gotoCreate}>
-          Create Customer
-        </Button>
+        <Box display={'flex'} justifyContent={'end'}>
+          <Button variant="outlined" color="secondary" onClick={gotoCreate}>
+            Create Customer
+          </Button>
+        </Box>
       </Box>
       <Box bgcolor={"#FFF"} p={"1rem"} borderRadius={"8px"}>
         {customers.length ? (

@@ -160,11 +160,11 @@ export default function User({}: Props) {
         </Box>
         <Box
           display={"flex"}
+          flexDirection={{ xs: "column", sm: "row" }}
           justifyContent={"space-between"}
           pt={2}
-          alignItems={"center"}
         >
-          <Box width={"50%"} display={"flex"} gap={2}>
+          <Box width={"auto"} display={"flex"} gap={2}>
             <CustomTextfield
               type="search"
               label=""
@@ -177,9 +177,11 @@ export default function User({}: Props) {
               onClick={() => getAllUser(page, pageLimit, searchValue)}
             />
           </Box>
-          <Button variant="outlined" color="secondary" onClick={gotoCreate}>
-            Create User
-          </Button>
+          <Box display={"flex"} justifyContent={"end"}>
+            <Button variant="outlined" color="secondary" onClick={gotoCreate}>
+              Create User
+            </Button>
+          </Box>
         </Box>
         <Box bgcolor={"#FFF"} p={"1rem"} borderRadius={"8px"}>
           {users.length ? (

@@ -29,10 +29,10 @@ const AppBar = styled(MuiAppBar)(({ theme }) => ({
 
 export default function NavBar() {
   const pathname = usePathname();
-  const isMobile = useMediaQuery("(max-width:1000px)");
   const [open, setOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,26 +50,22 @@ export default function NavBar() {
   const handleLogOut = () => {
     // Clear localStorage
     localStorage.clear();
-  
 
     const cookies = document.cookie.split(";"); // Get all cookies
     for (let cookie of cookies) {
       const cookieName = cookie.split("=")[0].trim();
       document.cookie = `${cookieName}=; max-age=0; path=/`; // Set cookie expiration to the past
     }
-  
+
     // Redirect to login page
     window.location.href = "/login"; // Redirect to the login page
   };
-  
 
   const cleanPath = pathname
     .split("?")[0]
     .replace(/\/$/, "")
     .split("/")
     .filter(Boolean)[0];
-
-  
 
   //*------------------------------------------------------------------------
 
@@ -110,8 +106,6 @@ export default function NavBar() {
           backgroundColor: "tranparent",
         }}
       >
-       
-
         <Box
           sx={{
             display: "flex",
@@ -148,6 +142,7 @@ export default function NavBar() {
             >
               {DrawerList}
             </Drawer> */}
+            {isMobile && <MobileDrawer />}
             <Box sx={logoStyle}></Box>
             <Box display={"flex"} flexDirection={"column"}>
               <Box display={"flex"} gap={2} alignItems={"center"}>
@@ -207,42 +202,42 @@ const logoStyle = {
   },
 };
 
+import {
+  FacebookShareButton,
+  FacebookMessengerShareButton,
+  LineShareButton,
+  WhatsappShareButton,
+} from "react-share";
+import {
+  FacebookIcon,
+  FacebookMessengerIcon,
+  LineIcon,
+  WhatsappIcon,
+} from "react-share";
+import MobileDrawer from "../SideBar/SideBarMobile";
 
-import { 
-  FacebookShareButton, 
-  FacebookMessengerShareButton, 
-  LineShareButton, 
-  WhatsappShareButton 
-} from 'react-share';
-import { 
-  FacebookIcon, 
-  FacebookMessengerIcon, 
-  LineIcon, 
-  WhatsappIcon 
-} from 'react-share';
-
-interface SocialShareButtonsProps {
-
-}
+interface SocialShareButtonsProps {}
 
 const SocialShareButtons: React.FC = () => {
-  const url = encodeURIComponent('https://az-uat-akm-cust.allkons.com/shopping/product/925?productVariantId=6415');
-  const title = encodeURIComponent('Check out this amazing product!');
-  const appId = '1333714707590194'; // Your Facebook App ID
+  const url = encodeURIComponent(
+    "https://az-uat-akm-cust.allkons.com/shopping/product/925?productVariantId=6415"
+  );
+  const title = encodeURIComponent("Check out this amazing product!");
+  const appId = "1333714707590194"; // Your Facebook App ID
 
   return (
-    <div style={{ display: 'flex', gap: '10px' }}>
+    <div style={{ display: "flex", gap: "10px" }}>
       {/* Facebook Share */}
       <a
         href={`https://www.facebook.com/sharer/sharer.php?u=${url}`}
         target="_blank"
         rel="noopener noreferrer"
-        style={{ display: 'inline-block' }}
+        style={{ display: "inline-block" }}
       >
         <img
           src="https://upload.wikimedia.org/wikipedia/commons/c/c2/F_icon.svg"
           alt="Share on Facebook"
-          style={{ width: 32, height: 32, borderRadius: '50%' }}
+          style={{ width: 32, height: 32, borderRadius: "50%" }}
         />
       </a>
 
@@ -251,12 +246,12 @@ const SocialShareButtons: React.FC = () => {
         href={`fb-messenger://share/?link=${url}&app_id=${appId}`}
         target="_blank"
         rel="noopener noreferrer"
-        style={{ display: 'inline-block' }}
+        style={{ display: "inline-block" }}
       >
         <img
           src="https://upload.wikimedia.org/wikipedia/commons/8/83/Facebook_Messenger_Logo.svg"
           alt="Share on Messenger"
-          style={{ width: 32, height: 32, borderRadius: '50%' }}
+          style={{ width: 32, height: 32, borderRadius: "50%" }}
         />
       </a>
 
@@ -265,12 +260,12 @@ const SocialShareButtons: React.FC = () => {
         href={`https://social-plugins.line.me/lineit/share?url=${url}`}
         target="_blank"
         rel="noopener noreferrer"
-        style={{ display: 'inline-block' }}
+        style={{ display: "inline-block" }}
       >
         <img
           src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg"
           alt="Share on Line"
-          style={{ width: 32, height: 32, borderRadius: '50%' }}
+          style={{ width: 32, height: 32, borderRadius: "50%" }}
         />
       </a>
 
@@ -279,12 +274,12 @@ const SocialShareButtons: React.FC = () => {
         href={`https://api.whatsapp.com/send?text=${title}%20${url}`}
         target="_blank"
         rel="noopener noreferrer"
-        style={{ display: 'inline-block' }}
+        style={{ display: "inline-block" }}
       >
         <img
           src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
           alt="Share on WhatsApp"
-          style={{ width: 32, height: 32, borderRadius: '50%' }}
+          style={{ width: 32, height: 32, borderRadius: "50%" }}
         />
       </a>
 
@@ -293,15 +288,14 @@ const SocialShareButtons: React.FC = () => {
         href="https://www.instagram.com/yourprofile/"
         target="_blank"
         rel="noopener noreferrer"
-        style={{ display: 'inline-block' }}
+        style={{ display: "inline-block" }}
       >
         <img
           src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png"
           alt="Visit Instagram"
-          style={{ width: 32, height: 32, borderRadius: '50%' }}
+          style={{ width: 32, height: 32, borderRadius: "50%" }}
         />
       </a>
     </div>
   );
 };
-

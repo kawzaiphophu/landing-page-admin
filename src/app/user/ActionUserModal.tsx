@@ -153,14 +153,14 @@ export default function ActionUserModal({
             gap={4}
           >
             <Grid container spacing={2} p={2}>
-              <Grid item xs={4}>
+              <Grid item xs={12} sm={4}>
                 <CustomTextfield
                   label="ชื่อผู้ใช้"
                   value={form.name}
                   onChange={(e) => handleChange("name", e)}
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} sm={4}>
                 <CustomTextfield
                   label="อีเมล"
                   type="email"
@@ -168,7 +168,7 @@ export default function ActionUserModal({
                   onChange={(e) => handleChange("email", e)}
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} sm={4}>
                 <CustomTextfield
                   label="เบอร์โทร"
                   type="phone"
@@ -177,7 +177,7 @@ export default function ActionUserModal({
                   onChange={(e) => handleChange("tel", e)}
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} sm={4}>
                 <CustomTextfield
                   label="User ID"
                   value={form.username}
@@ -186,7 +186,7 @@ export default function ActionUserModal({
                   onChange={(e) => handleChange("username", e)}
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} sm={4}>
                 <CustomTextfield
                   label="รหัสผ่าน"
                   type="password"
@@ -196,7 +196,7 @@ export default function ActionUserModal({
                   onChange={(e) => handleChange("password", e)}
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} sm={4}>
                 <CustomTextfield
                   label="ยืนยันรหัสผ่าน"
                   type="password"
@@ -214,7 +214,7 @@ export default function ActionUserModal({
                   onChange={(e) => handleChange("confirmPassword", e)}
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} sm={4}>
                 <CustomSelect
                   label=" ตำแหน่ง"
                   options={ROLE.map((t) => t.value)}
