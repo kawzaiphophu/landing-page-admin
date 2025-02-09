@@ -134,7 +134,12 @@ export default function Customer({}: Props) {
           Customer
         </Typography>
       </Box>
-      <Box display={"flex"} flexDirection={{xs:'column',sm:'row'}} justifyContent={"space-between"} pt={2}>
+      <Box
+        display={"flex"}
+        flexDirection={{ xs: "column", sm: "row" }}
+        justifyContent={"space-between"}
+        pt={2}
+      >
         <Box width={"auto"} display={"flex"} gap={2}>
           <CustomTextfield
             type="search"
@@ -148,7 +153,7 @@ export default function Customer({}: Props) {
             onClick={() => getAllCustomer(page, pageLimit, searchValue)}
           />
         </Box>
-        <Box display={'flex'} justifyContent={'end'}>
+        <Box display={"flex"} justifyContent={"end"}>
           <Button variant="outlined" color="secondary" onClick={gotoCreate}>
             Create Customer
           </Button>

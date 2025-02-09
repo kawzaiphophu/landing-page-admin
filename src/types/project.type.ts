@@ -9,6 +9,8 @@ export interface IProject {
   projectMa: number;
   projectMaPerYear: number;
   projectDueDate: string;
+  startDate: string;
+  docNumber: string;
   projectPrice: number;
   projectCost: number;
   projectProfit: number;
@@ -45,7 +47,9 @@ export interface Order {
   updatedAt?: Date;
   createdBy?: string;
   updatedBy?: string;
-  status?:string
+  status?:string;
+  startDate: string;
+  docNumber: string;
 }
 
 // export interface File {

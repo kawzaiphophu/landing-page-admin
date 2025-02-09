@@ -84,7 +84,10 @@ export default function SalesChart() {
                 />
                 <Tooltip
                   formatter={(value) => {
-                    return new Intl.NumberFormat("th-TH").format(value as any);
+                    return new Intl.NumberFormat("th-TH", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }).format(value as number);
                   }}
                 />
 
@@ -151,7 +154,10 @@ export default function SalesChart() {
                 />
                 <Tooltip
                   formatter={(value) => {
-                    return new Intl.NumberFormat("th-TH").format(value as any);
+                    return new Intl.NumberFormat("th-TH", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }).format(value as number);
                   }}
                 />
                 <Legend />

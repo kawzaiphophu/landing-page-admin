@@ -58,6 +58,8 @@ const initailError = {
   projectType: false,
   customerId: false,
   projectStatus: false,
+  startDate: false,
+  docNumber: false,
   orders: [
     {
       supplierId: false,
@@ -66,6 +68,8 @@ const initailError = {
       orderCost: false,
       orderStatus: false,
       orderWaranty: false,
+      startDate: false,
+      docNumber: false,
     },
   ],
   periods: [{ periodDue: false, paymentDue: false, amount: false }],
@@ -83,6 +87,8 @@ const initialState: IProject = {
   projectPrice: 0,
   projectCost: 0,
   projectProfit: 0,
+  startDate: "",
+  docNumber: "",
   orders: [
     {
       supplierId: null,
@@ -93,17 +99,19 @@ const initialState: IProject = {
       remark: "",
       orderCost: 0,
       orderWaranty: "",
+      startDate: "",
+      docNumber: "",
       documents: [
         {
-          docPeriod: "",
+          docPeriod: "1",
           docNo: "",
-          docType: "",
+          docType: "ใบเสร็จรับเงิน",
           filePath: "",
         },
         {
-          docPeriod: "",
+          docPeriod: "1",
           docNo: "",
-          docType: "",
+          docType: "ใบกำกับภาษี",
           filePath: "",
         },
       ],
@@ -124,13 +132,13 @@ const initialState: IProject = {
         {
           docPeriod: "1",
           docNo: "",
-          docType: "",
+          docType: "ใบเสร็จรับเงิน",
           filePath: "",
         },
         {
           docPeriod: "1",
           docNo: "",
-          docType: "",
+          docType: "ใบกำกับภาษี",
           filePath: "",
         },
       ],
@@ -440,6 +448,8 @@ export default function ProjectAction({}: Props) {
       receive: Number(period.receive),
       amount: Number(period.amount),
     }));
+    // return console.log(body);
+
     try {
       let data;
       if (projectId) {
@@ -847,7 +857,7 @@ export default function ProjectAction({}: Props) {
         </Typography>
       </Box>
       {/*//!-------------------- project secction --------------------*/}
-      <Box display="flex" alignItems="flex-start" p={{xs:0,sm:3}}>
+      <Box display="flex" alignItems="flex-start" p={{ xs: 0, sm: 3 }}>
         <Grid container spacing={2} xs={12}>
           <Grid item xs={12} mb={2}>
             <Box display={"flex"} justifyContent={"space-between"}>
@@ -987,7 +997,29 @@ export default function ProjectAction({}: Props) {
               disabled={isDisableAll}
             />
           </Grid>
-          <Grid item xs={12} sm={6} />
+
+          <Grid item xs={12} sm={3}>
+            <CustomDatePicker
+              label="วันที่ได้รับงาน"
+              value={form?.startDate}
+              onChange={(value) => handleChange("startDate", value)}
+              error={errors?.startDate}
+              required
+              disabled={isDisableAll}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={3}>
+            <CustomTextfield
+              label="เลขที่ใบสั่งซื้อ/สัญญา"
+              value={form?.docNumber}
+              onChange={(value) => handleChange("docNumber", value)}
+              error={errors?.docNumber}
+              required
+              disabled={isDisableAll}
+            />
+          </Grid>
+
           <Grid item xs={12} sm={3}>
             <CustomTextfield
               label="ราคาProject (บาท)"
@@ -1395,8 +1427,7 @@ export default function ProjectAction({}: Props) {
         display="flex"
         flexDirection={"column"}
         alignItems="flex-start"
-        px={{xs:0,sm:3}}
-
+        px={{ xs: 0, sm: 3 }}
       >
         <Box
           display={"flex"}
@@ -1442,7 +1473,7 @@ export default function ProjectAction({}: Props) {
           elevation={1}
           border={"1px solid #DEDEDE"}
           borderRadius={4}
-          maxWidth={'100%'}
+          maxWidth={"100%"}
         >
           <Grid container spacing={2} xs={12} p={1}>
             <Grid
@@ -1553,7 +1584,26 @@ export default function ProjectAction({}: Props) {
                 }
               />
             </Grid>
-            <Grid item xs={12} sm={6} />
+            <Grid item xs={12} sm={3}>
+              <CustomDatePicker
+                label="วันที่ได้สั่งซื้อ"
+                value={form?.orders[tab].startDate}
+                onChange={(value) => handleChange("startDate", value, tab)}
+                error={errors?.orders[tab]?.startDate}
+                required
+                disabled={isDisableAll}
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <CustomTextfield
+                label="เลขที่ใบสั่งซื้อ"
+                value={form?.orders[tab]?.docNumber}
+                onChange={(value) => handleChange("docNumber", value, tab)}
+                error={errors?.orders[tab]?.docNumber}
+                required
+                disabled={isDisableAll}
+              />
+            </Grid>
             <Grid item xs={12} sm={6}>
               <CustomTextfield
                 label="หมายเหตุ"
@@ -1563,7 +1613,7 @@ export default function ProjectAction({}: Props) {
                 disabled={isDisableAll}
               />
             </Grid>
-            <Grid item xs={9} />
+
             <Grid item xs={12}>
               <Typography variant="h5" color="initial" className="title">
                 รายชื่อซัพพลายเออร์
