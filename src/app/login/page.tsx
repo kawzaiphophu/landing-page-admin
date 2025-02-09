@@ -71,6 +71,7 @@ export default function Login({}: Props) {
       }, 500);
     }
   };
+  const name = process.env.NEXT_PUBLIC_NAME_COMPANY;
 
   return (
     <Box
@@ -134,7 +135,7 @@ export default function Login({}: Props) {
             pt={"25px"}
             noWrap
           >
-            Unified Solutions
+            {name}
           </Typography>
           <Typography
             fontSize={20}
