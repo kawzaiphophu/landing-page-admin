@@ -489,9 +489,8 @@ export default function ProjectAction({}: Props) {
       receive: Number(period.receive),
       amount: Number(period.amount),
     }));
-    body.projectDueDate = dayjs(body.projectDueDate) as any
+    body.projectDueDate = dayjs(body.projectDueDate) as any;
     // return console.log(body);
-
 
     try {
       let data;
@@ -1135,7 +1134,7 @@ export default function ProjectAction({}: Props) {
           </Grid>
           <Grid item xs={12} sm={3}>
             <CustomTextfield
-              label="ประกัน(เดือน) (เดือน) "
+              label="ประกัน(เดือน)"
               type="number"
               value={form?.projectWaranty}
               onChange={(value) => handleChange("projectWaranty", value)}
@@ -1428,6 +1427,11 @@ export default function ProjectAction({}: Props) {
                                   options={[
                                     "ใบเสร็จรับเงิน",
                                     "ใบกำกับภาษี",
+                                    "ใบวางบิล",
+                                    "เอกสารส่งมอบงาน",
+                                    "ใบสั่งซื้อ",
+                                    "ข้อกำหนดและตารางวางบิล",
+                                    "ใบ Service",
                                     "อื่นๆ",
                                   ]}
                                   onChange={(v) =>
@@ -1446,7 +1450,7 @@ export default function ProjectAction({}: Props) {
                             </TableRow>
                           )
                         )}
-                        {form?.periods[tabProject]?.documents?.length < 8 && (
+                        {form?.periods[tabProject]?.documents?.length < 10 && (
                           <TableRow>
                             <TableCell
                               align="center"
@@ -1629,7 +1633,7 @@ export default function ProjectAction({}: Props) {
             </Grid>
             <Grid item xs={12} sm={3}>
               <CustomTextfield
-                label="ประกัน(เดือน) (เดือน) "
+                label="ประกัน(เดือน)"
                 type="number"
                 value={form?.orders[tab]?.orderWaranty}
                 onChange={(value) => handleChange("orderWaranty", value, tab)}
@@ -1861,6 +1865,11 @@ export default function ProjectAction({}: Props) {
                                 options={[
                                   "ใบเสร็จรับเงิน",
                                   "ใบกำกับภาษี",
+                                  "ใบวางบิล",
+                                  "เอกสารส่งมอบงาน",
+                                  "ใบสั่งซื้อ",
+                                  "ข้อกำหนดและตารางวางบิล",
+                                  "ใบ Service",
                                   "อื่นๆ",
                                 ]}
                                 onChange={(v) =>

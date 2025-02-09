@@ -46,7 +46,7 @@ export default function CustomSelect({
   );
 
   useEffect(() => {
-    if (options.includes(value)) {
+    if (options?.includes(value)) {
       setSelectedValue(value);
     }
   }, [value]);
@@ -76,7 +76,7 @@ export default function CustomSelect({
         placeholder={placeholder}
         disabled={disabled}
         onChange={handleChange}
-        value={options.includes(value) ? value || selectedValue : ""}
+        value={options?.includes(value) ? value || selectedValue : ""}
         error={error}
         InputLabelProps={{
           shrink: true,
@@ -97,7 +97,7 @@ export default function CustomSelect({
             กรุณาเลือก{label}
           </MenuItem>
         )}
-        {options.length > 0 ? (
+        {options?.length > 0 ? (
           options.map((option) => (
             <MenuItem
               key={option}
