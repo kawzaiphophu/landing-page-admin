@@ -436,9 +436,8 @@ export default function ProjectAction({}: Props) {
     const newErrors = setErrObject(form, errors);
 
     newErrors.customerId === !form.customerId;
-    newErrors.orders.map((order:any) => delete order.remark);
+    newErrors.orders.map((order: any) => delete order.remark);
     delete newErrors.projectProfit;
-
 
     setErrors(newErrors);
     const isHasError =
@@ -490,7 +489,9 @@ export default function ProjectAction({}: Props) {
       receive: Number(period.receive),
       amount: Number(period.amount),
     }));
+    body.projectDueDate = dayjs(body.projectDueDate) as any
     // return console.log(body);
+
 
     try {
       let data;
@@ -1445,7 +1446,7 @@ export default function ProjectAction({}: Props) {
                             </TableRow>
                           )
                         )}
-                        {form?.periods[tabProject]?.documents?.length < 4 && (
+                        {form?.periods[tabProject]?.documents?.length < 8 && (
                           <TableRow>
                             <TableCell
                               align="center"
