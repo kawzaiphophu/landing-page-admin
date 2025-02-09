@@ -39,7 +39,7 @@ import supplierApi from "@/api/supplier.api";
 
 import ConfirmSwal from "@/components/Alert/ConfirmSwal";
 import AlertSwal from "@/components/Alert/AlertSwal";
-import { getAddress } from "@/utils/formatData";
+import { formatPhoneNumber, getAddress } from "@/utils/formatData";
 import SupplierApi from "@/api/supplier.api";
 import { ISupplier } from "@/types/supplier.type";
 import { getRole } from "@/utils/app";
@@ -201,9 +201,9 @@ export default function supplier({}: Props) {
                       </TableCell>
 
                       <TableCell align="center">
-                        {supplier?.tel || "-"}
+                        {formatPhoneNumber(supplier?.tel) || "-"}
                       </TableCell>
-                      <TableCell>{getAddress(supplier)}</TableCell>
+                      <TableCell width={'50%'}>{getAddress(supplier)}</TableCell>
                       <TableCell
                         sx={{
                           position: "sticky",

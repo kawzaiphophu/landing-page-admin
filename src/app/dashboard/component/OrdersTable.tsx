@@ -165,8 +165,8 @@ export default function OrdersTable() {
                     <TableHead>
                       <TableRow sx={{ height: "40px", zIndex: 10 }}>
                         <TableCell>ชื่อProject</TableCell>
-                        <TableCell>วันกำหนดส่ง</TableCell>
-                        <TableCell>วันคงเหลือ</TableCell>
+                        <TableCell align="center">วันกำหนดส่ง</TableCell>
+                        <TableCell align="center">วันคงเหลือ</TableCell>
                         <TableCell
                           align="center"
                           width={"7%"}
@@ -496,7 +496,7 @@ export default function OrdersTable() {
                           }}
                           key={index}
                         >
-                          <TableCell align="center">
+                          <TableCell >
                             {period?.project?.projectName || "-"}
                           </TableCell>
                           <TableCell align="center">
@@ -593,7 +593,7 @@ export default function OrdersTable() {
                           }}
                           key={index}
                         >
-                          <TableCell align="center">
+                          <TableCell >
                             {project?.projectName}
                           </TableCell>
                           <TableCell align="center">
@@ -671,8 +671,8 @@ export default function OrdersTable() {
                   <Table stickyHeader>
                     <TableHead>
                       <TableRow sx={{ height: "40px", zIndex: 10 }}>
-                        <TableCell align="center">ชื่อออเดอร์</TableCell>
-                        <TableCell align="center">ติดต่อ</TableCell>
+                        <TableCell >ชื่อออเดอร์</TableCell>
+                        <TableCell >ติดต่อ</TableCell>
                         <TableCell align="center">วันที่คงเหลือ</TableCell>
                         <TableCell align="center">วันที่ประกัน</TableCell>
                         <TableCell

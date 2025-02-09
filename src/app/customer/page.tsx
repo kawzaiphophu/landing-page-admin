@@ -38,7 +38,7 @@ import CustomerApi from "@/api/customer.api";
 import { ICustomer } from "@/types/customer";
 import ConfirmSwal from "@/components/Alert/ConfirmSwal";
 import AlertSwal from "@/components/Alert/AlertSwal";
-import { getAddress } from "@/utils/formatData";
+import { formatPhoneNumber, getAddress } from "@/utils/formatData";
 import { getRole } from "@/utils/app";
 
 //?================================================================================
@@ -172,7 +172,7 @@ export default function Customer({}: Props) {
                     <TableCell align="center">ลำดับ</TableCell>
                     <TableCell>ชื่อลูกค้า</TableCell>
                     <TableCell>สาขา</TableCell>
-                    <TableCell>เลขผู้เสียภาษี</TableCell>
+                    {/* <TableCell>เลขประจำตัวผู้เสียภาษี</TableCell> */}
                     <TableCell align="center">เบอร์โทรศัพท์</TableCell>
                     <TableCell>ที่อยู่</TableCell>
                     <TableCell
@@ -198,7 +198,7 @@ export default function Customer({}: Props) {
                       }}
                       key={index}
                     >
-                      <TableCell>
+                      <TableCell align="center">
                         {pageLimit * (page - 1) + index + 1}
                       </TableCell>
                       <TableCell>
@@ -209,11 +209,11 @@ export default function Customer({}: Props) {
                           ? "สำนักงานใหญ่"
                           : customer?.branch || "-"}
                       </TableCell>
-                      <TableCell>{customer?.taxNumber || "-"}</TableCell>
+                      {/* <TableCell>{customer?.taxNumber || "-"}</TableCell> */}
 
-                      <TableCell>{customer?.tel || "-"}</TableCell>
+                      <TableCell align="center">{formatPhoneNumber(customer?.tel) || "-"}</TableCell>
 
-                      <TableCell>{getAddress(customer)}</TableCell>
+                      <TableCell width={'50%'}>{getAddress(customer)}</TableCell>
                       <TableCell
                         sx={{
                           position: "sticky",

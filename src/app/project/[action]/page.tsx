@@ -1157,7 +1157,7 @@ export default function ProjectAction({}: Props) {
               getOptionLabel={(option: ICustomer) =>
                 ` ${option?.name || option?.nameEn} ${
                   option?.branch === "00000" ? "สำนักงานใหญ่" : option.branch
-                } | ${option?.tel}`
+                }  ${option?.tel&& '| ' + option?.tel}`
               }
               onClear={() => {
                 handleClearAutocomplete("project");
@@ -1190,7 +1190,7 @@ export default function ProjectAction({}: Props) {
                       <TableRow sx={{ height: "40px" }}>
                         <TableCell align="center">ลำดับ</TableCell>
                         <TableCell>ชื่อผู้ติดต่อ</TableCell>
-                        <TableCell>เบอร์โทรศัพท์ท์</TableCell>
+                        <TableCell>เบอร์โทรศัพท์</TableCell>
                         <TableCell> ตำแหน่ง</TableCell>
                       </TableRow>
                     </TableHead>
@@ -1687,7 +1687,7 @@ export default function ProjectAction({}: Props) {
                 placeholder="ค้นหาโดยชื่อ"
                 minRows={1}
                 getOptionLabel={(option: ISupplier) =>
-                  ` ${option?.name} | ${option?.tel}`
+                  ` ${option?.name||option?.nameEn}  ${option?.tel && '| ' + option?.tel}`
                 }
                 error={errors.orders[tab]?.supplierId}
                 onClear={() => {
