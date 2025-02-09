@@ -307,6 +307,27 @@ export default function ProjectAction({}: Props) {
                   amount: false,
                 }),
               ],
+        orders:
+          data?.orders?.length <= (prev?.orders?.length || 0)
+            ? prev?.orders?.slice(0, data?.orders?.length)
+            : [
+                ...(prev?.orders || []),
+                ...Array(
+                  Math.max(
+                    data?.orders?.length - (prev?.orders?.length || 0),
+                    0
+                  )
+                ).fill({
+                  supplierId: false,
+                  orderName: false,
+                  orderDueDate: false,
+                  orderCost: false,
+                  orderStatus: false,
+                  orderWaranty: false,
+                  startDate: false,
+                  docNumber: false,
+                }),
+              ],
       }));
     } catch (error) {
       console.error(error);
@@ -350,11 +371,28 @@ export default function ProjectAction({}: Props) {
         {
           supplierId: null,
           orderName: "",
-          orderStatus: "TYPE_1",
+          orderStatus: "ORDERED",
+          orderStatusOther: "",
           orderDueDate: "",
           remark: "",
           orderCost: 0,
-          files: [],
+          orderWaranty: "",
+          startDate: "",
+          docNumber: "",
+          documents: [
+            {
+              docPeriod: "1",
+              docNo: "",
+              docType: "ใบเสร็จรับเงิน",
+              filePath: "",
+            },
+            {
+              docPeriod: "1",
+              docNo: "",
+              docType: "ใบกำกับภาษี",
+              filePath: "",
+            },
+          ],
         },
       ],
     }));
@@ -366,9 +404,11 @@ export default function ProjectAction({}: Props) {
           supplierId: false,
           orderName: false,
           orderDueDate: false,
-          orderStatus: false,
           orderCost: false,
+          orderStatus: false,
           orderWaranty: false,
+          startDate: false,
+          docNumber: false,
         },
       ],
     }));
@@ -396,9 +436,11 @@ export default function ProjectAction({}: Props) {
     const newErrors = setErrObject(form, errors);
 
     newErrors.customerId === !form.customerId;
+    newErrors.orders.map((order:any) => delete order.remark);
     delete newErrors.projectProfit;
-    setErrors(newErrors);
 
+
+    setErrors(newErrors);
     const isHasError =
       Object.values(newErrors).some((error) => error === true) || // Check main object
       newErrors.orders.some(
@@ -524,7 +566,20 @@ export default function ProjectAction({}: Props) {
                 receive: 0,
                 detail: "",
                 status: "ORDERED",
-                documents: [],
+                documents: [
+                  {
+                    docPeriod: `${tabProject + 1}`,
+                    docNo: "",
+                    docType: "ใบเสร็จรับเงิน",
+                    filePath: "",
+                  },
+                  {
+                    docPeriod: `${tabProject + 1}`,
+                    docNo: "",
+                    docType: "ใบกำกับภาษี",
+                    filePath: "",
+                  },
+                ],
                 isPaid: false,
               }),
             ],
