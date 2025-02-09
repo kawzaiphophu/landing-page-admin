@@ -215,8 +215,8 @@ export default function CustomerAction({}: Props) {
           {capitalizeFirstChar(action)} Customer
         </Typography>
       </Box>
-      <Box display="flex"  flexDirection={'column'}>
-        <Box >
+      <Box display="flex" flexDirection={"column"}>
+        <Box>
           <Grid container spacing={2} p={3} xs={12}>
             <Grid item xs={12} mb={3}>
               <Typography variant="h4" color="initial">
@@ -250,7 +250,7 @@ export default function CustomerAction({}: Props) {
                 label="สาขา"
                 type="phone"
                 maxLength={5}
-                value={form?.branch === '00000' ? 'สำนักงานใหญ่' : form?.branch}
+                value={form?.branch === "00000" ? "สำนักงานใหญ่" : form?.branch}
                 disabled={isDisableAll}
                 onChange={(value) => handleChange("branch", value)}
               />
@@ -303,8 +303,10 @@ export default function CustomerAction({}: Props) {
                 error={errors?.fax}
               />
             </Grid>
-
-            <Grid item xs={12} sm={3}>
+            <Grid item xs={0} sm={3}/>
+         
+        
+            <Grid item xs={12} sm={6}>
               <CustomTextfield
                 label="ที่อยู่"
                 value={form?.address}
@@ -410,11 +412,11 @@ export default function CustomerAction({}: Props) {
           </Grid>
         </Box>
         <Divider
-            sx={{ borderWidth: 4, borderRadius: 4, borderColor: "#898989" }}
-          />
+          sx={{ borderWidth: 4, borderRadius: 4, borderColor: "#898989" }}
+        />
         <Box>
-          <Grid container spacing={2} p={3} xs={12} >
-            <Box display={"flex"} flexDirection={"column"} width={"100%"} >
+          <Grid container spacing={2} p={3} xs={12}>
+            <Box display={"flex"} flexDirection={"column"} width={"100%"}>
               <Box display={"flex"} justifyContent={"space-between"} mb={5}>
                 <Typography variant="h4" color="initial">
                   ข้อมูลผู้ติดต่อ
@@ -429,9 +431,9 @@ export default function CustomerAction({}: Props) {
                   disabled={isDisableAll}
                 />
               </Box>
-              <Box display={"flex"} flexDirection={"column"}   >
+              <Box display={"flex"} flexDirection={"column"}>
                 {[...Array(form?.contactPersons?.length)].map((_, idx) => (
-                  <Grid container spacing={2} key={idx} mb={2} >
+                  <Grid container spacing={2} key={idx} mb={2}>
                     <Grid item xs={12} sm={3}>
                       <CustomTextfield
                         label="ชื่อผู้ติดต่อ"
@@ -453,7 +455,7 @@ export default function CustomerAction({}: Props) {
                         disabled={isDisableAll}
                       />
                     </Grid>
-                   
+
                     <Grid item xs={12} sm={2.5}>
                       <CustomTextfield
                         label="email"

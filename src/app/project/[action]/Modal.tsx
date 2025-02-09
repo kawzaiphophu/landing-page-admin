@@ -163,7 +163,7 @@ export default function BasicModal({
               </Grid>
               <Grid item xs={6}>
                 <Typography sx={{ display: "flex", gap: 1 }}>
-                  ระยะเวลา MA :
+                  MA (เดือน) :
                   <Typography variant="body1" color="initial">
                     {projectDetail.projectMa} เดือน (
                     {projectDetail?.projectMaPerYear || "-"} ครั้ง/ปี)

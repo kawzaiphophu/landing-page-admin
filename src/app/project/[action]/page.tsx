@@ -1047,7 +1047,7 @@ export default function ProjectAction({}: Props) {
           </Grid>
           <Grid item xs={12} sm={3}>
             <CustomTextfield
-              label="ระยะเวลาประกัน (เดือน) "
+              label="ประกัน(เดือน) (เดือน) "
               type="number"
               value={form?.projectWaranty}
               onChange={(value) => handleChange("projectWaranty", value)}
@@ -1542,7 +1542,7 @@ export default function ProjectAction({}: Props) {
             </Grid>
             <Grid item xs={12} sm={3}>
               <CustomTextfield
-                label="ระยะเวลาประกัน (เดือน) "
+                label="ประกัน(เดือน) (เดือน) "
                 type="number"
                 value={form?.orders[tab]?.orderWaranty}
                 onChange={(value) => handleChange("orderWaranty", value, tab)}

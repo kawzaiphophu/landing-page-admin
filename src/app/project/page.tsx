@@ -178,13 +178,10 @@ export default function Project({}: Props) {
                     <TableCell align="center">ลำดับ</TableCell>
                     <TableCell>ชื่อProject</TableCell>
                     <TableCell>สถานะ</TableCell>
-                    <TableCell>รายละเอียด</TableCell>
-                    <TableCell align="center">ระยะเวลาประกัน</TableCell>
-                    <TableCell align="center">ระยะเวลา MA</TableCell>
-                    <TableCell align="center">จำนวนครั้ง MA</TableCell>
-                    <TableCell align="right">ราคา</TableCell>
-                    <TableCell align="right">ต้นทุน</TableCell>
-                    <TableCell align="right">กำไร</TableCell>
+                    <TableCell align="center">ประกัน(เดือน)</TableCell>
+                    <TableCell align="center">MA (เดือน)</TableCell>
+                    <TableCell align="center">MA(ครั้ง)</TableCell>
+                    <TableCell align="right">มูลค่า</TableCell>
                     <TableCell
                       align="center"
                       width={"7%"}
@@ -216,19 +213,14 @@ export default function Project({}: Props) {
                         {STATUS.find((s) => s.value === project?.projectStatus)
                           ?.name || "-"}
                       </TableCell>
-                      <TableCell>{project?.projectScope || "-"}</TableCell>
-                      <TableCell>{project?.projectWaranty || "-"}</TableCell>
-                      <TableCell>{project?.projectMa || "-"}</TableCell>
-                      <TableCell>{project?.projectMaPerYear || "-"}</TableCell>
+
+                      <TableCell align="center">{project?.projectWaranty || "-"}</TableCell>
+                      <TableCell align="center">{project?.projectMa || "-"}</TableCell>
+                      <TableCell align="center">{project?.projectMaPerYear || "-"}</TableCell>
                       <TableCell align="right">
                         {formatPrice(project?.projectPrice)}
                       </TableCell>
-                      <TableCell align="right">
-                        {formatPrice(project?.projectCost)}
-                      </TableCell>
-                      <TableCell align="right">
-                        {formatPrice(project?.projectProfit)}
-                      </TableCell>
+                 
 
                       <TableCell
                         sx={{

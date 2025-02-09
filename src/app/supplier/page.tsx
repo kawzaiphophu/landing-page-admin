@@ -167,7 +167,7 @@ export default function supplier({}: Props) {
                   <TableRow sx={{ height: "72px", zIndex: 10 }}>
                     <TableCell align="center">ลำดับ</TableCell>
                     <TableCell>ชื่อซัพพลายเออร์</TableCell>
-                    <TableCell>อีเมล</TableCell>
+
                     <TableCell align="center">เบอร์โทรศัพท์</TableCell>
                     <TableCell>ที่อยู่</TableCell>
                     <TableCell
@@ -199,7 +199,7 @@ export default function supplier({}: Props) {
                       <TableCell>
                         {supplier?.name || supplier?.nameEn || "-"}
                       </TableCell>
-                      <TableCell>{supplier?.email || "-"}</TableCell>
+
                       <TableCell align="center">
                         {supplier?.tel || "-"}
                       </TableCell>

@@ -168,10 +168,7 @@ export default function Customer({}: Props) {
                     <TableCell>ชื่อลูกค้า</TableCell>
                     <TableCell>สาขา</TableCell>
                     <TableCell>เลขผู้เสียภาษี</TableCell>
-
-                    <TableCell>อีเมล</TableCell>
                     <TableCell align="center">เบอร์โทรศัพท์</TableCell>
-                    <TableCell align="center">โทรสาร</TableCell>
                     <TableCell>ที่อยู่</TableCell>
                     <TableCell
                       align="center"
@@ -208,9 +205,9 @@ export default function Customer({}: Props) {
                           : customer?.branch || "-"}
                       </TableCell>
                       <TableCell>{customer?.taxNumber || "-"}</TableCell>
-                      <TableCell>{customer?.email || "-"}</TableCell>
+
                       <TableCell>{customer?.tel || "-"}</TableCell>
-                      <TableCell>{customer?.fax || "-"}</TableCell>
+
                       <TableCell>{getAddress(customer)}</TableCell>
                       <TableCell
                         sx={{

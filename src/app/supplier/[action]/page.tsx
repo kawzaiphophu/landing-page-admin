@@ -294,8 +294,8 @@ export default function SupplierAction({}: Props) {
                 error={errors?.tel}
               />
             </Grid>
-
-            <Grid item xs={12} sm={3}>
+            <Grid item xs={0} sm={6}/>
+            <Grid item xs={12} sm={6}>
               <CustomTextfield
                 label="ที่อยู่"
                 value={form?.address}
@@ -315,6 +315,8 @@ export default function SupplierAction({}: Props) {
                 required
               />
             </Grid>
+          
+           
             <Grid item xs={12} sm={3}>
               <CustomSelect
                 label="จังหวัด"
