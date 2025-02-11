@@ -54,7 +54,6 @@ const initailError = {
   projectName: false,
   projectScope: false,
   projectDueDate: false,
-  projectPrice: false,
   projectType: false,
   customerId: false,
   projectStatus: false,
@@ -72,7 +71,7 @@ const initailError = {
       docNumber: false,
     },
   ],
-  periods: [{ periodDue: false, paymentDue: false, amount: false }],
+  periods: [{ periodDue: false, paymentDue: false }],
 };
 
 const initialState: IProject = {
@@ -84,9 +83,9 @@ const initialState: IProject = {
   projectMaPerYear: 0,
   projectDueDate: "",
   projectType: "",
-  projectPrice: 0,
-  projectCost: 0,
-  projectProfit: 0,
+  projectPrice: 0.0,
+  projectCost: 0.0,
+  projectProfit: 0.0,
   startDate: "",
   docNumber: "",
   orders: [
@@ -183,10 +182,10 @@ export default function ProjectAction({}: Props) {
       (sum, order) => sum + Number(order.orderCost),
       0
     );
-    handleChange("projectCost", Number(totalCost));
+    handleChange("projectCost", formatPrice(totalCost));
     handleChange(
       "projectProfit",
-      Number(form.projectPrice) - Number(totalCost)
+      formatPrice(Number(form.projectPrice) - Number(totalCost))
     );
   }, [form.orders, form.projectPrice]);
 
@@ -437,7 +436,10 @@ export default function ProjectAction({}: Props) {
 
     newErrors.customerId === !form.customerId;
     newErrors.orders.map((order: any) => delete order.remark);
+    newErrors.periods.map((period: any) => delete period.amount);
     delete newErrors.projectProfit;
+    delete newErrors.projectCost;
+    delete newErrors.projectPrice;
 
     setErrors(newErrors);
     const isHasError =
@@ -1090,7 +1092,7 @@ export default function ProjectAction({}: Props) {
             <CustomTextfield
               label="ต้นทุนProject (บาท)"
               type="numberWithComma"
-              value={formatPrice(form?.projectCost)}
+              value={formatPrice(form?.projectCost,2)}
               disabled
             />
           </Grid>
@@ -1098,7 +1100,7 @@ export default function ProjectAction({}: Props) {
             <CustomTextfield
               label="กำไรProject (บาท)"
               type="numberWithComma"
-              value={formatPrice(form?.projectProfit)}
+              value={formatPrice(form?.projectProfit,2)}
               disabled
             />
           </Grid>
@@ -1157,7 +1159,7 @@ export default function ProjectAction({}: Props) {
               getOptionLabel={(option: ICustomer) =>
                 ` ${option?.name || option?.nameEn} ${
                   option?.branch === "00000" ? "สำนักงานใหญ่" : option.branch
-                }  ${option?.tel&& '| ' + option?.tel}`
+                }  ${option?.tel && "| " + option?.tel}`
               }
               onClear={() => {
                 handleClearAutocomplete("project");
@@ -1340,7 +1342,7 @@ export default function ProjectAction({}: Props) {
                       <CustomTextfield
                         label="ยอดเงินที่รับชำระ"
                         type="numberWithComma"
-                        placeholder="0.00"
+                        placeholder="0"
                         value={formatPrice(form?.periods[tabProject]?.receive)}
                         onChange={(value) =>
                           handleChangePeriod("receive", Number(value))
@@ -1687,7 +1689,9 @@ export default function ProjectAction({}: Props) {
                 placeholder="ค้นหาโดยชื่อ"
                 minRows={1}
                 getOptionLabel={(option: ISupplier) =>
-                  ` ${option?.name||option?.nameEn}  ${option?.tel && '| ' + option?.tel}`
+                  ` ${option?.name || option?.nameEn}  ${
+                    option?.tel && "| " + option?.tel
+                  }`
                 }
                 error={errors.orders[tab]?.supplierId}
                 onClear={() => {

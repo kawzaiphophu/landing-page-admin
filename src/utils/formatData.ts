@@ -1,4 +1,8 @@
-import { getDistrictNameByCode, getProvinceNameByCode, getSubdistrictNameByCode } from "./app";
+import {
+  getDistrictNameByCode,
+  getProvinceNameByCode,
+  getSubdistrictNameByCode,
+} from "./app";
 
 const formatSinglePhoneNumber = (phoneNumber: string): string => {
   if (!phoneNumber) return "-";
@@ -71,7 +75,7 @@ export const formatPrice = (
   value: number | string,
   fixed: number = 2
 ): string => {
-  if (!value) {
+  if (!value || value === 0 || value === "0" || value === "0.00" || value === '00.00') {
     return "0";
   }
   const NumValue = Number(value);
@@ -102,15 +106,19 @@ export const extractPlainText = (htmlString?: string): string => {
   return plainText.trim();
 };
 
-export const getAddress = (data: { 
-  address: string, 
-  subDistrict: string, 
-  district: string, 
-  province: string, 
-  zipcode: string, 
-  country: string 
+export const getAddress = (data: {
+  address: string;
+  subDistrict: string;
+  district: string;
+  province: string;
+  zipcode: string;
+  country: string;
 }) => {
-  const getValueOrDash = (value: any) => value || '';
+  const getValueOrDash = (value: any) => value || "";
 
-  return `${getValueOrDash(data.address)} ${getValueOrDash(getSubdistrictNameByCode(data.subDistrict))} ${getValueOrDash(getDistrictNameByCode(data.district))} ${getValueOrDash(getProvinceNameByCode(data.province))} ${getValueOrDash(data.zipcode)} ${getValueOrDash(data.country)}`;
+  return `${getValueOrDash(data.address)} ${getValueOrDash(
+    getSubdistrictNameByCode(data.subDistrict)
+  )} ${getValueOrDash(getDistrictNameByCode(data.district))} ${getValueOrDash(
+    getProvinceNameByCode(data.province)
+  )} ${getValueOrDash(data.zipcode)} ${getValueOrDash(data.country)}`;
 };
