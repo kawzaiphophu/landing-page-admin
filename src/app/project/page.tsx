@@ -215,13 +215,19 @@ export default function Project({}: Props) {
                       </TableCell>
 
                       <TableCell align="center">
-                        {project?.projectWaranty || "-"}
+                        {Number(project?.projectWaranty) > 0
+                          ? project?.projectWaranty
+                          : "-"}
                       </TableCell>
                       <TableCell align="center">
-                        {project?.projectMa || "-"}
+                        {Number(project?.projectMa) > 0
+                          ? project?.projectMa
+                          : "-"}
                       </TableCell>
                       <TableCell align="center">
-                        {project?.projectMaPerYear || "-"}
+                        {Number(project?.projectMaPerYear) > 0
+                          ? project?.projectMaPerYear
+                          : "-"}
                       </TableCell>
                       <TableCell align="right">
                         {formatPrice(project?.projectPrice)}

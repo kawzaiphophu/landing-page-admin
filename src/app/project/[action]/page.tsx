@@ -64,7 +64,6 @@ const initailError = {
       supplierId: false,
       orderName: false,
       orderDueDate: false,
-      orderCost: false,
       orderStatus: false,
       orderWaranty: false,
       startDate: false,
@@ -403,7 +402,6 @@ export default function ProjectAction({}: Props) {
           supplierId: false,
           orderName: false,
           orderDueDate: false,
-          orderCost: false,
           orderStatus: false,
           orderWaranty: false,
           startDate: false,
@@ -435,7 +433,7 @@ export default function ProjectAction({}: Props) {
     const newErrors = setErrObject(form, errors);
 
     newErrors.customerId === !form.customerId;
-    newErrors.orders.map((order: any) => delete order.remark);
+    newErrors.orders.map((order: any) => (delete order.remark,delete order.orderCost));
     newErrors.periods.map((period: any) => delete period.amount);
     delete newErrors.projectProfit;
     delete newErrors.projectCost;
