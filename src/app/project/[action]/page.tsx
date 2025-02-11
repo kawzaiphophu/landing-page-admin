@@ -1090,7 +1090,7 @@ export default function ProjectAction({}: Props) {
             <CustomTextfield
               label="ต้นทุนProject (บาท)"
               type="numberWithComma"
-              value={formatPrice(form?.projectCost,2)}
+              value={formatPrice(form?.projectCost)}
               disabled
             />
           </Grid>
@@ -1098,7 +1098,7 @@ export default function ProjectAction({}: Props) {
             <CustomTextfield
               label="กำไรProject (บาท)"
               type="numberWithComma"
-              value={formatPrice(form?.projectProfit,2)}
+              value={formatPrice(form?.projectProfit)}
               disabled
             />
           </Grid>

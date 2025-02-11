@@ -78,6 +78,9 @@ export const formatPrice = (
   if (!value || value === 0 || value === "0" || value === "0.00" || value === '00.00') {
     return "0";
   }
+  if (typeof value === 'string') {
+    value = value.replace(/,/g, '');
+  }
   const NumValue = Number(value);
   const integerPart = Math.floor(NumValue);
   let decimalPart = (NumValue - integerPart).toFixed(fixed).slice(2);
