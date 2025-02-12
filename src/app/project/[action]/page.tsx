@@ -181,10 +181,10 @@ export default function ProjectAction({}: Props) {
       (sum, order) => sum + Number(order.orderCost),
       0
     );
-    handleChange("projectCost", formatPrice(totalCost));
+    handleChange("projectCost", totalCost);
     handleChange(
       "projectProfit",
-      formatPrice(Number(form.projectPrice) - Number(totalCost))
+      Number(form.projectPrice) - Number(totalCost)
     );
   }, [form.orders, form.projectPrice]);
 
@@ -433,7 +433,9 @@ export default function ProjectAction({}: Props) {
     const newErrors = setErrObject(form, errors);
 
     newErrors.customerId === !form.customerId;
-    newErrors.orders.map((order: any) => (delete order.remark,delete order.orderCost));
+    newErrors.orders.map(
+      (order: any) => (delete order.remark, delete order.orderCost)
+    );
     newErrors.periods.map((period: any) => delete period.amount);
     delete newErrors.projectProfit;
     delete newErrors.projectCost;
@@ -531,9 +533,7 @@ export default function ProjectAction({}: Props) {
         AlertSwal({
           icon: "error",
           text: `${
-            projectId
-              ? "แก้ไขข้อมูลลูกค้าไม่สำเร็จ"
-              : "สร้างลูกค้าใหม่ไม่สำเร็จ"
+            projectId ? "แก้ไขProjectไม่สำเร็จ" : "สร้างProjectไม่สำเร็จ"
           }`,
         });
       }
