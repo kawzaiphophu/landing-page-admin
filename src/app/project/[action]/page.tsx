@@ -454,7 +454,7 @@ export default function ProjectAction({}: Props) {
       return;
     }
     const totalPeriodAmount = form.periods.reduce(
-      (sum, period) => sum + period.amount,
+      (sum, period) => sum + Number(period.amount),
       0
     );
 
@@ -871,7 +871,7 @@ export default function ProjectAction({}: Props) {
   };
 
   const totalReceive = form?.periods.reduce(
-    (total, period) => total + period.receive,
+    (total, period) => total + Number(period.receive),
     0
   );
 
